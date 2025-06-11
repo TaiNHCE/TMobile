@@ -19,8 +19,7 @@
     <body>
         <h2>Customer List</h2>
         <div class="container">
-            <table border="1" cellpadding="5">
-                <tr>
+            <table class="table table-striped table-hover">
                     <th>ID</th>
                     <th>Email</th>
                     <th>Full Name</th>
@@ -46,9 +45,9 @@
                     <td><%= formattedDate%></td>
                     <td><%= cus.isActive() ? "Yes" : "No"%></td>
                     <td>
-                        <a href="edit-user.jsp?id=<%= cus.getId()%>" class="btn btn-primary">Edit</a>
-                        <a href="delete-user.jsp?id=<%= cus.getId()%>" class="btn btn-danger">Delete</a>
-                        <a href="detail-user.jsp?id=<%= cus.getId()%>" class="btn btn-info">Detail</a>
+                        <a href="CustomerList?action=edit" class="btn btn-primary">Edit</a>
+                        
+                        <a href="CustomerList?action=detail&id=<%= cus.getId()%>" class="btn btn-info">Detail</a>
                     </td>
                 </tr>
                 <%

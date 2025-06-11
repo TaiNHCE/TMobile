@@ -50,33 +50,31 @@ public class CustomerDAO extends DBContext {
     }
     return list;
 }
-   public Customer getCustomerbyID(int customerID){
-       Customer cus = null;
-       String sql = "SELECT * FROM Users WHERE UserID = ?";
-       try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, customerID);
-            ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            int id = rs.getInt("UserID");
-            String email = rs.getString("Email");
-            String password = rs.getString("PasswordHash");
-            String fullName = rs.getString("FullName");
-            String phone = rs.getString("PhoneNumber");
-            Date createdAt = rs.getTimestamp("CreatedAt");
-            boolean isActive = rs.getBoolean("IsActive");
-            String birthday = rs.getString("BirthDay");
-            String gender = rs.getString("Gender");
-            cus = new Customer(id, email, password, fullName, phone, createdAt, isActive, birthday, gender);          // Giả sử class Account có constructor phù hợp:
-            
+  public Customer getCustomerbyID(int customerID) {
+    Customer cus = null;
+    String sql = "SELECT * FROM Users WHERE UserID = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, customerID);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int id = rs.getInt("UserID");
+                String email = rs.getString("Email");
+                String password = rs.getString("PasswordHash");
+                String fullName = rs.getString("FullName");
+                String phone = rs.getString("PhoneNumber");
+                Date createdAt = rs.getTimestamp("CreatedAt");
+                boolean isActive = rs.getBoolean("IsActive");
+                String birthday = rs.getString("BirthDate");
+                String gender = rs.getString("Gender");
+                cus = new Customer(id, email, password, fullName, phone, createdAt, isActive, birthday, gender);
+            }
         }
     } catch (Exception e) {
-        System.out.println(e.getMessage());
+        e.printStackTrace(); // hoặc log ra logger nếu dùng log4j, slf4j
     }
-       
-       return cus;
-   }
+    return cus; // nếu không có bản ghi hoặc có lỗi
+}
+
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO(); // giả sử bạn đã có class này
         List<Customer> accounts = dao.getAll();
