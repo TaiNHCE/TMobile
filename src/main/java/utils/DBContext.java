@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * @author TaiNHCE181569
  */
 public class DBContext {
-   protected Connection conn = null;
+
+    protected Connection conn = null;
 
     public DBContext() {
         try {
@@ -40,6 +41,10 @@ public class DBContext {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public Connection getConnection() {
+        return conn;
     }
 
 }
