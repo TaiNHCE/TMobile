@@ -60,7 +60,7 @@ public class CreateSupplierServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("createSupplier.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);
     }
 
     /**
@@ -80,7 +80,7 @@ public class CreateSupplierServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phoneNumber");
         String address = request.getParameter("address");
         int active = Integer.parseInt(request.getParameter("activate"));
-        int deleted = 0; // khi tao mac dinh thi chua xoa
+        int deleted = 0; 
 
         String errorMsg = null;
         if (taxId == null || taxId.isEmpty() || name == null || name.isEmpty()) {
@@ -89,14 +89,14 @@ public class CreateSupplierServlet extends HttpServlet {
 
         SupplierDAO dao = new SupplierDAO();
 
-        // **Check trùng taxId hoặc email**
+        
         if (dao.isSupplierExist(taxId, email)) {
             errorMsg = "Tax ID or Email already exists!";
         }
 
         if (errorMsg != null) {
             request.setAttribute("errorMsg", errorMsg);
-            request.getRequestDispatcher("createSupplier.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);
             return;
         }
 
@@ -109,7 +109,7 @@ public class CreateSupplierServlet extends HttpServlet {
             response.sendRedirect("ViewSupplier");
         } else {
             request.setAttribute("errorMsg", "Add supplier failed!");
-            request.getRequestDispatcher("createSupplier.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);
         }
     }
 

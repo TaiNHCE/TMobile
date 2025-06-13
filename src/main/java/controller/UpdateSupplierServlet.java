@@ -74,10 +74,10 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             request.setAttribute("errorMessage", "Supplier not found!");
         }
         request.setAttribute("supplier", supplier);
-        request.getRequestDispatcher("updateSupplier.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
     } catch (NumberFormatException ex) {
         request.setAttribute("errorMessage", "Invalid supplier ID!");
-        request.getRequestDispatcher("updateSupplier.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
     }
 }
 
@@ -109,7 +109,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
         if (supplier == null) {
             request.setAttribute("errorMessage", "Supplier not found!");
-            request.getRequestDispatcher("updateSupplier.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
             return;
         }
 
@@ -128,7 +128,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             request.setAttribute("errorMessage", "Failed to update supplier. Please try again.");
         }
         request.setAttribute("supplier", supplier);
-        request.getRequestDispatcher("updateSupplier.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
     }
 
     /**

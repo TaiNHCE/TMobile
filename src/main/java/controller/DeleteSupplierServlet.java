@@ -69,7 +69,7 @@ public class DeleteSupplierServlet extends HttpServlet {
 
         request.setAttribute("supplierID", supplierID);
         request.setAttribute("taxId", taxId);
-        request.getRequestDispatcher("deleteSupplier.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/deleteSupplier.jsp").forward(request, response);
     }
 
     /**
