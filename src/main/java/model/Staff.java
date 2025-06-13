@@ -15,21 +15,21 @@ public class Staff {
     private String email;
     private String fullName;
     private String phone;
-    private Date hiredDate;
+    private String hiredDate;
     private String birthDay;
     private String gender;
 
     public Staff() {
     }
 
-    public Staff(int staffID, String email, String fullName, Date hiredDate) {
+    public Staff(int staffID, String email, String fullName, String hiredDate) {
         this.staffID = staffID;
         this.email = email;
         this.fullName = fullName;
         this.hiredDate = hiredDate;
     }
 
-    public Staff(int staffID, String email, String fullName, String phone, Date hiredDate, String birthDay, String gender) {
+    public Staff(int staffID, String email, String fullName, String phone, String hiredDate, String birthDay, String gender) {
         this.staffID = staffID;
         this.email = email;
         this.fullName = fullName;
@@ -71,11 +71,11 @@ public class Staff {
         this.phone = phone;
     }
 
-    public Date getHiredDate() {
+    public String getHiredDate() {
         return hiredDate;
     }
 
-    public void setHiredDate(Date hiredDate) {
+    public void setHiredDate(String hiredDate) {
         this.hiredDate = hiredDate;
     }
 
