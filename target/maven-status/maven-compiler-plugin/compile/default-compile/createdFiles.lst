@@ -1,2 +1,10 @@
+controller\BrandViewServlet.class
+controller\CategoryViewServlet.class
+dao\BrandDAO.class
+model\Category.class
+dao\CategoryDAO.class
+model\Brand.class
+dao\ProductDAO.class
 utils\DBContext.class
+controller\HomeServlet.class
 utils\testDB.class
