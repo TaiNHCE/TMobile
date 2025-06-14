@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author HP - Gia Khiêm
@@ -12,16 +14,34 @@ public class Category {
     private int categoryId;
     private String categoryName;
     private String descriptionCategory;
+    private Timestamp createdAt;
     private String imgUrlLogo;
 
-    public Category(int categoryId, String categoryName, String descriptionCategory, String imgUrlLogo) {
+    public Category(int categoryId, String categoryName, String descriptionCategory, Timestamp  createdAt, String imgUrlLogo) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.descriptionCategory = descriptionCategory;
+        this.createdAt = createdAt;
         this.imgUrlLogo = imgUrlLogo;
     }
 
     public Category() {
+    }
+
+    public void setDescriptionCategory(String descriptionCategory) {
+        this.descriptionCategory = descriptionCategory;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getDescriptionCategory() {
+        return descriptionCategory;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
     public int getCategoryId() {

@@ -5,6 +5,8 @@
 
 package controller;
 
+import dao.CategoryDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +14,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Category;
 
 /**
  *
@@ -55,7 +59,19 @@ public class CategoryViewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        
+        CategoryDAO dao = new CategoryDAO();
+        
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "list";
+        }
+        
+        if (action.equalsIgnoreCase("list")) {
+                List<Category> categortList = dao.getAllCategory();
+                request.setAttribute("categoryList", categortList);
+                request.getRequestDispatcher("/WEB-INF/View/admin/categoryManagement/viewCategoryListFull.jsp").forward(request, response);
+            }
     } 
 
     /** 
