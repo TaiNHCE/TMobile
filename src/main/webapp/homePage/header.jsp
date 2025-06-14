@@ -38,7 +38,7 @@
 
                     <!-- Danh mục: Dropdown -->
                     <div class="dropdown ms-3">
-                        <button class="category-btn dropdown-toggle"
+                        <button class="category-btn"
                                 type="button"
                                 id="dropdownMenuButton"
                                 data-bs-toggle="dropdown"
@@ -51,7 +51,7 @@
                                 for (Category cate : categoryList) {
                             %>
                             <li class="dropdown-submenu position-relative">
-                                <a class="dropdown-item dropdown-toggle"
+                                <a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/Brand?name=">
                                     <img src="<%= cate.getImgUrlLogo()%>" style="width: 18%; margin-right: 4%;">
                                     <%= cate.getCategoryName()%>
@@ -122,5 +122,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS Bundle(dropdown) -->
     </body>
 </html>
+
+
 
 

@@ -70,7 +70,7 @@ public class CategoryViewServlet extends HttpServlet {
         if (action.equalsIgnoreCase("list")) {
                 List<Category> categortList = dao.getAllCategory();
                 request.setAttribute("categoryList", categortList);
-                request.getRequestDispatcher("/WEB-INF/View/admin/categoryManagement/viewCategoryListFull.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/View/admin/categoryManagement/viewCategoryList/viewCategoryList.jsp").forward(request, response);
             }
     } 
 

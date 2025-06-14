@@ -1,3 +1,4 @@
+controller\addCategory.class
 controller\BrandViewServlet.class
 controller\CategoryViewServlet.class
 dao\BrandDAO.class

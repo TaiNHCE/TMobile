@@ -70,7 +70,8 @@ public class HomeServlet extends HttpServlet {
                 
         request.setAttribute("categoryList", categoryList);
         request.setAttribute("brandList", brandList);
-        request.getRequestDispatcher("homePage/homePage.jsp").forward(request, response);
+//        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
+request.getRequestDispatcher("/homePage/homePage.jsp").forward(request, response);
     }
 
     /**

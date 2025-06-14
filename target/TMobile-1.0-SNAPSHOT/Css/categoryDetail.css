@@ -1,0 +1,114 @@
+/* Container chính */
+.containerCategory {
+    margin-left: 18.9%;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #fdfdfd;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+}
+
+/* Tiêu đề */
+.containerCategory > h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Grid chứa các ô */
+.categoryGrid {
+    width: 100%;
+    font-size: 0; /* tránh khoảng trắng inline-block */
+}
+
+/* Từng danh mục */
+.divLogo {
+    width: 23%;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px; /* reset lại */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-left: 1.35%;
+    margin-bottom: 2%;
+    margin-top: 0.5%;
+}
+
+.divLogo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Hình ảnh logo */
+.logoCategory {
+    width: 50%;
+    height: 10%;
+   
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Tên danh mục */
+.divLogo h2 {
+    font-size: 18px;
+    color: #222;
+    margin: 10px 0 0;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 10px 0 20px;
+}
+
+.activeCategory {
+    border: 2px solid #2e89ff !important;
+}
+
+/*======= Conten category detail ========*/
+/* Lưới chứa tất cả các Category Detail */
+.categoryDetailGrid {
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+/* Mỗi Category Detail chiếm 50% chiều rộng */
+.divContentCategoryDetail {
+    width: calc(45%); /* trừ khoảng gap */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    margin-left: 3.2%;
+    margin-bottom: 2.5%;
+}
+
+/* Tiêu đề "Category Detail 1", "2", ... */
+.categoryDatailName {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: bold;
+    border-left: 4px solid #3498db;
+    padding-left: 10px;
+}
+
+/* Nội dung tên Attribute */
+.divContentCategoryDetail h2 {
+    font-size: 150%;
+    color: #444;
+    margin: 0;
+}
+
+/*======= Conten category detail ========*/
+
+
+

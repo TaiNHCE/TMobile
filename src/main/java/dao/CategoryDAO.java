@@ -11,18 +11,19 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import model.Category;
+import model.CategoryDetail;
 import utils.DBContext;
 
 /**
  *
  * @author HP - Gia Khiêm
  */
-public class CategoryDAO extends DBContext{
-    
+public class CategoryDAO extends DBContext {
+
     public CategoryDAO() {
         super();
     }
-    
+
     public List<Category> getAllCategory() {
         List<Category> categoryList = new ArrayList<>();
         String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo FROM Categories";
@@ -45,7 +46,50 @@ public class CategoryDAO extends DBContext{
         }
         return categoryList;
     }
-    
+
+    public List<CategoryDetail> getCategoryDetailById(int categoryId) {
+        List<CategoryDetail> categoryDetailList = new ArrayList<>();
+        String sql = "SELECT CategoryDetailID, CategoryID, AttributeName from CategoryDetails where CategoryID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int categoryDetailID = rs.getInt("CategoryDetailID");
+                int categoryID = rs.getInt("CategoryID");
+                String attributeName = rs.getString("AttributeName");
+
+                categoryDetailList.add(new CategoryDetail(categoryDetailID, categoryID, attributeName));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryDetailList;
+    }
+
+//    public List<CategoryDetail> getAllCategoryDetails() {
+//        List<CategoryDetail> categoryDetailList = new ArrayList<>();
+//        String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo FROM Categories";
+//
+//        try {
+//            PreparedStatement ps = conn.prepareStatement(sql);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                int categoryId = rs.getInt("CategoryID");
+//                String categoryName = rs.getString("CategoryName");
+//                String descriptionCategory = rs.getString("Description");
+//                Timestamp createdAt = rs.getTimestamp("CreatedAt");
+//                String imgUrlLogo = rs.getString("ImgURLLogo");
+//
+//                categoryList.add(new Category(categoryId, categoryName, descriptionCategory, createdAt, imgUrlLogo));
+//            }
+//            return categoryList;
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return categoryList;
+//    }
     public Category getCategoryById(int categoryID) {
         Category category = null;
         String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo FROM Categories";
