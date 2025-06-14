@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
 
         <!-- Dashboard CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList3.css">
 
     </head>
     <body>
@@ -47,7 +47,6 @@
                                 <th>Name</th>
                                 <th>Phone Number</th>
                                 <th>Email</th>
-                                <th>Address</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -65,7 +64,6 @@
                                 <td><%= s.getName()%></td>
                                 <td><%= s.getPhoneNumber()%></td>
                                 <td><%= s.getEmail()%></td>
-                                <td><%= s.getAddress()%></td>
                                 <td><span class="<%= statusClass%>"><%= statusText%></span></td>
                                 <td class="action-col">
                                     <a href="ViewSupplier?id=<%= s.getSupplierID()%>" class="btn-detail">Detail</a>

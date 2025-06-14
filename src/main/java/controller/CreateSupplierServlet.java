@@ -74,41 +74,75 @@ public class CreateSupplierServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         String taxId = request.getParameter("taxId");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String address = request.getParameter("address");
+        String contactPerson = request.getParameter("contactPerson");
+        String[] supplyGroupArr = request.getParameterValues("supplyGroup");
+        String description = request.getParameter("description");
         int active = Integer.parseInt(request.getParameter("activate"));
-        int deleted = 0; 
+        int deleted = 0;
+
+        String supplyGroup = (supplyGroupArr != null) ? String.join(",", supplyGroupArr) : "";
 
         String errorMsg = null;
-        if (taxId == null || taxId.isEmpty() || name == null || name.isEmpty()) {
-            errorMsg = "Tax ID and Company Name is not null!";
+        //Validate Tax ID: must be 6-15 digits
+        if (taxId == null || !taxId.matches("^\\d{6,15}$")) {
+            errorMsg = "Tax ID must be 6-15 digits.";
+        }
+         //Validate Email
+        else if (email == null || !email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
+            errorMsg = "Invalid email address.";
+        } 
+        else if (phoneNumber == null || !phoneNumber.matches("^\\+?[0-9\\s\\-()]{8,20}$")) {
+            errorMsg = "Invalid phone number (must be 8-20 digits, may include +, -, ()).";
+        } 
+        // Validate Supply Group
+        else if (supplyGroupArr == null || supplyGroupArr.length == 0) {
+            errorMsg = "Please select at least one Supply Group!";
         }
 
+        // 8. Check for duplicate Tax ID or Email
         SupplierDAO dao = new SupplierDAO();
-
-        
-        if (dao.isSupplierExist(taxId, email)) {
+        if (errorMsg == null && dao.isSupplierExist(taxId, email)) {
             errorMsg = "Tax ID or Email already exists!";
         }
 
         if (errorMsg != null) {
             request.setAttribute("errorMsg", errorMsg);
+            // Save user input to redisplay in the form if needed
+            request.setAttribute("oldTaxId", taxId);
+            request.setAttribute("oldName", name);
+            request.setAttribute("oldEmail", email);
+            request.setAttribute("oldPhone", phoneNumber);
+            request.setAttribute("oldAddress", address);
+            request.setAttribute("oldContact", contactPerson);
+            request.setAttribute("oldSupplyGroup", supplyGroupArr);
+            request.setAttribute("oldDescription", description);
+            request.setAttribute("oldActive", active);
             request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);
             return;
         }
 
+        // Create supplier as usual
         LocalDateTime now = LocalDateTime.now();
-        Suppliers supplier = new Suppliers(0, taxId, name, email, phoneNumber, address, now, now, deleted, active);
+        Suppliers supplier = new Suppliers(
+                0, taxId, name, email, phoneNumber, address,
+                now, now, deleted, active,
+                contactPerson, supplyGroup, description
+        );
 
         int result = dao.createSupplier(supplier);
 
         if (result > 0) {
             response.sendRedirect("ViewSupplier");
         } else {
-            request.setAttribute("errorMsg", "Add supplier failed!");
+            request.setAttribute("errorMsg", "Failed to add supplier!");
             request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);
         }
     }

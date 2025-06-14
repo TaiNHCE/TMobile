@@ -61,6 +61,7 @@ public class ViewSupplierServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("id");
+        String searchName = request.getParameter("searchName");
         SupplierDAO supplierDAO = new SupplierDAO();
 
         if (id != null) {
@@ -69,10 +70,18 @@ public class ViewSupplierServlet extends HttpServlet {
                 Suppliers supplier = supplierDAO.getSupplierById(supplierId);
                 request.setAttribute("supplier", supplier);
                 request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/supplierDetail.jsp").forward(request, response);
+                return;
             } catch (Exception e) {
             }
         }
-        List<Suppliers> supplierList = supplierDAO.getAllSuppliers();
+
+        List<Suppliers> supplierList;
+        if (searchName != null && !searchName.trim().isEmpty()) {
+            supplierList = supplierDAO.findSuppliersByName(searchName);
+        } else {
+            supplierList = supplierDAO.getAllSuppliers();
+        }
+
         request.setAttribute("supplierList", supplierList);
         request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/supplierList.jsp").forward(request, response);
     }

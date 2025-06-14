@@ -8,7 +8,7 @@
     </div>
     <ul class="nav-menu">
         <li class="nav-item">
-            <a href="adminDashboad.jsp" class="nav-link active">
+            <a href="AdminDashboard" class="nav-link active">
                 <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
             </a>
         </li>

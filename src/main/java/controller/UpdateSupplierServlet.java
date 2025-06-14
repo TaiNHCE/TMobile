@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import model.Suppliers;
 
 /**
@@ -56,30 +57,30 @@ public class UpdateSupplierServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String sid = request.getParameter("id");
-    if (sid == null) {
-        response.sendRedirect("ViewSupplier"); // hoặc báo lỗi phù hợp
-        return;
-    }
-
-    try {
-        int supplierID = Integer.parseInt(sid);
-        SupplierDAO dao = new SupplierDAO();
-        Suppliers supplier = dao.getSupplierById(supplierID);
-
-        if (supplier == null) {
-            request.setAttribute("errorMessage", "Supplier not found!");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String sid = request.getParameter("id");
+        if (sid == null) {
+            response.sendRedirect("ViewSupplier");
+            return;
         }
-        request.setAttribute("supplier", supplier);
-        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
-    } catch (NumberFormatException ex) {
-        request.setAttribute("errorMessage", "Invalid supplier ID!");
-        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
+
+        try {
+            int supplierID = Integer.parseInt(sid);
+            SupplierDAO dao = new SupplierDAO();
+            Suppliers supplier = dao.getSupplierById(supplierID);
+
+            if (supplier == null) {
+                request.setAttribute("errorMessage", "Supplier not found!");
+            }
+            request.setAttribute("supplier", supplier);
+            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
+        } catch (NumberFormatException ex) {
+            request.setAttribute("errorMessage", "Invalid supplier ID!");
+            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
+        }
     }
-}
 
 
     /**
@@ -91,17 +92,21 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
 
+    try {
         int supplierID = Integer.parseInt(request.getParameter("supplierID"));
-        String taxId = request.getParameter("taxId");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String address = request.getParameter("address");
+        String contactPerson = request.getParameter("contactPerson");
+        String[] supplyGroup = request.getParameterValues("supplyGroup");
+        String supplyGroupStr = (supplyGroup != null) ? String.join(",", supplyGroup) : "";
+        String description = request.getParameter("description");
         int activate = Integer.parseInt(request.getParameter("activate"));
 
         SupplierDAO dao = new SupplierDAO();
@@ -113,24 +118,31 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             return;
         }
 
-        supplier.setTaxId(taxId);
+        // Không cập nhật taxId nữa
         supplier.setName(name);
         supplier.setEmail(email);
         supplier.setPhoneNumber(phoneNumber);
         supplier.setAddress(address);
+        supplier.setContactPerson(contactPerson);
+        supplier.setSupplyGroup(supplyGroupStr);
+        supplier.setDescription(description);
         supplier.setActivate(activate);
         supplier.setLastModify(java.time.LocalDateTime.now());
 
         boolean success = dao.updateSupplier(supplier);
         if (success) {
-            request.setAttribute("successMessage", "Supplier updated successfully.");
+            response.sendRedirect("ViewSupplier");
         } else {
             request.setAttribute("errorMessage", "Failed to update supplier. Please try again.");
+            request.setAttribute("supplier", supplier);
+            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
         }
-        request.setAttribute("supplier", supplier);
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
         request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
     }
-
+}
     /**
      * Returns a short description of the servlet.
      *
