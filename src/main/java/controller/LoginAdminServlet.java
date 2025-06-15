@@ -58,7 +58,7 @@ public class LoginAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         request.getRequestDispatcher("login-admin.jsp").forward(request, response);
+         request.getRequestDispatcher("account/login-admin.jsp").forward(request, response);
     } 
 
     /** 
