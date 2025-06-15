@@ -1,13 +1,5 @@
-controller\LoginServlet.class
-controller\LoginStaffServlet.class
-dao\CustomerDAO.class
-dao\AccountDAO.class
-controller\CustomerListServlet.class
+dao\StaffDAO.class
+controller\StaffListServlet.class
 model\Staff.class
 utils\DBContext.class
 utils\testDB.class
-dao\StaffDAO.class
-controller\StaffListServlet.class
-model\Account.class
-model\Customer.class
-controller\LoginAdminServlet.class

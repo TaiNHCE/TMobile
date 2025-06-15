@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import model.Customer;
 import model.Staff;
 import sun.applet.Main;
 import utils.DBContext;
