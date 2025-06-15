@@ -68,7 +68,7 @@ public class StaffListServlet extends HttpServlet {
         if (action.equalsIgnoreCase("list")) {
             List<Staff> staff = dao.getStaffList();
             request.setAttribute("staff", staff);
-            request.getRequestDispatcher("staffList.jsp").forward(request, response);
+            request.getRequestDispatcher("staff/staffList.jsp").forward(request, response);
         }
         if (action.equalsIgnoreCase("search")) {
             String keyword = request.getParameter("keyword");
@@ -82,7 +82,7 @@ public class StaffListServlet extends HttpServlet {
             if (list.isEmpty()) {
                 request.setAttribute("message", "No staff found.");
             }
-            request.getRequestDispatcher("staffList.jsp").forward(request, response);
+            request.getRequestDispatcher("staff/staffList.jsp").forward(request, response);
             return;
         }
             if (action.equalsIgnoreCase("detail")) {
@@ -92,7 +92,7 @@ public class StaffListServlet extends HttpServlet {
                 id = Integer.parseInt(idRaw);
                 Staff sta = dao.getStaffByID(id);
                 request.setAttribute("data", sta);
-                request.getRequestDispatcher("view-staff-detail.jsp").forward(request, response);
+                request.getRequestDispatcher("staff/view-staff-detail.jsp").forward(request, response);
             } catch (Exception e) {
                 PrintWriter out = response.getWriter();
                 out.print(e.getMessage());
