@@ -1,9 +1,9 @@
 controller\DeleteSupplierServlet.class
-controller\UpdateSupplierServlet.class
 model\Suppliers.class
 dao\SupplierDAO.class
 controller\AdminDashboard.class
 utils\DBContext.class
-controller\ViewSupplierServlet.class
 utils\testDB.class
+controller\UpdateSupplierServlet.class
+controller\ViewSupplierServlet.class
 controller\CreateSupplierServlet.class

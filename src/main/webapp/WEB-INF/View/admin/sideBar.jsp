@@ -1,6 +1,3 @@
-
-
-
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -8,7 +5,7 @@
     </div>
     <ul class="nav-menu">
         <li class="nav-item">
-            <a href="AdminDashboard" class="nav-link active">
+            <a href="AdminDashboard" class="nav-link">
                 <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
             </a>
         </li>
@@ -43,10 +40,24 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="Inventory" class="nav-link">
-                <i class="fas fa-warehouse"></i> <span>Inventory Statistics</span>
+            <a href="InventoryStatistic" class="nav-link">
+                <i class="fas fa-warehouse"></i> <span>Manage Statistics</span>
             </a>
         </li>
-       
     </ul>
 </nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const path = window.location.pathname.toLowerCase();
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute("href").toLowerCase();
+            if (path.includes(href)) {
+                document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
+                link.classList.add("active");
+            }
+        });
+    });
+</script>
