@@ -78,7 +78,7 @@ public class LoginStaffServlet extends HttpServlet {
         Account acc = dao.verifyMD5(email, pass); 
         if (acc != null &&  acc.getAccountID() != -1 && acc.getRoleID() == 2){
              session.setAttribute("staff", acc);
-             response.sendRedirect("CustomerList");
+             response.sendRedirect("account/login-staff.jsp");
         }
         else{
             response.sendRedirect("login-staff.jsp");
