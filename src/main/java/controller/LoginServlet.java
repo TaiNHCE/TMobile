@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("account/login.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
     }
 
     /**
@@ -84,10 +84,10 @@ public class LoginServlet extends HttpServlet {
         if (acc == null || acc.getAccountID() == -1) {
             // Sai email hoặc password
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            request.getRequestDispatcher("account/login.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
         } else {
             session.setAttribute("user", acc);
-                request.getRequestDispatcher("account/login.jsp");
+                request.getRequestDispatcher("WEB-INF/View/account/login.jsp");
         }
 
     }

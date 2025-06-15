@@ -58,7 +58,7 @@ public class LoginStaffServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          request.getRequestDispatcher("account/login-staff.jsp").forward(request, response);
+          request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
     } 
 
     /** 
@@ -78,10 +78,10 @@ public class LoginStaffServlet extends HttpServlet {
         Account acc = dao.verifyMD5(email, pass); 
         if (acc != null &&  acc.getAccountID() != -1 && acc.getRoleID() == 2){
              session.setAttribute("staff", acc);
-             response.sendRedirect("account/login-staff.jsp");
+             response.sendRedirect("WEB-INF/View/account/login-staff.jsp");
         }
         else{
-            response.sendRedirect("account/login-staff.jsp");
+            response.sendRedirect("WEB-INF/View/account/login-staff.jsp");
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
         }
     }

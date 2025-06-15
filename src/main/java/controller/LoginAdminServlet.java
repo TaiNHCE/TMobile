@@ -58,7 +58,7 @@ public class LoginAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         request.getRequestDispatcher("account/login-admin.jsp").forward(request, response);
+         request.getRequestDispatcher("WEB-INF/View/account/login-admin.jsp").forward(request, response);
     } 
 
     /** 
@@ -83,7 +83,7 @@ public class LoginAdminServlet extends HttpServlet {
         }
         else{
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            response.sendRedirect("account/login-admin.jsp");
+            response.sendRedirect("WEB-INF/View/account/login-admin.jsp");
         }
     }
 
