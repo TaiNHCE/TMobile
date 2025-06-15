@@ -16,13 +16,15 @@ public class Category {
     private String descriptionCategory;
     private Timestamp createdAt;
     private String imgUrlLogo;
+    private Boolean isActive;
 
-    public Category(int categoryId, String categoryName, String descriptionCategory, Timestamp  createdAt, String imgUrlLogo) {
+    public Category(int categoryId, String categoryName, String descriptionCategory, Timestamp  createdAt, String imgUrlLogo, Boolean isActive) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.descriptionCategory = descriptionCategory;
         this.createdAt = createdAt;
         this.imgUrlLogo = imgUrlLogo;
+        this.isActive = isActive;
     }
 
     public Category() {
@@ -80,8 +82,13 @@ public class Category {
         this.descriptionCategory = descriptionCategory;
     }
 
-    @Override
-    public String toString() {
-        return "Category{" + "categortId=" + categoryId + ", categoryName=" + categoryName + ", descriptionCategory=" + descriptionCategory + '}';
+    public Boolean getIsActive() {
+        return isActive;
     }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    
 }

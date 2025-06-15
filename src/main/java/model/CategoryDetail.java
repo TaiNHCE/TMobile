@@ -12,14 +12,16 @@ public class CategoryDetail {
     private int categoryDetailID;
     private int CategoryID;
     private String categoryDatailName;
+    private int categoryDetailsGroupID;
 
     public CategoryDetail() {
     }
 
-    public CategoryDetail(int categoryDetailID, int CategoryID, String categoryDatailName) {
+    public CategoryDetail(int categoryDetailID, int CategoryID, String categoryDatailName, int categoryDetailsGroupID) {
         this.categoryDetailID = categoryDetailID;
         this.CategoryID = CategoryID;
         this.categoryDatailName = categoryDatailName;
+        this.categoryDetailsGroupID = categoryDetailsGroupID;
     }
 
     public int getCategoryDetailID() {
@@ -44,6 +46,14 @@ public class CategoryDetail {
 
     public void setCategoryDatailName(String categoryDatailName) {
         this.categoryDatailName = categoryDatailName;
+    }
+
+    public int getCategoryDetailsGroupID() {
+        return categoryDetailsGroupID;
+    }
+
+    public void setCategoryDetailsGroupID(int categoryDetailsGroupID) {
+        this.categoryDetailsGroupID = categoryDetailsGroupID;
     }
 
     

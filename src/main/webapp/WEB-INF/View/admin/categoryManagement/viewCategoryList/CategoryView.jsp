@@ -16,7 +16,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="Css/viewCategoryList.css">
-        
+
     </head>
     <body>
         <div>
@@ -55,6 +55,7 @@
                 </tr>
                 <%
                     for (Category cate : categoryList) {
+                        if (cate.getIsActive()) {
                 %>
                 <tr>
                     <td><%= cate.getCategoryId()%></td>
@@ -66,12 +67,13 @@
 
                     <td>
                         <a href="CategoryDetail?categoryId=<%= cate.getCategoryId()%>" class="btn btn-warning" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
-                        <a href="" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit</a>
+                        <a href="UpdateCategory?categoryId=<%= cate.getCategoryId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit</a>
                         <a href="" class="btn btn-danger" ><i class="bi bi-trash"></i> Delete</a>
                     </td>
                 </tr>
 
                 <%
+                        }
                     }
                 %>
             </table>
@@ -81,6 +83,6 @@
                 }
             %>
         </div>
-        
+
     </body>
 </html>

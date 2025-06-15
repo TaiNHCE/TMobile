@@ -25,6 +25,7 @@
 /* Từng danh mục */
 .divLogo {
     width: 23%;
+    height: 50%;
     display: inline-block;
     vertical-align: top;
     font-size: 16px; /* reset lại */
@@ -37,7 +38,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     margin-left: 1.35%;
     margin-bottom: 2%;
-    margin-top: 0.5%;
+    
 }
 
 .divLogo:hover {
@@ -47,16 +48,16 @@
 
 /* Hình ảnh logo */
 .logoCategory {
-    width: 50%;
-    height: 10%;
-   
+    width: 32%;
+    height: 50%;
+
     border-radius: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 1%;
 }
 
 /* Tên danh mục */
 .divLogo h2 {
-    font-size: 18px;
+    font-size: 100%;
     color: #222;
     margin: 10px 0 0;
 }
@@ -71,44 +72,92 @@ hr {
     border: 2px solid #2e89ff !important;
 }
 
-/*======= Conten category detail ========*/
-/* Lưới chứa tất cả các Category Detail */
-.categoryDetailGrid {
-    display: flex;
-    flex-wrap: wrap;
-    
-}
 
-/* Mỗi Category Detail chiếm 50% chiều rộng */
-.divContentCategoryDetail {
-    width: calc(45%); /* trừ khoảng gap */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+/*<== category titel and category */
+.category-container {
+    margin-left: 21.5%;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    width: 73%;
+    background-color: #fefefe;
     padding: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    margin-left: 3.2%;
-    margin-bottom: 2.5%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Tiêu đề "Category Detail 1", "2", ... */
-.categoryDatailName {
-    font-size: 18px;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    font-weight: bold;
-    border-left: 4px solid #3498db;
-    padding-left: 10px;
+/* Nhóm tiêu đề */
+.group-header {
+    background-color: #b2ebf2; /* xanh ngọc */
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-/* Nội dung tên Attribute */
-.divContentCategoryDetail h2 {
-    font-size: 150%;
-    color: #444;
+.group-header:hover {
+    background-color: #4dd0e1; /* xanh ngọc đậm hơn */
+}
+
+.group-header h2 {
+    color: #00796b; /* xanh dương đậm */
     margin: 0;
+    font-size: 20px;
 }
 
-/*======= Conten category detail ========*/
+/* Chi tiết danh mục */
+.group-details {
+    display: none;
+    padding: 8px 24px;
+    animation: fadeIn 0.3s ease-in-out;
+}
 
+.detail-item {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    background-color: #f0f0f0;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.detail-item:hover {
+    background-color: #e0e0e0;
+}
+
+/* Hiệu ứng hiện chi tiết */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.no-data-message {
+    text-align: center;
+    color: #1565c0;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 24px 0;
+    padding: 14px 20px;
+    background-color: #e3f2fd; /* nền xanh dương nhạt */
+    border: 1px solid #90caf9;
+    border-radius: 10px;
+    position: relative;
+}
+
+.no-data-message::before {
+    content: "📭";
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+}
+/*<== category titel and category */
 
 

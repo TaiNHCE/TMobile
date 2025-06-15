@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Category;
 import model.CategoryDetail;
+import model.CategoryDetailGroup;
 
 /**
  *
@@ -65,9 +66,13 @@ public class CategoryDetailServlet extends HttpServlet {
         String cateId = request.getParameter("categoryId");
         int categoryId = (cateId != null) ? Integer.parseInt(cateId) : -1;
         if (categoryId != -1) {
-            CategoryDAO dao = new CategoryDAO();
+
             CategoryDAO categoryDAO = new CategoryDAO();
-            List<CategoryDetail> categoryDetailList = dao.getCategoryDetailById(categoryId);
+            
+            List<CategoryDetailGroup> categoryDetaiGrouplList = categoryDAO.getCategoryDetailGroupById(categoryId);
+            request.setAttribute("categoryDetaiGrouplList", categoryDetaiGrouplList);
+            
+            List<CategoryDetail> categoryDetailList = categoryDAO.getCategoryDetailById(categoryId);
             request.setAttribute("categoryDetailList", categoryDetailList);
 
             List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Category;
 import model.CategoryDetail;
+import model.CategoryDetailGroup;
 import utils.DBContext;
 
 /**
@@ -26,7 +27,7 @@ public class CategoryDAO extends DBContext {
 
     public List<Category> getAllCategory() {
         List<Category> categoryList = new ArrayList<>();
-        String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo FROM Categories";
+        String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo, isActive FROM Categories";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -37,8 +38,9 @@ public class CategoryDAO extends DBContext {
                 String descriptionCategory = rs.getString("Description");
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 String imgUrlLogo = rs.getString("ImgURLLogo");
+                boolean isActive = rs.getBoolean("isActive");
 
-                categoryList.add(new Category(categoryId, categoryName, descriptionCategory, createdAt, imgUrlLogo));
+                categoryList.add(new Category(categoryId, categoryName, descriptionCategory, createdAt, imgUrlLogo, isActive));
             }
             return categoryList;
         } catch (Exception e) {
@@ -47,9 +49,30 @@ public class CategoryDAO extends DBContext {
         return categoryList;
     }
 
+    public List<CategoryDetailGroup> getCategoryDetailGroupById(int categoryId) {
+        List<CategoryDetailGroup> categoryDetailGroupList = new ArrayList<>();
+        String sql = "SELECT CategoryDetailsGroupID, NameCategoryDetailsGroup, CategoryID from CategoryDetailsGroup where CategoryID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int categoryDetailsGroupID = rs.getInt("CategoryDetailsGroupID");
+                String nameCategoryDetailsGroup = rs.getString("NameCategoryDetailsGroup");
+                int categoryID = rs.getInt("CategoryID");
+
+                categoryDetailGroupList.add(new CategoryDetailGroup(categoryDetailsGroupID, nameCategoryDetailsGroup, categoryID));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryDetailGroupList;
+    }
+
     public List<CategoryDetail> getCategoryDetailById(int categoryId) {
         List<CategoryDetail> categoryDetailList = new ArrayList<>();
-        String sql = "SELECT CategoryDetailID, CategoryID, AttributeName from CategoryDetails where CategoryID = ?";
+        String sql = "SELECT CategoryDetailID, CategoryID, AttributeName, CategoryDetailsGroupID from CategoryDetails where CategoryID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, categoryId);
@@ -58,8 +81,9 @@ public class CategoryDAO extends DBContext {
                 int categoryDetailID = rs.getInt("CategoryDetailID");
                 int categoryID = rs.getInt("CategoryID");
                 String attributeName = rs.getString("AttributeName");
+                int categoryDetailsGroupID = rs.getInt("CategoryDetailsGroupID");
 
-                categoryDetailList.add(new CategoryDetail(categoryDetailID, categoryID, attributeName));
+                categoryDetailList.add(new CategoryDetail(categoryDetailID, categoryID, attributeName, categoryDetailsGroupID));
 
             }
         } catch (SQLException e) {
@@ -92,7 +116,7 @@ public class CategoryDAO extends DBContext {
 //    }
     public Category getCategoryById(int categoryID) {
         Category category = null;
-        String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo FROM Categories";
+        String sql = "SELECT CategoryID, CategoryName, Description, CreatedAt, ImgURLLogo, isActive FROM Categories where categoryID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, categoryID);
@@ -103,12 +127,51 @@ public class CategoryDAO extends DBContext {
                 String descriptionCategory = rs.getString("Description");
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 String imgUrlLogo = rs.getString("ImgURLLogo");
+                boolean isActive = rs.getBoolean("isActive");
 
-                category = new Category(categoryId, categoryName, descriptionCategory, createdAt, imgUrlLogo);
+                category = new Category(categoryId, categoryName, descriptionCategory, createdAt, imgUrlLogo, isActive);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return category;
+    }
+
+    public boolean updateCategporyDetailGroup(int categoryDetailsGroupID, String nameCategoryDetailsGroup) {
+        String sql = "UPDATE CategoryDetailsGroup SET NameCategoryDetailsGroup = ? WHERE CategoryDetailsGroupID = ?";
+        try ( PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nameCategoryDetailsGroup);
+            pstmt.setInt(2, categoryDetailsGroupID);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateCategporyDetail(int categoryDetailID, String attributeName) {
+        String sql = "UPDATE CategoryDetails SET AttributeName = ? WHERE CategoryDetailID = ?";
+        try ( PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, attributeName);
+            pstmt.setInt(2, categoryDetailID);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateCategory(int categoryId, String categoryName, String description) {
+        String sql = "UPDATE Categories SET CategoryName = ? WHERE CategoryID = ?";
+        try ( PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, categoryName);
+            pstmt.setInt(2, categoryId);
+            return pstmt.executeUpdate() >= 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

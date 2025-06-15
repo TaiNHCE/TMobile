@@ -4,6 +4,7 @@
     Author     : HP - Gia Khiêm
 --%>
 
+<%@page import="model.CategoryDetailGroup"%>
 <%@page import="model.CategoryDetail"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Category"%>
@@ -11,6 +12,7 @@
 <%
     List<CategoryDetail> categoryDetailList = (List<CategoryDetail>) request.getAttribute("categoryDetailList");
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
+    List<CategoryDetailGroup> categoryDetailGroup = (List<CategoryDetailGroup>) request.getAttribute("categoryDetaiGrouplList");
     int categoryId = (int) request.getAttribute("categoryId");
 %>
 <!DOCTYPE html>
@@ -19,7 +21,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="Css/categoryDetail.css">
-        
+
     </head>
     <body>
         <div style="display: flex; align-items: center; gap: 10px; margin-left: 21.5%; margin-bottom: 3%;  margin-top: 3%">
@@ -28,7 +30,7 @@
         </div>
 
         <!--            <== Category name==>-->
-        <div style = "margin-left: 21.5%; border-radius: 12px; border: 1px solid #ccc; width: 75%; margin-bottom: 3%; ">
+        <div style = "margin-left: 21.5%; border-radius: 12px; border: 1px solid #ccc; width: 75%; height: 25%; margin-bottom: 3%; ">
             <h2 style = "margin-left: 1%;">
                 Category Name
             </h2>
@@ -54,34 +56,64 @@
         <!--            <== Category name==>-->
 
         <!--            <== Category detail==>-->
-        <div style="margin-left: 21.5%; border-radius: 12px; border: 1px solid #ccc; width: 75%;">
-            <%
-                if (categoryDetailList != null && !categoryDetailList.isEmpty()) {
-                    int count = 1;
-            %>
-            <h2 style="margin-left: 1%;">Category Detail</h2>
+        <!-- Vùng hiển thị tổng -->
+        <div class="category-container">
+            <h2>Technical Specifications</h2>
             <hr>
+            <%
+                if (categoryDetailGroup != null && !categoryDetailGroup.isEmpty()) {
+                    int groupIndex = 0;
+                    for (CategoryDetailGroup cateGroup : categoryDetailGroup) {
+            %>
 
-            <div class="categoryDetailGrid">
-                <% for (CategoryDetail cateDetail : categoryDetailList) {%>
-                <div class="divContentCategoryDetail">
-                    <h2 class="categoryDatailName">Category Detail <%= count++%></h2>
-                    <h2><%= cateDetail.getCategoryDatailName()%></h2>
+            <!-- Nhóm tiêu đề -->
+            <div class="group-header" onclick="toggleDetails(<%= groupIndex%>)">
+                <h2><%= cateGroup.getNameCategoryDetailsGroup()%></h2>
+            </div>
+
+            <!-- Chi tiết, ẩn ban đầu -->
+            <div class="group-details" id="detailGroup<%= groupIndex%>">
+                <%
+                    if (categoryDetailList != null && !categoryDetailList.isEmpty()) {
+                        for (CategoryDetail cateList : categoryDetailList) {
+                            if (cateList.getCategoryDetailsGroupID() == cateGroup.getCategoryDetailsGroupID()) {
+                %>
+                <div class="detail-item">
+                    <%= cateList.getCategoryDatailName()%>
                 </div>
-                <% } %>
+                <%
+                            }
+                        }
+                    }
+                %>
             </div>
             <%
+                    groupIndex++;
+                }
             } else {
             %>
-            <h1 style="text-align: center; color: gray;">No category detail data available.</h1>
+            <p class="no-data-message">No data</p>
             <%
                 }
+
             %>
         </div>
 
 
 
+
         <!--            <== Category detail==>-->
-        
+
     </body>
 </html>
+
+<script>
+    function toggleDetails(index) {
+        var detailDiv = document.getElementById("detailGroup" + index);
+        if (detailDiv.style.display === "none") {
+            detailDiv.style.display = "block";
+        } else {
+            detailDiv.style.display = "none";
+        }
+    }
+</script>
