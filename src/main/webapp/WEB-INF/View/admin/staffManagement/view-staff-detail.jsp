@@ -22,6 +22,7 @@
                 out.print("<p>There is no customer with that id</p>");
             } else {
         %>
+        <h2>Staff's information</h2>
         <form method="post" action="CustomerList?action=detail">
             <div class="mb-3">
                 <label class="form-label">Full Name: </label>
@@ -47,8 +48,8 @@
                 <input type="radio" class="form-check-input" name="sex" value="female"
                        <%= ("female".equalsIgnoreCase(sta.getGender()) ? "checked" : "")%> disabled/> Female
             </div>
-            <a href="CustomerList" class="btn btn-secondary" id="back"><i class="bi bi-arrow-return-left"></i> Change Status</a>
-            <button type="submit" class="btn btn-primary" id="submit"><i class="bi bi-tools"></i> Back</button>
+            <a href="ChangePassword" class="btn btn-secondary" ><i class="bi bi-tools"></i> Change Password</a>
+            <a href="CustomerList" class="btn btn-primary" id="back"><i class="bi bi-arrow-return-left"></i> Back</a>
         </form>
         <%
             }
