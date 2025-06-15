@@ -84,10 +84,10 @@ public class LoginServlet extends HttpServlet {
         if (acc == null || acc.getAccountID() == -1) {
             // Sai email hoặc password
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("account/login.jsp").forward(request, response);
         } else {
             session.setAttribute("user", acc);
-                request.getRequestDispatcher("login.jsp");
+                request.getRequestDispatcher("account/login.jsp");
         }
 
     }

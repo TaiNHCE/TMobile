@@ -83,7 +83,7 @@ public class LoginAdminServlet extends HttpServlet {
         }
         else{
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            response.sendRedirect("login-admin.jsp");
+            response.sendRedirect("account/login-admin.jsp");
         }
     }
 

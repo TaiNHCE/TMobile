@@ -81,7 +81,7 @@ public class LoginStaffServlet extends HttpServlet {
              response.sendRedirect("account/login-staff.jsp");
         }
         else{
-            response.sendRedirect("login-staff.jsp");
+            response.sendRedirect("account/login-staff.jsp");
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
         }
     }
