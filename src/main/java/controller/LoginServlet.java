@@ -79,15 +79,13 @@ public class LoginServlet extends HttpServlet {
 
         AccountDAO dao = new AccountDAO();
         HttpSession session = request.getSession();
-        Account acc = dao.verifyMD5(email, pass); // dùng email thay vì username
-
+        Account acc = dao.verifyMD5(email, pass);
         if (acc == null || acc.getAccountID() == -1) {
-            // Sai email hoặc password
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
             request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
         } else {
             session.setAttribute("user", acc);
-                request.getRequestDispatcher("WEB-INF/View/account/login.jsp");
+            request.getRequestDispatcher("WEB-INF/View/account/login.jsp");
         }
 
     }

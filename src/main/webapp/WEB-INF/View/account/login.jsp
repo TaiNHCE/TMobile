@@ -3,8 +3,6 @@
     Created on : Jun 11, 2025, 4:10:00 PM
     Author     : pc
 --%>
-<%@page import="model.Customer"%>
-<%@page import="dao.CustomerDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

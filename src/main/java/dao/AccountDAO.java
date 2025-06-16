@@ -67,16 +67,16 @@ public class AccountDAO extends DBContext {
         ps.setString(1, email);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            return true; // Email đã tồn tại
+            return true;
         }
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
-    return false; // Email chưa tồn tại hoặc có lỗi
+    return false;
 }   
 
     public static void main(String[] args) {
-        AccountDAO dao = new AccountDAO(); // giả sử bạn đã có class này
+        AccountDAO dao = new AccountDAO();
         String pass = "123456";
         System.out.println(dao.hashMD5(pass));
     }
