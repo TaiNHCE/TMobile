@@ -28,7 +28,7 @@
         </div>
         
         <div class="nav-item">
-            <a href="${pageContext.request.contextPath}/staff/stock/view" class="nav-link">
+            <a href="ImportStatistic" class="nav-link">
                 <i class="fas fa-warehouse"></i>
                 <span>Stock</span>
             </a>

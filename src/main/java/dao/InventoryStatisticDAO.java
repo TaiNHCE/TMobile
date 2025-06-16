@@ -8,11 +8,9 @@ package dao;
  *
  * @author HP
  */
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.math.BigDecimal;
 import model.InventoryStatistic;
 import utils.DBContext;
 
@@ -29,16 +27,24 @@ public class InventoryStatisticDAO extends DBContext {
                    + "JOIN Suppliers s ON p.SupplierID = s.SupplierID "
                    + "JOIN PurchaseOrderDetails pod ON pod.ProductID = p.ProductID "
                    + "JOIN PurchaseOrders po ON po.PurchaseOrderID = pod.PurchaseOrderID";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
             while (rs.next()) {
                 InventoryStatistic stat = mapResultSetToStatistic(rs);
                 list.add(stat);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }
@@ -55,21 +61,29 @@ public class InventoryStatisticDAO extends DBContext {
                    + "JOIN PurchaseOrderDetails pod ON pod.ProductID = p.ProductID "
                    + "JOIN PurchaseOrders po ON po.PurchaseOrderID = pod.PurchaseOrderID "
                    + "WHERE p.ProductName LIKE ? OR b.BrandName LIKE ? OR c.CategoryName LIKE ?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(sql);
             String searchValue = "%" + keyword + "%";
             ps.setString(1, searchValue);
             ps.setString(2, searchValue);
             ps.setString(3, searchValue);
 
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 InventoryStatistic stat = mapResultSetToStatistic(rs);
                 list.add(stat);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }
@@ -86,17 +100,26 @@ public class InventoryStatisticDAO extends DBContext {
                    + "JOIN PurchaseOrderDetails pod ON pod.ProductID = p.ProductID "
                    + "JOIN PurchaseOrders po ON po.PurchaseOrderID = pod.PurchaseOrderID "
                    + "WHERE c.CategoryID = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(sql);
             ps.setInt(1, categoryId);
-            ResultSet rs = ps.executeQuery();
+
+            rs = ps.executeQuery();
             while (rs.next()) {
                 InventoryStatistic stat = mapResultSetToStatistic(rs);
                 list.add(stat);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(rs != null) rs.close();
+                if(ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }

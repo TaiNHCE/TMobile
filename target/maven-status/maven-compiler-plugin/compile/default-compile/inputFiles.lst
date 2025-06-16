@@ -1,9 +1,15 @@
+E:\Ki 5\SWP391\TMobile\src\main\java\dao\RevenueStatisticDAO.java
 E:\Ki 5\SWP391\TMobile\src\main\java\dao\ImportStockDAO.java
+E:\Ki 5\SWP391\TMobile\src\main\java\controller\RevenueStatisticServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\utils\testDB.java
+E:\Ki 5\SWP391\TMobile\src\main\java\model\RevenueStatistic.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\AdminDashboard.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\UpdateSupplierServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\dao\SupplierDAO.java
+E:\Ki 5\SWP391\TMobile\src\main\java\model\Product.java
 E:\Ki 5\SWP391\TMobile\src\main\java\utils\DBContext.java
+E:\Ki 5\SWP391\TMobile\src\main\java\controller\ImportStatisticServlet.java
+E:\Ki 5\SWP391\TMobile\src\main\java\model\PurchaseOrderDetail.java
 E:\Ki 5\SWP391\TMobile\src\main\java\dao\InventoryStatisticDAO.java
 E:\Ki 5\SWP391\TMobile\src\main\java\model\Suppliers.java
 E:\Ki 5\SWP391\TMobile\src\main\java\model\InventoryStatistic.java
@@ -12,4 +18,5 @@ E:\Ki 5\SWP391\TMobile\src\main\java\controller\StaffDashboardServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\CreateSupplierServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\ViewSupplierServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\DeleteSupplierServlet.java
-E:\Ki 5\SWP391\TMobile\src\main\java\model\ImportStock.java
+E:\Ki 5\SWP391\TMobile\src\main\java\model\PurchaseOrder.java
+E:\Ki 5\SWP391\TMobile\src\main\java\controller\ManageStatisticServlet.java

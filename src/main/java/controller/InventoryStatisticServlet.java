@@ -63,13 +63,18 @@ public class InventoryStatisticServlet extends HttpServlet {
             throws ServletException, IOException {
 
         InventoryStatisticDAO dao = new InventoryStatisticDAO();
+        String keyword = request.getParameter("keyword");
+
         ArrayList<InventoryStatistic> statistics = dao.getAllInventory();
-
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            statistics = dao.searchInventory(keyword.trim());
+            request.setAttribute("searchKeyword", keyword.trim());
+        } else {
+            statistics = dao.getAllInventory();
+        }
         String message = (statistics == null || statistics.isEmpty()) ? "No inventory statistics available." : null;
-
         request.setAttribute("inventoryStatistics", statistics);
         request.setAttribute("message", message);
-
         request.getRequestDispatcher("/WEB-INF/View/admin/manageStatistics/inventoryStatistic.jsp")
                 .forward(request, response);
     }

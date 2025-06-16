@@ -91,11 +91,11 @@ public class CreateSupplierServlet extends HttpServlet {
         String supplyGroup = (supplyGroupArr != null) ? String.join(",", supplyGroupArr) : "";
 
         String errorMsg = null;
-        //Validate Tax ID: must be 6-15 digits
+        // Validate Tax ID: must be 6-15 digits
         if (taxId == null || !taxId.matches("^\\d{6,15}$")) {
             errorMsg = "Tax ID must be 6-15 digits.";
         }
-         //Validate Email
+         // Validate Email
         else if (email == null || !email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
             errorMsg = "Invalid email address.";
         } 
@@ -107,7 +107,7 @@ public class CreateSupplierServlet extends HttpServlet {
             errorMsg = "Please select at least one Supply Group!";
         }
 
-        // 8. Check for duplicate Tax ID or Email
+        // Check for duplicate Tax ID or Email
         SupplierDAO dao = new SupplierDAO();
         if (errorMsg == null && dao.isSupplierExist(taxId, email)) {
             errorMsg = "Tax ID or Email already exists!";

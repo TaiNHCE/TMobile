@@ -40,8 +40,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="InventoryStatistic" class="nav-link">
-                <i class="fas fa-warehouse"></i> <span>Manage Statistics</span>
+            <a href="ManageStatistic" class="nav-link">
+                <i class="fa fa-bar-chart"></i> <span>Manage Statistics</span>
             </a>
         </li>
     </ul>

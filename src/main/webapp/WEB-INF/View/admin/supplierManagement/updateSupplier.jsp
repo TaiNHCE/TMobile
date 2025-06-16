@@ -50,19 +50,7 @@
                 align-items: center;
             }
 
-            @media (max-width: 576px) {
-                .form-label {
-                    width: 100%;
-                    margin-bottom: 6px;
-                }
-                .mb-3.row {
-                    display: block;
-                }
-                .col-sm-9 {
-                    width: 100%;
-                }
-            }
-
+            
         </style>
     </head>
     <body>
