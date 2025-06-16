@@ -29,6 +29,7 @@ public class Product {
     private String imageUrl;
 
     public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, int categoryId, int brandId, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
+
         this.productId = productId;
         this.productName = productName;
         this.description = description;
@@ -44,123 +45,123 @@ public class Product {
         this.isNew = isNew;
         this.warrantyPeriod = warrantyPeriod;
         this.isActive = isActive;
-        this.imageUrl = imageUrl;
+
     }
 
     public int getProductId() {
         return productId;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public int getSupplierId() {
-        return supplierId;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public int getBrandId() {
-        return brandId;
-    }
-
-    public boolean isIsFeatured() {
-        return isFeatured;
-    }
-
-    public boolean isIsBestSeller() {
-        return isBestSeller;
-    }
-
-    public boolean isIsNew() {
-        return isNew;
-    }
-
-    public int getWarrantyPeriod() {
-        return warrantyPeriod;
-    }
-
-    public boolean isIsActive() {
-        return isActive;
-    }
-
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
     }
 
     public void setProductName(String productName) {
         this.productName = productName;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    public int getDiscount() {
+        return discount;
+    }
+
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public int getStock() {
+        return stock;
     }
 
     public void setStock(int stock) {
         this.stock = stock;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getSupplierId() {
+        return supplierId;
     }
 
     public void setSupplierId(int supplierId) {
         this.supplierId = supplierId;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public int getBrandId() {
+        return brandId;
     }
 
     public void setBrandId(int brandId) {
         this.brandId = brandId;
     }
 
+    public boolean isIsFeatured() {
+        return isFeatured;
+    }
+
     public void setIsFeatured(boolean isFeatured) {
         this.isFeatured = isFeatured;
+    }
+
+    public boolean isIsBestSeller() {
+        return isBestSeller;
     }
 
     public void setIsBestSeller(boolean isBestSeller) {
         this.isBestSeller = isBestSeller;
     }
 
+    public boolean isIsNew() {
+        return isNew;
+    }
+
     public void setIsNew(boolean isNew) {
         this.isNew = isNew;
     }
 
+    public int getWarrantyPeriod() {
+        return warrantyPeriod;
+    }
+
     public void setWarrantyPeriod(int warrantyPeriod) {
         this.warrantyPeriod = warrantyPeriod;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
     }
 
     public void setIsActive(boolean isActive) {
@@ -174,6 +175,5 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    
     
 }
