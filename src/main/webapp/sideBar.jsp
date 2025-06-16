@@ -1,3 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Supplier Detail</title>
+    <!-- Bootstrap CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierLists.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style> .sidebar {
+    width: 220px;
+    background: #232946;
+    color: #fff;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+.sidebar-header {
+    padding: 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #2e3652;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.nav-item {
+    margin: 0;
+}
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 25px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    border-left: 4px solid transparent;
+    transition: background .2s, border-left .2s, color .2s;
+}
+.nav-link:hover,
+.nav-link.active {
+    background: #35377e;
+    color: #fff;
+    border-left: 4px solid #eebbc3;
+}
+</style>
+</head>
+ 
+
+
+
+
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
