@@ -25,7 +25,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="category-management.jsp" class="nav-link">
+            <a href="CategoryView" class="nav-link">
                 <i class="fas fa-tags"></i> <span>Category Management</span>
             </a>
         </li>
