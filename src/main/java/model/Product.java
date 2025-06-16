@@ -4,18 +4,17 @@
  */
 package model;
 
-import java.sql.Date;
+import java.math.BigDecimal;
 
 /**
  *
- * @author HP
+ * @author HP - Gia Khiêm
  */
 public class Product {
-
     private int productId;
     private String productName;
     private String description;
-    private double price;
+    private BigDecimal  price;
     private int discount;
     private int stock;
     private String status;
@@ -25,18 +24,12 @@ public class Product {
     private boolean isFeatured;
     private boolean isBestSeller;
     private boolean isNew;
-    private Date createdAt;
-    private Date updateAt;
     private int warrantyPeriod;
     private boolean isActive;
+    private String imageUrl;
 
-    public Product() {
-    }
+    public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, int categoryId, int brandId, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
 
-    public Product(int productId, String productName, String description, double price, int discount,
-            int stock, String status, int supplierId, int categoryId, int brandId,
-            boolean isFeatured, boolean isBestSeller, boolean isNew,
-            Date createdAt, Date updateAt, int warrantyPeriod, boolean isActive) {
         this.productId = productId;
         this.productName = productName;
         this.description = description;
@@ -50,18 +43,14 @@ public class Product {
         this.isFeatured = isFeatured;
         this.isBestSeller = isBestSeller;
         this.isNew = isNew;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
         this.warrantyPeriod = warrantyPeriod;
         this.isActive = isActive;
+        this.imageUrl = imageUrl;
+
     }
 
     public int getProductId() {
         return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public String getProductName() {
@@ -80,11 +69,11 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -136,44 +125,28 @@ public class Product {
         this.brandId = brandId;
     }
 
-    public boolean isFeatured() {
+    public boolean isIsFeatured() {
         return isFeatured;
     }
 
-    public void setFeatured(boolean featured) {
-        isFeatured = featured;
+    public void setIsFeatured(boolean isFeatured) {
+        this.isFeatured = isFeatured;
     }
 
-    public boolean isBestSeller() {
+    public boolean isIsBestSeller() {
         return isBestSeller;
     }
 
-    public void setBestSeller(boolean bestSeller) {
-        isBestSeller = bestSeller;
+    public void setIsBestSeller(boolean isBestSeller) {
+        this.isBestSeller = isBestSeller;
     }
 
-    public boolean isNew() {
+    public boolean isIsNew() {
         return isNew;
     }
 
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
     }
 
     public int getWarrantyPeriod() {
@@ -184,11 +157,20 @@ public class Product {
         this.warrantyPeriod = warrantyPeriod;
     }
 
-    public boolean isActive() {
+    public boolean isIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
 }
