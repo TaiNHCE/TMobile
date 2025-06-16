@@ -1,20 +1,3 @@
-
-
-<head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title></title>
-        <!-- Bootstrap CDN -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-        <!-- Fontawesome CDN -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-        <!-- Sidebar CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
-
-        <!-- Dashboard CSS -->
-        
-    </head>
-
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -22,7 +5,7 @@
     </div>
     <ul class="nav-menu">
         <li class="nav-item">
-            <a href="adminDashboad.jsp" class="nav-link active">
+            <a href="AdminDashboard" class="nav-link">
                 <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
             </a>
         </li>
@@ -57,10 +40,24 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="Inventory" class="nav-link">
-                <i class="fas fa-warehouse"></i> <span>Inventory Statistics</span>
+            <a href="ManageStatistic" class="nav-link">
+                <i class="fa fa-bar-chart"></i> <span>Manage Statistics</span>
             </a>
         </li>
-       
     </ul>
 </nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const path = window.location.pathname.toLowerCase();
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute("href").toLowerCase();
+            if (path.includes(href)) {
+                document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
+                link.classList.add("active");
+            }
+        });
+    });
+</script>
