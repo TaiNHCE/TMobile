@@ -45,12 +45,15 @@ public class Product {
         this.isNew = isNew;
         this.warrantyPeriod = warrantyPeriod;
         this.isActive = isActive;
-        this.imageUrl = imageUrl;
 
     }
 
     public int getProductId() {
         return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
