@@ -4,9 +4,8 @@
  */
 package controller;
 
-import dao.BrandDAO;
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.ImportStockDAO;
+import dao.InventoryStatisticDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,17 +13,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Brand;
-import model.Category;
-import model.Product;
+import java.util.ArrayList;
+import java.util.Map;
+import model.InventoryStatistic;
 
 /**
  *
- * @author HP - Gia Khiêm
+ * @author HP
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/Home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "ImportStatisticServlet", urlPatterns = {"/ImportStatistic"})
+public class ImportStatisticServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +41,10 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
+            out.println("<title>Servlet ImportStatisticServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ImportStatisticServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,30 +62,34 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CategoryDAO categoryDAO = new CategoryDAO();
-        BrandDAO brandDAO = new BrandDAO();
-        ProductDAO productDAO = new ProductDAO();
+        try {
+            String keyword = request.getParameter("search");
+            InventoryStatisticDAO invDao = new InventoryStatisticDAO();
+            ImportStockDAO dao = new ImportStockDAO(); 
+            ArrayList<InventoryStatistic> inventoryList;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                inventoryList = invDao.searchInventory(keyword);
+            } else {
+                inventoryList = invDao.getAllInventory();
+            }
+            // lay du lieu thong ke
+            Map<String, Integer> dailyImport = dao.getImportStocksCountByDate();
+            Map<String, Integer> monthlyImport = dao.getImportStocksCountByMonth();
+            Map<String, Integer> supplierImport = dao.getStocksBySupplier();
+            Map<String, Integer> topProductImport = dao.getTopImportedProducts();
+            // dem sang jsp
+            request.setAttribute("inventoryList", inventoryList);
+            request.setAttribute("dailyImport", dailyImport);
+            request.setAttribute("monthlyImport", monthlyImport);
+            request.setAttribute("supplierImport", supplierImport);
+            request.setAttribute("topProductImport", topProductImport);
 
-        List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
-        List<Brand> brandList = brandDAO.getAllBrand();
-        
-        List<Product> productListNew = productDAO.getProductIsNew();
-        
-        List<Product> productListFeatured = productDAO.getProductIsFeatured();
-        
-        List<Product> productListBestSeller = productDAO.getProductIsBestSeller();
-        
-        List<Product> productListDiscount = productDAO.getDiscountedProducts();
-        
-        request.setAttribute("categoryList", categoryList);
-        request.setAttribute("brandList", brandList);
-        request.setAttribute("productList", productListNew);
-        request.setAttribute("productListFeatured", productListFeatured);
-        request.setAttribute("productListBestSeller", productListBestSeller);
-        request.setAttribute("productListDiscount", productListDiscount);
-        
-        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
-
+            request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Error fetching inventory statistics: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
+        }
     }
 
     /**

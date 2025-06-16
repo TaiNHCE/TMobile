@@ -4,9 +4,7 @@
  */
 package controller;
 
-import dao.BrandDAO;
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.SupplierDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,16 +13,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import model.Brand;
-import model.Category;
-import model.Product;
+import model.Suppliers;
 
 /**
  *
- * @author HP - Gia Khiêm
+ * @author HP
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/Home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "ViewSupplierServlet", urlPatterns = {"/ViewSupplier"})
+public class ViewSupplierServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +39,10 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
+            out.println("<title>Servlet ViewSupplierServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ViewSupplierServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,30 +60,30 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CategoryDAO categoryDAO = new CategoryDAO();
-        BrandDAO brandDAO = new BrandDAO();
-        ProductDAO productDAO = new ProductDAO();
+        String id = request.getParameter("id");
+        String searchName = request.getParameter("searchName");
+        SupplierDAO supplierDAO = new SupplierDAO();
 
-        List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
-        List<Brand> brandList = brandDAO.getAllBrand();
-        
-        List<Product> productListNew = productDAO.getProductIsNew();
-        
-        List<Product> productListFeatured = productDAO.getProductIsFeatured();
-        
-        List<Product> productListBestSeller = productDAO.getProductIsBestSeller();
-        
-        List<Product> productListDiscount = productDAO.getDiscountedProducts();
-        
-        request.setAttribute("categoryList", categoryList);
-        request.setAttribute("brandList", brandList);
-        request.setAttribute("productList", productListNew);
-        request.setAttribute("productListFeatured", productListFeatured);
-        request.setAttribute("productListBestSeller", productListBestSeller);
-        request.setAttribute("productListDiscount", productListDiscount);
-        
-        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
+        if (id != null) {
+            try {
+                int supplierId = Integer.parseInt(id);
+                Suppliers supplier = supplierDAO.getSupplierById(supplierId);
+                request.setAttribute("supplier", supplier);
+                request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/supplierDetail.jsp").forward(request, response);
+                return;
+            } catch (Exception e) {
+            }
+        }
 
+        List<Suppliers> supplierList;
+        if (searchName != null && !searchName.trim().isEmpty()) {
+            supplierList = supplierDAO.findSuppliersByName(searchName);
+        } else {
+            supplierList = supplierDAO.getAllSuppliers();
+        }
+
+        request.setAttribute("supplierList", supplierList);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/supplierList.jsp").forward(request, response);
     }
 
     /**
@@ -101,7 +97,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
     /**

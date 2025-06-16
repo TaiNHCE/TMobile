@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * @author TaiNHCE181569
  */
 public class DBContext {
-   protected Connection conn = null;
+
+    protected Connection conn = null;
 
     public DBContext() {
         try {
@@ -41,5 +42,7 @@ public class DBContext {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+   
 
 }

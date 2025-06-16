@@ -4,9 +4,7 @@
  */
 package controller;
 
-import dao.BrandDAO;
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.InventoryStatisticDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,17 +12,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Brand;
-import model.Category;
-import model.Product;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import model.InventoryStatistic;
 
 /**
  *
- * @author HP - Gia Khiêm
+ * @author HP
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/Home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "InventoryStatisticServlet", urlPatterns = {"/InventoryStatistic"})
+public class InventoryStatisticServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +40,10 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
+            out.println("<title>Servlet InventoryStatisticServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet InventoryStatisticServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,30 +61,22 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CategoryDAO categoryDAO = new CategoryDAO();
-        BrandDAO brandDAO = new BrandDAO();
-        ProductDAO productDAO = new ProductDAO();
 
-        List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
-        List<Brand> brandList = brandDAO.getAllBrand();
-        
-        List<Product> productListNew = productDAO.getProductIsNew();
-        
-        List<Product> productListFeatured = productDAO.getProductIsFeatured();
-        
-        List<Product> productListBestSeller = productDAO.getProductIsBestSeller();
-        
-        List<Product> productListDiscount = productDAO.getDiscountedProducts();
-        
-        request.setAttribute("categoryList", categoryList);
-        request.setAttribute("brandList", brandList);
-        request.setAttribute("productList", productListNew);
-        request.setAttribute("productListFeatured", productListFeatured);
-        request.setAttribute("productListBestSeller", productListBestSeller);
-        request.setAttribute("productListDiscount", productListDiscount);
-        
-        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
+        InventoryStatisticDAO dao = new InventoryStatisticDAO();
+        String keyword = request.getParameter("keyword");
 
+        ArrayList<InventoryStatistic> statistics = dao.getAllInventory();
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            statistics = dao.searchInventory(keyword.trim());
+            request.setAttribute("searchKeyword", keyword.trim());
+        } else {
+            statistics = dao.getAllInventory();
+        }
+        String message = (statistics == null || statistics.isEmpty()) ? "No inventory statistics available." : null;
+        request.setAttribute("inventoryStatistics", statistics);
+        request.setAttribute("message", message);
+        request.getRequestDispatcher("/WEB-INF/View/admin/manageStatistics/inventoryStatistic.jsp")
+                .forward(request, response);
     }
 
     /**

@@ -4,9 +4,7 @@
  */
 package controller;
 
-import dao.BrandDAO;
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.SupplierDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,17 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Brand;
-import model.Category;
-import model.Product;
 
 /**
  *
- * @author HP - Gia Khiêm
+ * @author HP
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/Home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "DeleteSupplierServlet", urlPatterns = {"/DeleteSupplier"})
+public class DeleteSupplierServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +37,10 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
+            out.println("<title>Servlet DeleteSupplierServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteSupplierServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,30 +58,18 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CategoryDAO categoryDAO = new CategoryDAO();
-        BrandDAO brandDAO = new BrandDAO();
-        ProductDAO productDAO = new ProductDAO();
+        String supplierID = request.getParameter("supplierID");
+        String taxId = request.getParameter("taxId");
 
-        List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
-        List<Brand> brandList = brandDAO.getAllBrand();
-        
-        List<Product> productListNew = productDAO.getProductIsNew();
-        
-        List<Product> productListFeatured = productDAO.getProductIsFeatured();
-        
-        List<Product> productListBestSeller = productDAO.getProductIsBestSeller();
-        
-        List<Product> productListDiscount = productDAO.getDiscountedProducts();
-        
-        request.setAttribute("categoryList", categoryList);
-        request.setAttribute("brandList", brandList);
-        request.setAttribute("productList", productListNew);
-        request.setAttribute("productListFeatured", productListFeatured);
-        request.setAttribute("productListBestSeller", productListBestSeller);
-        request.setAttribute("productListDiscount", productListDiscount);
-        
-        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
+        if (supplierID == null || supplierID.trim().isEmpty()
+                || taxId == null || taxId.trim().isEmpty()) {
+            response.sendRedirect("ViewSupplier");
+            return;
+        }
 
+        request.setAttribute("supplierID", supplierID);
+        request.setAttribute("taxId", taxId);
+        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/deleteSupplier.jsp").forward(request, response);
     }
 
     /**
@@ -101,7 +83,27 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String sid = request.getParameter("supplierID");
+
+        if (sid == null || sid.trim().isEmpty()) {
+            response.sendRedirect("ViewSupplier");
+            return;
+        }
+
+        try {
+            int supplierID = Integer.parseInt(sid);
+            SupplierDAO dao = new SupplierDAO();
+            boolean result = dao.deleteSupplierByID(supplierID);
+
+            if (result) {
+                response.sendRedirect("ViewSupplier?deleteSuccess=true");
+            } else {
+                request.setAttribute("errorMsg", "Delete supplier failed!");
+                request.getRequestDispatcher("ViewSupplier").forward(request, response);
+            }
+        } catch (NumberFormatException e) {
+            response.sendRedirect("ViewSupplier");
+        }
     }
 
     /**
