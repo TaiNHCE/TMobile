@@ -174,4 +174,20 @@ public class CategoryDAO extends DBContext {
         }
         return false;
     }
+    
+    public boolean deleteCategory(int categoryId) {
+        String sql = "UPDATE Categories SET isActive = 0 WHERE CategoryID = ?";
+
+        try ( PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, categoryId);
+
+            int affectedRows = stmt.executeUpdate();
+
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

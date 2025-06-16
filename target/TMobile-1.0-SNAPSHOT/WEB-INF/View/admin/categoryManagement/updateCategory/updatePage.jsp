@@ -23,7 +23,7 @@
         <title>JSP Page</title>
         <link rel="stylesheet" href="Css/categoryDetail.css">
         <link rel="stylesheet" href="Css/updateCategory.css">
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
         <form method="post" action="UpdateCategory">
@@ -157,12 +157,33 @@
     }
 </script>
 
+<%
+    String success = request.getParameter("success");
+    String error = request.getParameter("error");
+%>
 <script>
-    <% if ("1".equals(request.getParameter("success"))) { %>
-    alert("Cập nhật thành công!");
-    <% } else if ("1".equals(request.getParameter("error"))) { %>
-    alert("Cập nhật thất bại. Vui lòng thử lại!");
-    <% }%>
+    window.onload = function () {
+        <% if ("1".equals(success)) { %>
+        Swal.fire({
+            icon: 'success',
+            title: 'Update Successful!',
+            text: 'Your changes have been saved successfully.',
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+            timer: 3000
+        });
+        <% } else if ("1".equals(error)) { %>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error Occurred!',
+            text: 'The update could not be completed. Please try again later.',
+            showConfirmButton: true,
+            confirmButtonText: 'Try Again',
+            timer: 3000
+        });
+        <% } %>
+    };
 </script>
+
 
 

@@ -16,9 +16,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="Css/viewCategoryList.css">
-
+        
     </head>
     <body>
+        <jsp:include page="/WEB-INF/View/admin/categoryManagement/deleteCategory/deleteCategory.jsp" />
         <div>
             <h1 class = "col-md-9 fw-bold display-5" style = "margin-left: 18.9%; margin-top: 5%">
                 Category Management
@@ -36,10 +37,6 @@
 
                 <span style="color: white; font-weight: 500; font-size: 16px;">Add</span>
             </a>
-
-
-
-
 
             <%
                 if (categoryList != null) {
@@ -68,7 +65,7 @@
                     <td>
                         <a href="CategoryDetail?categoryId=<%= cate.getCategoryId()%>" class="btn btn-warning" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
                         <a href="UpdateCategory?categoryId=<%= cate.getCategoryId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit</a>
-                        <a href="" class="btn btn-danger" ><i class="bi bi-trash"></i> Delete</a>
+                        <button class="btn btn-danger" onclick="confirmDelete(<%= cate.getCategoryId()%>)">Delete</button>
                     </td>
                 </tr>
 
@@ -86,3 +83,30 @@
 
     </body>
 </html>
+
+
+<%
+    String success = request.getParameter("success");
+    String error = request.getParameter("error");
+%>
+
+<script>
+    window.onload = function () {
+    <% if ("1".equals(success)) { %>
+        Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'The category has been hidden.',
+            timer: 2000
+        });
+    <% } else if ("1".equals(error)) { %>
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'Could not hide the category.',
+            timer: 2000
+        });
+    <% }%>
+    };
+</script>
+

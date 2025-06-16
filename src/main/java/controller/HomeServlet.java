@@ -6,6 +6,7 @@ package controller;
 
 import dao.BrandDAO;
 import dao.CategoryDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Brand;
 import model.Category;
+import model.Product;
 
 /**
  *
@@ -64,14 +66,28 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         CategoryDAO categoryDAO = new CategoryDAO();
         BrandDAO brandDAO = new BrandDAO();
+        ProductDAO productDAO = new ProductDAO();
 
         List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
         List<Brand> brandList = brandDAO.getAllBrand();
-                
+        
+        List<Product> productListNew = productDAO.getProductIsNew();
+        
+        List<Product> productListFeatured = productDAO.getProductIsFeatured();
+        
+        List<Product> productListBestSeller = productDAO.getProductIsBestSeller();
+        
+        List<Product> productListDiscount = productDAO.getDiscountedProducts();
+        
         request.setAttribute("categoryList", categoryList);
         request.setAttribute("brandList", brandList);
-//        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
-request.getRequestDispatcher("/homePage/homePage.jsp").forward(request, response);
+        request.setAttribute("productList", productListNew);
+        request.setAttribute("productListFeatured", productListFeatured);
+        request.setAttribute("productListBestSeller", productListBestSeller);
+        request.setAttribute("productListDiscount", productListDiscount);
+        
+        request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
+
     }
 
     /**

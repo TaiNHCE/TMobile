@@ -8,8 +8,10 @@ utils\testDB.class
 controller\CategoryDetailServlet.class
 controller\CategoryViewServlet.class
 model\CategoryDetail.class
+model\Product.class
 dao\BrandDAO.class
 model\Category.class
 model\CategoryDetailGroup.class
 dao\ProductDAO.class
+controller\DeleteCategoryServlet.class
 controller\HomeServlet.class
