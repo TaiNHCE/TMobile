@@ -11,25 +11,45 @@ import java.util.Date;
  * @author pc
  */
 public class Staff {
+
     private int staffID;
     private String email;
     private String fullName;
     private String phone;
-    private String hiredDate;
-    private String birthDay;
     private String gender;
+
+    private int accountId;
+    private Date birthDay;
+    private String position;
+    private Date hiredDate;
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
     public Staff() {
     }
 
-    public Staff(int staffID, String email, String fullName, String hiredDate) {
+    public Staff(int staffID, String email, String fullName, Date hiredDate) {
         this.staffID = staffID;
         this.email = email;
         this.fullName = fullName;
         this.hiredDate = hiredDate;
     }
 
-    public Staff(int staffID, String email, String fullName, String phone, String hiredDate, String birthDay, String gender) {
+    public Staff(int staffID, String email, String fullName, String phone, Date hiredDate, Date birthDay, String gender) {
         this.staffID = staffID;
         this.email = email;
         this.fullName = fullName;
@@ -71,19 +91,19 @@ public class Staff {
         this.phone = phone;
     }
 
-    public String getHiredDate() {
+    public Date getHiredDate() {
         return hiredDate;
     }
 
-    public void setHiredDate(String hiredDate) {
+    public void setHiredDate(Date hiredDate) {
         this.hiredDate = hiredDate;
     }
 
-    public String getBirthDay() {
+    public Date getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(String birthDay) {
+    public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
     }
 
@@ -94,5 +114,5 @@ public class Staff {
     public void setGender(String gender) {
         this.gender = gender;
     }
-    
+
 }

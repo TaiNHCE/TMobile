@@ -34,7 +34,7 @@
         <div style="margin-left: 21.5%; border-radius: 12px; border: 1px solid #ccc; width: 75%;">
 
             <form action="CreateCategory" method="post">
-                <div class="divCategoryInput">
+                <div>
                     <div class="form-row" style = "margin-bottom: 2%">
                         <label for="categoryName">Category Name:</label>
                         <input type="text"

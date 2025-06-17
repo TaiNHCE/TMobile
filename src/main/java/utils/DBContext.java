@@ -19,6 +19,7 @@ public class DBContext {
 
     protected Connection conn = null;
 
+
     public DBContext() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -42,7 +43,5 @@ public class DBContext {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-   
 
 }

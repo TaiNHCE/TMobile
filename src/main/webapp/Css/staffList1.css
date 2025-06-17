@@ -100,6 +100,7 @@ th, td {
     border-bottom: 1px solid #ececec;
     text-align: left;
     word-wrap: break-word; /* Allows text to wrap in the cells */
+    text-align: center;
 }
 
 th {

@@ -9,9 +9,15 @@ package model;
  * @author pc
  */
 public class Account {
+
     private int accountID;
     private String email;
     private String passwordHash;
+
+    private boolean isActive;
+    private boolean emailVerified;
+    private String profileImageURL;
+
     private int roleID;
 
     public Account() {
@@ -22,6 +28,30 @@ public class Account {
         this.email = email;
         this.passwordHash = passwordHash;
         this.roleID = roleID;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getProfileImageURL() {
+        return profileImageURL;
+    }
+
+    public void setProfileImageURL(String profileImageURL) {
+        this.profileImageURL = profileImageURL;
     }
 
     public int getAccountID() {
@@ -55,6 +85,5 @@ public class Account {
     public void setRoleID(int roleID) {
         this.roleID = roleID;
     }
-    
-    
+
 }
