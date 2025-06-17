@@ -65,7 +65,7 @@ if (acc == null || acc.getRoleID() != 1) {
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            Total Customers
+                            Total Supplier
                             <span class="stat-icon"><i class="fas fa-users"></i></span>
                         </div>
                     </div>

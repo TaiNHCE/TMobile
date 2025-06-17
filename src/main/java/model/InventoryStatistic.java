@@ -18,15 +18,17 @@ public class InventoryStatistic {
     private String model;
     private String fullName;
     private int stockQuantity;
+    private int importQuantity;
+    private int soldQuantity; 
     private String supplierName;
     private Date importDate;
-    private int importQuantity;
     private BigDecimal productImportPrice;
     private String modelName;
     private int categoryId;
     private int productId;
 
-    // Getters and Setters
+    
+
     public String getCategoryName() {
         return categoryName;
     }
@@ -67,6 +69,22 @@ public class InventoryStatistic {
         this.stockQuantity = stockQuantity;
     }
 
+    public int getImportQuantity() {
+        return importQuantity;
+    }
+
+    public void setImportQuantity(int importQuantity) {
+        this.importQuantity = importQuantity;
+    }
+
+    public int getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
+    }
+
     public String getSupplierName() {
         return supplierName;
     }
@@ -81,14 +99,6 @@ public class InventoryStatistic {
 
     public void setImportDate(Date importDate) {
         this.importDate = importDate;
-    }
-
-    public int getImportQuantity() {
-        return importQuantity;
-    }
-
-    public void setImportQuantity(int importQuantity) {
-        this.importQuantity = importQuantity;
     }
 
     public BigDecimal getProductImportPrice() {
@@ -122,4 +132,5 @@ public class InventoryStatistic {
     public void setProductId(int productId) {
         this.productId = productId;
     }
+
 }
