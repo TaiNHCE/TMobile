@@ -28,15 +28,15 @@
 
         <div class = "container" style = "border-radius: 15px; margin-top: 1%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* bóng nhẹ */">
 
-
             <p class = "new-product-label">Discount product</p>
 
-            <div style = "display: flex; border-radius: 10px;">
-                <div class = "" style = "width: 100%; border-radius: 5px; margin-bottom: 1%">
-                    <img style = "width: 100%; height: 100%" src = "https://24hstore.vn/upload_images/images/2023/12/07/sale-noel-24hstore-6.gif">
+            <div style = "display: flex; border-radius: 10px; gap: 20px;">
+                <div class = "banner-section" style = "flex: 0 0 300px; border-radius: 5px; margin-bottom: 1%">
+                    <img style = "width: 100%; height: 400px; object-fit: cover; border-radius: 5px;" src = "https://24hstore.vn/upload_images/images/2023/12/07/sale-noel-24hstore-6.gif">
                 </div>
 
-                <div class="row" style = "margin-left: 2%">
+                <!-- Products section - Takes remaining space -->
+                <div class="row" style = "flex: 1; min-width: 0;">
                     <%
                         if (productListDiscount != null) {
                     %>
@@ -58,7 +58,7 @@
                            style="text-decoration: none; color: inherit; display: block;">
 
                             <div class = "divHinh">
-                                <img width="98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
                             </div>
 
                             <div class = "divTraGop">
@@ -102,7 +102,7 @@
                            style="text-decoration: none; color: inherit; display: block;">
 
                             <div class = "divHinh">
-                                <img width="98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
                             </div>
 
                             <div class = "divTraGop">
@@ -110,7 +110,6 @@
                             </div>
 
                             <p class = "productName"> <%= pro.getProductName()%></p>
-
 
                             <p class= "giaMoi"><%= giaCuFormatted%> đ</p>
                             <p></p>
@@ -135,5 +134,9 @@
 </html>
 
 <style>
+.banner-section {
+    flex-shrink: 0; /* Prevent banner from shrinking */
+}
+
 
 </style>

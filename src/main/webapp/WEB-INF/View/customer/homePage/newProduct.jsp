@@ -32,7 +32,7 @@
             <p class = "new-product-label">New product</p>
 
             <div style = "display: flex; border-radius: 10px;">
-                <div class = "" style = "width: 100%; border-radius: 5px; margin-bottom: 1%">
+                <div class = "" style = "width: 350%; border-radius: 5px; margin-bottom: 1%">
                     <img style = "width: 100%; height: 100%" src = "https://cdn.prod.website-files.com/6073fad993ae97919f0b0772/609fa687874b84361fc495db_%C4%91t.jpg">
                 </div>
 
@@ -58,7 +58,7 @@
                            style="text-decoration: none; color: inherit; display: block;">
 
                             <div class = "divHinh">
-                                <img width="98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl() %>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
                             </div>
 
                             <div class = "divTraGop">
@@ -102,7 +102,7 @@
                            style="text-decoration: none; color: inherit; display: block;">
 
                             <div class = "divHinh">
-                                <img width="98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
                             </div>
 
                             <div class = "divTraGop">

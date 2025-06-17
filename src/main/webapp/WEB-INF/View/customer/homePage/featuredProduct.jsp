@@ -56,7 +56,7 @@
                            style="text-decoration: none; color: inherit; display: block;">
 
                             <div class = "divHinh">
-                                <img width="98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
                             </div>
 
                             <div class = "divTraGop">
@@ -100,7 +100,7 @@
                            style="text-decoration: none; color: inherit; display: block;">
 
                             <div class = "divHinh">
-                                <img width="98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
                             </div>
 
                             <div class = "divTraGop">

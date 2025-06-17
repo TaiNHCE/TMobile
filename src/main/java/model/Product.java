@@ -29,7 +29,6 @@ public class Product {
     private String imageUrl;
 
     public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, int categoryId, int brandId, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
-
         this.productId = productId;
         this.productName = productName;
         this.description = description;
@@ -45,9 +44,10 @@ public class Product {
         this.isNew = isNew;
         this.warrantyPeriod = warrantyPeriod;
         this.isActive = isActive;
-
+        this.imageUrl = imageUrl;
     }
 
+    
     public int getProductId() {
         return productId;
     }

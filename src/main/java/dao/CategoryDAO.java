@@ -7,6 +7,7 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -189,5 +190,75 @@ public class CategoryDAO extends DBContext {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public int addCategory(String categoryName, String descriptionCategory) {
+        int categoryId = -1;
+        String sql = "INSERT INTO Categories (CategoryName, Description) VALUES (?, ?)";
+
+        try ( PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, categoryName);
+            stmt.setString(2, descriptionCategory);
+
+            int rowInserted = stmt.executeUpdate();
+
+            if (rowInserted > 0) {
+                try ( ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        categoryId = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryId; // Trả về -1 nếu lỗi
+    }
+
+    public int addCategoryDetailsGroup(String nameCategoryDetailsGroup, int categoryID) {
+        int categoryDetailsGroupID = -1;
+        String sql = "INSERT INTO CategoryDetailsGroup (NameCategoryDetailsGroup, CategoryID) VALUES (?, ?)";
+
+        try ( PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, nameCategoryDetailsGroup);
+            stmt.setInt(2, categoryID);
+
+            int rowInserted = stmt.executeUpdate();
+
+            if (rowInserted > 0) {
+                try ( ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        categoryDetailsGroupID = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryDetailsGroupID; // Trả về -1 nếu lỗi
+    }
+
+    public int addCategoryDetails(int categoryID, String attributeName, int categoryDetailsGroupID) {
+        int categoryDetailID = -1;
+        String sql = "INSERT INTO CategoryDetails (CategoryID, AttributeName, CategoryDetailsGroupID) VALUES (?, ?, ?)";
+
+        try ( PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, categoryID);
+            stmt.setString(2, attributeName);
+            stmt.setInt(3, categoryDetailsGroupID);  // ĐÚNG vị trí thứ 3
+
+            int rowInserted = stmt.executeUpdate();
+
+            if (rowInserted > 0) {
+                try ( ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        categoryDetailID = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryDetailID; // Trả về -1 nếu lỗi
     }
 }

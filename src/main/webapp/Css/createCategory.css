@@ -1,160 +1,87 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : Jun 16, 2025, 6:36:56 PM
-    Author     : HP - Gia Khiêm
-*/
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f7f7f7;
-        margin: 0;
-        padding: 0;
-    }
+h1 {
+    color: #333;
+}
 
-    h1.display-5 {
-        color: #333;
-    }
+.input-category {
+    width: 98%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
 
-    .form-row {
-        margin-bottom: 16px;
-    }
+.input-category:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+}
 
-    label {
-        font-weight: 600;
-        display: block;
-        margin-bottom: 6px;
-        color: #444;
-    }
+form {
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
-    .input-category {
-        width: 450px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-        box-sizing: border-box;
-        transition: border 0.3s ease;
-    }
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-right: 6px;
+    transition: background-color 0.3s, transform 0.2s;
+}
 
-    .input-category:focus {
-        border-color: #007bff;
-        outline: none;
-    }
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.03);
+}
 
-    .group-container {
-        background-color: #fff;
-        padding: 16px;
-        margin-bottom: 16px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
+button[type="submit"] {
+    background-color: #28a745;
+}
 
-    .group-container input[type="text"] {
-        width: 400px;
-        padding: 8px;
-        margin-top: 5px;
-        margin-right: 8px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 15px;
-    }
+button[type="submit"]:hover {
+    background-color: #1e7e34;
+}
 
-    .group-container button {
-        margin-top: 6px;
-        padding: 6px 12px;
-        font-size: 14px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+.group-container {
+    background-color: #f4f6f8;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
 
-    .group-container button:hover {
-        background-color: #0056b3;
-    }
+.detail-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
 
-    button[type="button"] {
-        margin-top: 12px;
-        background-color: #28a745;
-        color: white;
-        padding: 8px 14px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        font-size: 15px;
-        transition: background-color 0.3s;
-    }
+.detail-input input {
+    flex: 1;
+}
 
-    button[type="button"]:hover {
-        background-color: #218838;
-    }
-
-    .detail-input {
-        margin-top: 8px;
-    }
-
-    .detail-input input {
-        width: 350px;
-        padding: 7px;
-        margin-right: 6px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-
-    .detail-input button {
-        background-color: #dc3545;
-        padding: 6px 10px;
-        border-radius: 6px;
-        font-size: 13px;
-    }
-
-    .detail-input button:hover {
-        background-color: #b02a37;
-    }
-    
-/*    <==== nhập gr và detail*/
-
-    .group-container {
-        width: 90%; /* hoặc bạn chọn 300px, 400px tùy ý */
-        background-color: #fdfdfd;
-        border: 1px solid #ccc;
-        padding: 12px;
-        margin-top: 12px;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .detail-input {
-        width: 100%; /* đảm bảo nó không vượt quá group-container */
-    }
-
-    .detail-input input.input-category {
-        width: 86%;  /* giảm chiều dài của ô nhập */
-        display: inline-block;
-        margin-right: 8px;
-    }
-
-    .input-category {
-        padding: 6px 10px;
-        font-size: 15px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        box-sizing: border-box;
-    }
-
-    button {
-        padding: 4px 8px;
-        font-size: 14px;
-        margin-top: 4px;
-        cursor: pointer;
-    }
-
-
-/*    <==== nhập gr và detail*/
-
+label {
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 8px;
+    color: #333;
+}

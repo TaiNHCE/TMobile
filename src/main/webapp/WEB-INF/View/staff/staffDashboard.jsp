@@ -1,7 +1,13 @@
+<%@page import="model.Account"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<% Account acc = (Account) session.getAttribute("staff");
+    if (acc == null || acc.getRoleID() != 2) {
+        response.sendRedirect("LoginStaff");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,7 +33,6 @@
                 min-height: 100vh;
             }
 
-            /* Sidebar */
             .sidebar {
                 width: 250px;
                 background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
@@ -77,8 +82,6 @@
                 margin-right: 10px;
                 width: 20px;
             }
-
-            /* Main Content */
             .main-content {
                 flex: 1;
                 background-color: #f8fafc;
@@ -192,7 +195,6 @@
                 background: #9c27b0;
             }
 
-            /* Quick Actions */
             .quick-actions {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -301,7 +303,7 @@
                 text-decoration: none;
             }
 
-            
+
         </style>
 
     </head>
@@ -323,7 +325,7 @@
                             <h4>${not empty sessionScope.user ? sessionScope.user.firstName : 'John'} ${not empty sessionScope.user ? sessionScope.user.lastName : 'Smith'}</h4>
                             <p>Sales Staff</p>
                         </div>
-                        <form action="${pageContext.request.contextPath}/logout" method="post" style="margin: 0;">
+                        <form action="${pageContext.request.contextPath}/Logout" method="post" style="margin: 0;">
                             <button type="submit" class="logout-btn">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </button>

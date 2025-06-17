@@ -72,7 +72,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="staff-management.jsp" class="nav-link">
+            <a href="StaffList" class="nav-link">
                 <i class="fas fa-user-tie"></i> <span>Staff Management</span>
             </a>
         </li>
@@ -92,7 +92,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="voucher-management.jsp" class="nav-link">
+            <a href="Voucher" class="nav-link">
                 <i class="fas fa-ticket-alt"></i> <span>Voucher Management</span>
             </a>
         </li>
