@@ -94,23 +94,24 @@ public class CreateSupplierServlet extends HttpServlet {
         // Validate Tax ID: must be 6-15 digits
         if (taxId == null || !taxId.matches("^\\d{6,15}$")) {
             errorMsg = "Tax ID must be 6-15 digits.";
-        }
-         // Validate Email
-        else if (email == null || !email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
+        // Validate Email
+        }else if (email == null || !email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
             errorMsg = "Invalid email address.";
-        } 
-        else if (phoneNumber == null || !phoneNumber.matches("^\\+?[0-9\\s\\-()]{8,20}$")) {
+        } else if (phoneNumber == null || !phoneNumber.matches("^\\+?[0-9\\s\\-()]{8,20}$")) {
             errorMsg = "Invalid phone number (must be 8-20 digits, may include +, -, ()).";
-        } 
-        // Validate Supply Group
-        else if (supplyGroupArr == null || supplyGroupArr.length == 0) {
+         // Validate Supply Group
+        }else if (supplyGroupArr == null || supplyGroupArr.length == 0) {
             errorMsg = "Please select at least one Supply Group!";
         }
 
         // Check for duplicate Tax ID or Email
         SupplierDAO dao = new SupplierDAO();
+        
         if (errorMsg == null && dao.isSupplierExist(taxId, email)) {
             errorMsg = "Tax ID or Email already exists!";
+        }
+        else if (errorMsg == null && dao.isSupplierNameExist(name)) {
+            errorMsg = "Company name already exists!";
         }
 
         if (errorMsg != null) {

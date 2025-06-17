@@ -82,7 +82,6 @@ public class UpdateSupplierServlet extends HttpServlet {
         }
     }
 
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -92,57 +91,85 @@ public class UpdateSupplierServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    request.setCharacterEncoding("UTF-8");
-    response.setCharacterEncoding("UTF-8");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
-    try {
-        int supplierID = Integer.parseInt(request.getParameter("supplierID"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
-        String contactPerson = request.getParameter("contactPerson");
-        String[] supplyGroup = request.getParameterValues("supplyGroup");
-        String supplyGroupStr = (supplyGroup != null) ? String.join(",", supplyGroup) : "";
-        String description = request.getParameter("description");
-        int activate = Integer.parseInt(request.getParameter("activate"));
+        try {
+            int supplierID = Integer.parseInt(request.getParameter("supplierID"));
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String phoneNumber = request.getParameter("phoneNumber");
+            String address = request.getParameter("address");
+            String contactPerson = request.getParameter("contactPerson");
+            String[] supplyGroup = request.getParameterValues("supplyGroup");
+            String supplyGroupStr = (supplyGroup != null) ? String.join(",", supplyGroup) : "";
+            String description = request.getParameter("description");
+            int activate = Integer.parseInt(request.getParameter("activate"));
 
-        SupplierDAO dao = new SupplierDAO();
-        Suppliers supplier = dao.getSupplierById(supplierID);
+            SupplierDAO dao = new SupplierDAO();
+            Suppliers supplier = dao.getSupplierById(supplierID);
 
-        if (supplier == null) {
-            request.setAttribute("errorMessage", "Supplier not found!");
+            if (supplier == null) {
+                request.setAttribute("errorMessage", "Supplier not found!");
+                request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
+                return;
+            }
+
+            String errorMsg = null;
+
+            if (email == null || !email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
+                errorMsg = "Invalid email address.";
+            } else if (phoneNumber == null || !phoneNumber.matches("^\\+?[0-9\\s\\-()]{8,20}$")) {
+                errorMsg = "Invalid phone number (must be 8-20 digits, may include +, -, ()).";
+            } else if (supplyGroup == null || supplyGroup.length == 0) {
+                errorMsg = "Please select at least one Supply Group!";
+            } else if (!name.equalsIgnoreCase(supplier.getName()) && dao.isSupplierNameExist(name)) {
+                errorMsg = "Company name already exists!";
+            }
+
+            if (errorMsg != null) {
+                supplier.setName(name);
+                supplier.setEmail(email);
+                supplier.setPhoneNumber(phoneNumber);
+                supplier.setAddress(address);
+                supplier.setContactPerson(contactPerson);
+                supplier.setSupplyGroup(supplyGroupStr);
+                supplier.setDescription(description);
+                supplier.setActivate(activate);
+
+                request.setAttribute("errorMessage", errorMsg);
+                request.setAttribute("supplier", supplier);
+                request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
+                return;
+            }
+
+            supplier.setName(name);
+            supplier.setEmail(email);
+            supplier.setPhoneNumber(phoneNumber);
+            supplier.setAddress(address);
+            supplier.setContactPerson(contactPerson);
+            supplier.setSupplyGroup(supplyGroupStr);
+            supplier.setDescription(description);
+            supplier.setActivate(activate);
+            supplier.setLastModify(LocalDateTime.now());
+
+            boolean success = dao.updateSupplier(supplier);
+            if (success) {
+                response.sendRedirect("ViewSupplier");
+            } else {
+                request.setAttribute("errorMessage", "Failed to update supplier. Please try again.");
+                request.setAttribute("supplier", supplier);
+                request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
-            return;
         }
-
-        // Không cập nhật taxId nữa
-        supplier.setName(name);
-        supplier.setEmail(email);
-        supplier.setPhoneNumber(phoneNumber);
-        supplier.setAddress(address);
-        supplier.setContactPerson(contactPerson);
-        supplier.setSupplyGroup(supplyGroupStr);
-        supplier.setDescription(description);
-        supplier.setActivate(activate);
-        supplier.setLastModify(java.time.LocalDateTime.now());
-
-        boolean success = dao.updateSupplier(supplier);
-        if (success) {
-            response.sendRedirect("ViewSupplier");
-        } else {
-            request.setAttribute("errorMessage", "Failed to update supplier. Please try again.");
-            request.setAttribute("supplier", supplier);
-            request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
-        request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/updateSupplier.jsp").forward(request, response);
     }
-}
+
     /**
      * Returns a short description of the servlet.
      *
