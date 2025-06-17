@@ -35,22 +35,22 @@
 
             <form action="CreateCategory" method="post">
                 <div class="divCategoryInput">
-                <div class="form-row" style = "margin-bottom: 2%">
-                    <label for="categoryName">Category Name:</label>
-                    <input type="text"
-                           id="categoryName"
-                           name="categoryName"
-                           class="input-category" />
-                </div>
+                    <div class="form-row" style = "margin-bottom: 2%">
+                        <label for="categoryName">Category Name:</label>
+                        <input type="text"
+                               id="categoryName"
+                               name="categoryName"
+                               class="input-category" />
+                    </div>
 
-                <div class="form-row">
-                    <label for="description">Description:</label>
-                    <input type="text"
-                           id="description"
-                           name="description"
-                           class="input-category" />
+                    <div class="form-row">
+                        <label for="description">Description:</label>
+                        <input type="text"
+                               id="description"
+                               name="description"
+                               class="input-category" />
+                    </div>
                 </div>
-            </div>
                 <div>
                     <div id="groupWrapper"></div>
                     <button type="button" onclick="addGroup()">+ Add Detail Group</button><br><br>

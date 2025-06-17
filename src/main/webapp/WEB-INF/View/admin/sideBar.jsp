@@ -20,11 +20,6 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="customer-management.jsp" class="nav-link">
-                <i class="fas fa-users"></i> <span>Customer Management</span>
-            </a>
-        </li>
-        <li class="nav-item">
             <a href="CategoryView" class="nav-link">
                 <i class="fas fa-tags"></i> <span>Category Management</span>
             </a>

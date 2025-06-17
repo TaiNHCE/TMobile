@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.CategoryDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -72,7 +73,45 @@ public class CreateCategoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String categoryName = request.getParameter("categoryName");
+        String description = request.getParameter("description");
+
+        CategoryDAO dao = new CategoryDAO();
+        int categoryId = dao.addCategory(categoryName, description);  // Trả về ID Category
+
+        if (categoryId == -1) {
+            request.setAttribute("createError", "1");
+            request.getRequestDispatcher("/WEB-INF/View/admin/categoryManagement/createCategory/create.jsp").forward(request, response);
+            return;
+        }
+
+        // Lặp qua các nhóm group được gửi lên
+        int i = 0;
+        while (true) {
+            String groupName = request.getParameter("groups[" + i + "][name]");
+            if (groupName == null) {
+                break;
+            }
+
+            int groupId = dao.addCategoryDetailsGroup(groupName, categoryId);  // Trả về ID Group
+
+            // Lấy tất cả các chi tiết thuộc group này
+            String[] details = request.getParameterValues("groups[" + i + "][details][]");
+            if (details != null) {
+                for (String detail : details) {
+                    dao.addCategoryDetails(categoryId, detail, groupId);
+                }
+            }
+            i++;
+        }
+
+        // Thành công
+        request.setAttribute("createSuccess", "1");
+        request.getRequestDispatcher("/WEB-INF/View/admin/categoryManagement/createCategory/create.jsp").forward(request, response);
+
     }
 
     /**

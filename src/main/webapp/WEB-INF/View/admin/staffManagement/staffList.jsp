@@ -15,11 +15,19 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Staff List</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <!-- Fontawesome CDN -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+        <!-- Sidebar CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
+
+        <!-- Dashboard CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/staffList.css">
     </head>
     <body>
         <h2>Staff List</h2>
         <div class="container mt-4">
+            <jsp:include page="../sideBar.jsp" />
             <form action="StaffList" method="get" class="row g-3">
                 <div class="col-auto">
                     <input type="text" name="keyword" class="form-control" placeholder="Search staff by name">
@@ -56,16 +64,15 @@
                     </td>
                 </tr>
                 <%
-                    } 
-%>
-            </table>
-            <%
-                    String mes = (String) request.getAttribute("message");
-                    if (mes != null) {
-                        out.println(mes);
                     }
                 %>
+            </table>
+            <%
+                String mes = (String) request.getAttribute("message");
+                if (mes != null) {
+                    out.println(mes);
+                }
+            %>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>

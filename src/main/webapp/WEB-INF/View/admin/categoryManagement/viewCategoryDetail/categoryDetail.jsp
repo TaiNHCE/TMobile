@@ -39,7 +39,9 @@
                 <%
                     if (categoryList != null) {
                         for (Category cate : categoryList) {
-                            boolean check = cate.getCategoryId() == categoryId;
+                        if(cate.getIsActive() == true){
+                            boolean check = (cate.getCategoryId() == categoryId     );
+                       
                 %>
                 <div class = "divLogo <%= check ? "activeCategory" : ""%>">
                     <img class = "logoCategory" src = "<%= cate.getImgUrlLogo()%>">
@@ -50,6 +52,7 @@
 
                 <%                    }
                     }
+}
                 %>
             </div>
         </div>
