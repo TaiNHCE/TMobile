@@ -13,7 +13,7 @@ public class Account {
     private String email;
     private String passwordHash;
     private int roleID;
-
+    private boolean isActive;
     public Account() {
     }
 
@@ -54,6 +54,14 @@ public class Account {
 
     public void setRoleID(int roleID) {
         this.roleID = roleID;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
     
     

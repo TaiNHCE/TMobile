@@ -1,8 +1,0 @@
-controller\LoginServlet.class
-controller\LoginStaffServlet.class
-controller\LogoutServlet.class
-dao\AccountDAO.class
-model\Account.class
-utils\DBContext.class
-utils\testDB.class
-controller\LoginAdminServlet.class

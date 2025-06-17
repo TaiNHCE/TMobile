@@ -74,6 +74,22 @@ public class AccountDAO extends DBContext {
     }
     return false;
 }   
+ public boolean addNewAccount(Account acc) {
+    String sql = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive) VALUES (?, ?, ?, ?)";
+    try {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, acc.getEmail());
+        ps.setString(2, acc.getPasswordHash()); 
+        ps.setInt(3, 3);
+        ps.setBoolean(4, true); 
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+    return false;
+}
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
