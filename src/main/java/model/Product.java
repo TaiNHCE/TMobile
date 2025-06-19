@@ -11,10 +11,12 @@ import java.math.BigDecimal;
  * @author HP - Gia Khiêm
  */
 public class Product {
+
+
     private int productId;
     private String productName;
     private String description;
-    private BigDecimal  price;
+    private BigDecimal price;
     private int discount;
     private int stock;
     private String status;
@@ -47,7 +49,19 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    
+
+    public Product(int productId, String productName, BigDecimal price, int discount, int stock, String status, boolean isActive) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.discount = discount;
+        this.stock = stock;
+        this.status = status;
+        this.isActive = isActive;
+    }
+
+   
+
     public int getProductId() {
         return productId;
     }
@@ -175,5 +189,6 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    
+
+
 }
