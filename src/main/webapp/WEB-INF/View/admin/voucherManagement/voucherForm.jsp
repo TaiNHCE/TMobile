@@ -17,6 +17,7 @@
         <!-- Sidebar + Custom CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/voucherForm.css">
+       
     </head>
     <body>
         <div class="container-fluid">
@@ -56,14 +57,20 @@
 
                         <div class="col-md-6">
                             <label class="form-label">Minimum Order Amount</label>
-                            <input type="number" class="form-control" step="0.01" min="0" name="minOrderAmount"
-                                   value="<%= isEdit ? v.getMinOrderAmount() : 0%>" required />
+                            <div class="input-group">
+                                <input type="number" class="form-control" step="1000" min="0" name="minOrderAmount"
+                                       value="<%= isEdit ? String.format("%.0f", v.getMinOrderAmount()).replace(",", "") : 0%>" required />
+                                <span class="input-group-text">VNĐ</span>
+                            </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Maximum Discount Amount</label>
-                            <input type="number" class="form-control" step="0.01" min="0" name="maxDiscountAmount"
-                                   value="<%= isEdit ? v.getMaxDiscountAmount() : 0%>" required />
+                            <div class="input-group">
+                                <input type="number" class="form-control" step="1000" min="0" name="maxDiscountAmount"
+                                       value="<%= isEdit ? String.format("%.0f", v.getMaxDiscountAmount()).replace(",", "") : 0%>" required />
+                                <span class="input-group-text">VNĐ</span>
+                            </div>
                         </div>
 
                         <div class="col-md-6">

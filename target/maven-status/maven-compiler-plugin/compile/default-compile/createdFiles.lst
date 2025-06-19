@@ -1,6 +1,6 @@
-controller\VoucherServlet.class
 model\Voucher.class
 controller\AdminDashboard.class
+controller\VoucherServlet.class
 dao\VoucherDAO.class
 utils\DBContext.class
 utils\testDB.class
