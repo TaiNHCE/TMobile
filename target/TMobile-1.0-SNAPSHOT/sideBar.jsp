@@ -77,7 +77,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="product-management.jsp" class="nav-link">
+            <a href="ProductList" class="nav-link">
                 <i class="fas fa-box"></i> <span>Product Management</span>
             </a>
         </li>

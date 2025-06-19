@@ -43,11 +43,14 @@ controller\LoginServlet.class
 controller\VoucherServlet.class
 dao\InventoryStatisticDAO.class
 model\Suppliers.class
+controller\ActivateProductServlet.class
 model\PurchaseOrder.class
 controller\ManageStatisticServlet.class
 controller\UpdateSupplierServlet.class
+controller\ProductListServlet.class
 controller\UpdateStaffServlet.class
 model\CategoryDetail.class
 controller\StaffDashboardServlet.class
+controller\RejectProductServlet.class
 controller\StaffListServlet.class
 controller\HomeServlet.class
