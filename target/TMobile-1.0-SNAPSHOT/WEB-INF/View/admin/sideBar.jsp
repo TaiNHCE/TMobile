@@ -1,3 +1,4 @@
+
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -5,12 +6,16 @@
     </div>
     <ul class="nav-menu">
         <li class="nav-item">
+
             <a href="AdminDashboard" class="nav-link">
+
                 <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
             </a>
         </li>
         <li class="nav-item">
+
             <a href="StaffList" class="nav-link">
+
                 <i class="fas fa-user-tie"></i> <span>Staff Management</span>
             </a>
         </li>
@@ -20,7 +25,9 @@
             </a>
         </li>
         <li class="nav-item">
+
             <a href="CategoryView" class="nav-link">
+
                 <i class="fas fa-tags"></i> <span>Category Management</span>
             </a>
         </li>
@@ -35,6 +42,7 @@
             </a>
         </li>
         <li class="nav-item">
+
             <a href="ManageStatistic" class="nav-link">
                 <i class="fa fa-bar-chart"></i> <span>Manage Statistics</span>
             </a>

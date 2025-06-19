@@ -43,34 +43,34 @@ public class VoucherServlet extends HttpServlet {
 
             case "edit":
                 try {
-                    String idRaw = request.getParameter("id");
-                    if (idRaw == null || idRaw.isEmpty()) {
-                        throw new IllegalArgumentException("Missing voucher ID.");
-                    }
-                    int id = Integer.parseInt(idRaw);
-                    Voucher voucher = voucherDAO.getVoucherById(id);
-                    request.setAttribute("voucher", voucher);
-                    request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherForm.jsp").forward(request, response);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    response.sendRedirect("Voucher?error=InvalidID");
+                String idRaw = request.getParameter("id");
+                if (idRaw == null || idRaw.isEmpty()) {
+                    throw new IllegalArgumentException("Missing voucher ID.");
                 }
-                break;
+                int id = Integer.parseInt(idRaw);
+                Voucher voucher = voucherDAO.getVoucherById(id);
+                request.setAttribute("voucher", voucher);
+                request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherForm.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("Voucher?error=InvalidID");
+            }
+            break;
 
             case "delete":
                 try {
-                    String idRaw = request.getParameter("id");
-                    if (idRaw == null || idRaw.isEmpty()) {
-                        throw new IllegalArgumentException("Missing voucher ID.");
-                    }
-                    int delId = Integer.parseInt(idRaw);
-                    voucherDAO.deleteVoucher(delId);
-                    response.sendRedirect("Voucher");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    response.sendRedirect("Voucher?error=DeleteFailed");
+                String idRaw = request.getParameter("id");
+                if (idRaw == null || idRaw.isEmpty()) {
+                    throw new IllegalArgumentException("Missing voucher ID.");
                 }
-                break;
+                int delId = Integer.parseInt(idRaw);
+                voucherDAO.deleteVoucher(delId);
+                response.sendRedirect("Voucher");
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("Voucher?error=DeleteFailed");
+            }
+            break;
 
             default:
                 String keyword = request.getParameter("searchCode");

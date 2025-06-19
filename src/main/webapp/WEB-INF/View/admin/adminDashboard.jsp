@@ -1,18 +1,13 @@
-<%-- 
-    Document   : adminDashboard
-    Created on : Jun 13, 2025, 11:34:36 PM
-    Author     : HP
---%>
-
-
 <%@page import="model.Account"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% Account acc = (Account) session.getAttribute("admin");
-if (acc == null || acc.getRoleID() != 1) {
-    response.sendRedirect("LoginAdmin");
-    return;
-}
+<% 
+    Account acc = (Account) session.getAttribute("admin");
+    if (acc == null || acc.getRoleID() != 1) {
+        response.sendRedirect("LoginAdmin");
+        return;
+    }
 %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -25,7 +20,6 @@ if (acc == null || acc.getRoleID() != 1) {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
         <!-- Sidebar CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
-
         <!-- Dashboard CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/adminDashboard.css">
     </head>
@@ -44,6 +38,7 @@ if (acc == null || acc.getRoleID() != 1) {
                             <h3>Admin User</h3>
                             <p>Administrator</p>
                         </div>
+
                         <button class="logout-btn" onclick="alert('Logged out successfully!'); window.location.href = 'LoginAdmin';">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
@@ -92,13 +87,13 @@ if (acc == null || acc.getRoleID() != 1) {
                                     <th>Status</th>
                                 </tr>
                             </thead>
-
+                            <tbody>
+                                <!-- Dynamic content can be added here -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </main>
         </div>
-            
     </body>
-    
 </html>

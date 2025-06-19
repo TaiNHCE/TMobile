@@ -17,7 +17,6 @@ import utils.DBContext;
 
 public class VoucherDAO extends DBContext {
 
-    // Lấy danh sách tất cả voucher
     public List<Voucher> getAllVouchers() {
         List<Voucher> list = new ArrayList<>();
         String sql = "SELECT * FROM Vouchers";
@@ -34,7 +33,7 @@ public class VoucherDAO extends DBContext {
         return list;
     }
 
-    // Lấy voucher theo ID
+    // Láº¥y voucher theo ID
     public Voucher getVoucherById(int id) {
         String sql = "SELECT * FROM Vouchers WHERE VoucherID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -66,7 +65,7 @@ public class VoucherDAO extends DBContext {
         return false;
     }
 
-    // Thêm voucher
+    // ThÃªm voucher
     public boolean addVoucher(Voucher v) {
         String sql = "INSERT INTO Vouchers (Code, DiscountPercent, ExpiryDate, MinOrderAmount, "
                 + "MaxDiscountAmount, UsageLimit, UsedCount, IsActive, CreatedAt, Description) "
@@ -91,7 +90,7 @@ public class VoucherDAO extends DBContext {
         return false;
     }
 
-    // Cập nhật voucher
+    // Cáº­p nháº­t voucher
     public boolean updateVoucher(Voucher v) {
         String sql = "UPDATE Vouchers SET Code=?, DiscountPercent=?, ExpiryDate=?, MinOrderAmount=?, "
                 + "MaxDiscountAmount=?, UsageLimit=?, UsedCount=?, IsActive=?, Description=? "
@@ -116,7 +115,7 @@ public class VoucherDAO extends DBContext {
         return false;
     }
 
-    // Xóa voucher
+    // XÃ³a voucher
     public boolean deleteVoucher(int id) {
         String sql = "DELETE FROM Vouchers WHERE VoucherID = ?";
 
@@ -160,14 +159,14 @@ public class VoucherDAO extends DBContext {
         int usageLimit = rs.getInt("UsageLimit");
         int usedCount = rs.getInt("UsedCount");
         boolean isActive = rs.getBoolean("IsActive");
-        Timestamp createdAt = rs.getTimestamp("CreatedAt"); // hoặc getDate nếu kiểu là DATE
+        Timestamp createdAt = rs.getTimestamp("CreatedAt"); // hoáº·c getDate náº¿u kiá»ƒu lÃ  DATE
         String description = rs.getString("Description");
 
         return new Voucher(id, code, discountPercent, expiryDate, minOrderAmount,
                 maxDiscountAmount, usageLimit, usedCount, isActive, createdAt, description);
     }
 
-    // Helper - chuyển từ ResultSet thành Object
+    // Helper - chuyá»ƒn tá»« ResultSet thÃ nh Object
     private Voucher mapResultSetToVoucher(ResultSet rs) throws SQLException {
         Voucher v = new Voucher();
         v.setVoucherID(rs.getInt("VoucherID"));
