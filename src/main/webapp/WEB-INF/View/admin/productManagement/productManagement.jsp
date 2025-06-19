@@ -29,9 +29,7 @@
                 </div>
             </form>
 
-            <!-- Create Product button -->
-            <a href="CreateProductServlet" class="btn btn-primary mb-3">Create Product</a>
-
+           
             <!-- Product list table -->
             <table class="table table-striped table-hover">
                 <thead>
