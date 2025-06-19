@@ -32,7 +32,6 @@ public class ImportStockDAO extends DBContext {
         return result;
     }
 
-    // Thống kê nhập kho theo tháng (dạng: yyyy-MM)
     public Map<String, Integer> getImportStocksCountByMonth() throws SQLException {
         Map<String, Integer> result = new LinkedHashMap<>();
         String sql = "SELECT FORMAT(OrderDate, 'yyyy-MM') as ImportMonth, SUM(TotalAmount) as TotalImport "
@@ -48,7 +47,6 @@ public class ImportStockDAO extends DBContext {
         return result;
     }
 
-    // Thống kê nhập kho theo nhà cung cấp
     public Map<String, Integer> getStocksBySupplier() throws SQLException {
         Map<String, Integer> result = new LinkedHashMap<>();
         String sql = "SELECT s.Name as SupplierName, SUM(po.TotalAmount) as TotalImport "
@@ -64,7 +62,6 @@ public class ImportStockDAO extends DBContext {
         return result;
     }
 
-    // Thống kê top sản phẩm nhập nhiều nhất
     public Map<String, Integer> getTopImportedProducts() throws SQLException {
         Map<String, Integer> result = new LinkedHashMap<>();
         String sql = "SELECT p.ProductName, SUM(pod.Quantity) as TotalQuantity "
