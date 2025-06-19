@@ -14,7 +14,7 @@ public class RejectProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Chuyển hướng từ view-product-detail.jsp đến rejectProduct.jsp
+        // Chuyển hướng từ viewProductDetail.jsp đến rejectProduct.jsp
         String productId = request.getParameter("productId");
         if (productId != null) {
             request.setAttribute("productId", productId);
@@ -44,11 +44,14 @@ public class RejectProductServlet extends HttpServlet {
                 dao.saveNotification(title, message, productId);
                 request.getSession().setAttribute("message", "Product rejected successfully.");
             } else {
-                request.getSession().setAttribute("message", "Failed to reject product.");
+                System.err.println("Failed to reject product ID: " + productId);
+                request.getSession().setAttribute("message", "Failed to reject product. Product may not exist.");
             }
         } catch (NumberFormatException e) {
+            System.err.println("Invalid product ID: " + productIdRaw);
             request.getSession().setAttribute("message", "Invalid product ID.");
         } catch (Exception e) {
+            System.err.println("Error rejecting product: " + e.getMessage());
             request.getSession().setAttribute("message", "Error: " + e.getMessage());
         }
 

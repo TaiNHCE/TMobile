@@ -336,8 +336,10 @@ public class ProductDAO extends DBContext {
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, productId);
             int rowsAffected = ps.executeUpdate();
+            System.out.println("Rows affected by rejectProduct: " + rowsAffected + " for ProductID: " + productId);
             return rowsAffected > 0;
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.err.println("Error in rejectProduct: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

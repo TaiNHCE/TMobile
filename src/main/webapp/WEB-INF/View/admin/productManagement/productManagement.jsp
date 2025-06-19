@@ -75,8 +75,8 @@
                             <!-- Reject Product (Always show, but change text if product is active) -->
                             <form action="RejectProductServlet" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to REJECT this product?');">
                                 <input type="hidden" name="productId" value="<%= product.getProductId()%>">
-                                <button type="submit" class="btn btn-danger btn-sm" title="<%= product.isIsActive() ? "Deactivate" : "Reject"%> Product">
-                                    <i class="fas fa-times"></i> <%= product.isIsActive() ? "Deactivate" : "Reject"%>
+                                <button type="submit" class="btn btn-danger btn-sm" title="Reject Product">
+                                    <i class="fas fa-times"></i> Reject
                                 </button>
                             </form>
 
