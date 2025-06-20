@@ -18,6 +18,17 @@
     </head>
     <body>
         <h2>Customer List</h2>
+        <div class="container mt-4">
+            <form action="CustomerList" method="get" class="row g-3">
+                <div class="col-auto">
+                    <input type="text" name="keyword" class="form-control" placeholder="Search customer by name">
+                </div>
+                <div class="col-auto">
+                    <input type="hidden" name="action" value="search">
+                    <button type="submit" class="btn btn-primary mb-3">Search</button>
+                </div>
+            </form>
+        </div>
         <div class="container">
             <table class="table table-striped table-hover">
                 <th>ID</th>
@@ -51,12 +62,26 @@
                             Change Status
                         </a>
                         <a href="CustomerList?action=detail&id=<%= cus.getId()%>" class="btn btn-info">Detail</a>
+                         <a href="CustomerList?action=orderhistory&id=<%= cus.getId()%>" class="btn btn-success">Order History</a>
                     </td>
                 </tr>
                 <%
-                    } // đóng vòng lặp ở đúng chỗ
-%>
+                    } 
+                %>
             </table>
+            <%
+                String error = (String) request.getAttribute("error");
+                if (error != null && !error.isEmpty()) {
+            %>
+            <div class="container">
+                <div class="alert alert-danger" role="alert">
+                    <%= error%>
+                </div>
+            </div>
+            <%
+                }
+            %>
+
         </div>
         <script>
             function confirmStatusChange(currentStatus, fullName) {

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class CustomerDAO extends DBContext {
         super();
     }
 
-    public List<Customer> getAll() {
+    public List<Customer> getCustomerList() {
         List<Customer> list = new ArrayList<>();
         String sql = "Select CustomerID, a.Email, FullName, PhoneNumber,a.CreatedAt, a.IsActive from Customers c JOIN Accounts a on c.AccountID = a.AccountID";
 
@@ -68,29 +69,54 @@ public class CustomerDAO extends DBContext {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
-        return cus; 
+        return cus;
     }
 
     public boolean updateStatus(int customerID) {
-    String sqlUpdate = "UPDATE Accounts SET isActive = CASE WHEN isActive = 1 THEN 0 ELSE 1 END WHERE AccountID = (SELECT AccountID FROM Customers WHERE CustomerID = ?)";
+        String sqlUpdate = "UPDATE Accounts SET isActive = CASE WHEN isActive = 1 THEN 0 ELSE 1 END WHERE AccountID = (SELECT AccountID FROM Customers WHERE CustomerID = ?)";
 
-    try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate)) {
-        psUpdate.setInt(1, customerID);
-        int rowsAffected = psUpdate.executeUpdate();
+        try ( PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate)) {
+            psUpdate.setInt(1, customerID);
+            int rowsAffected = psUpdate.executeUpdate();
 
-        return rowsAffected > 0; 
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
     }
 
-    return false;
-}
+    public List<Customer> searchCustomerByName(String keyword) {
+        List<Customer> list = new ArrayList<>();
+        String sql = "Select CustomerID, a.Email, FullName, PhoneNumber,a.CreatedAt, a.IsActive from Customers c JOIN Accounts a on c.AccountID = a.AccountID WHERE LOWER(FullName) LIKE ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword.toLowerCase() + "%");  // tìm theo tên gần đúng
+
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("CustomerID");
+                    String email = rs.getString("Email");
+                    String fullName = rs.getString("FullName");
+                    String phone = rs.getString("PhoneNumber");
+                    Date createdAt = rs.getTimestamp("CreatedAt");
+                    boolean isActive = rs.getBoolean("IsActive");
+
+                    list.add(new Customer(id, email, fullName, phone, createdAt, isActive));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return list;
+    }
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO(); // giả sử bạn đã có class này
-        List<Customer> accounts = dao.getAll();
+        List<Customer> accounts = dao.getCustomerList();
 
         for (Customer acc : accounts) {
             System.out.println("ID: " + acc.getId());

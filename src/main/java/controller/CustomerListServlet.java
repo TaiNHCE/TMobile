@@ -20,7 +20,7 @@ import model.Customer;
  * @author pc
  */
 @WebServlet(name = "CustomerList", urlPatterns = {"/CustomerList"})
-public class CustomerList extends HttpServlet {
+public class CustomerListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,7 +67,7 @@ public class CustomerList extends HttpServlet {
         }
         if (action.equalsIgnoreCase("list")) {
 
-            List<Customer> users = dao.getAll();
+            List<Customer> users = dao.getCustomerList();
             request.setAttribute("userList", users);
             request.getRequestDispatcher("customerList.jsp").forward(request, response);
         }
@@ -97,6 +97,21 @@ public class CustomerList extends HttpServlet {
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Invalid ID format.");
             }
+        }
+        if (action.equalsIgnoreCase("search")) {
+            String keyword = request.getParameter("keyword");
+            List<Customer> list = dao.searchCustomerByName(keyword);
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                list = dao.searchCustomerByName(keyword);
+            } else {
+                list = dao.getCustomerList();
+            }
+            request.setAttribute("userList", list);
+            if (list.isEmpty()) {
+                request.setAttribute("error", "No staff found.");
+            }
+            request.getRequestDispatcher("customerList.jsp").forward(request, response);
+            return;
         }
 
     }
