@@ -72,7 +72,7 @@ public class CustomerList extends HttpServlet {
             request.getRequestDispatcher("customerList.jsp").forward(request, response);
         }
         if (action.equalsIgnoreCase("detail")) {
-          String idRaw = request.getParameter("id");
+            String idRaw = request.getParameter("id");
             int id = 0;
             try {
                 id = Integer.parseInt(idRaw);
@@ -82,9 +82,23 @@ public class CustomerList extends HttpServlet {
             } catch (Exception e) {
                 PrintWriter out = response.getWriter();
                 out.print(e.getMessage());
+            }
+        }
+        if (action.equalsIgnoreCase("changeStatus")) {
+            String idRaw = request.getParameter("id");
+            try {
+                int id = Integer.parseInt(idRaw);
+                boolean success = dao.updateStatus(id);
+                if (success) {
+                    response.sendRedirect("CustomerList");
+                } else {
+                    request.setAttribute("error", "Update failed.");
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("error", "Invalid ID format.");
+            }
         }
 
-    }
     }
 
     /**

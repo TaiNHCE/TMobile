@@ -24,23 +24,20 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int id, String email, String password, String fullName, String phone, Date createAt, boolean isActive) {
+    public Customer(int id, String email, String fullName, String phone, Date createAt, boolean isActive) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.fullName = fullName;
         this.phone = phone;
         this.createAt = createAt;
         this.isActive = isActive;
     }
 
-    public Customer(int id, String email, String password, String fullName, String phone, Date createAt, boolean isActive, String birthDay, String gender) {
+    public Customer(int id, String email, String fullName, String phone, boolean isActive, String birthDay, String gender) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.fullName = fullName;
         this.phone = phone;
-        this.createAt = createAt;
         this.isActive = isActive;
         this.birthDay = birthDay;
         this.gender = gender;

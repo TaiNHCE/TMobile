@@ -20,13 +20,13 @@
         <h2>Customer List</h2>
         <div class="container">
             <table class="table table-striped table-hover">
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>Full Name</th>
-                    <th>Phone</th>
-                    <th>Created At</th>
-                    <th>Is Active</th>
-                    <th>Action</th>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Full Name</th>
+                <th>Phone</th>
+                <th>Created At</th>
+                <th>Is Active</th>
+                <th>Action</th>
                 </tr>
                 <%
                     List<Customer> cusList = (List<Customer>) request.getAttribute("userList");
@@ -45,16 +45,26 @@
                     <td><%= formattedDate%></td>
                     <td><%= cus.isActive() ? "Yes" : "No"%></td>
                     <td>
-                        <a href="CustomerList?action=edit" class="btn btn-primary">Edit</a>
-                        
+                        <a href="CustomerList?action=changeStatus&id=<%= cus.getId()%>"
+                           class="btn btn-primary"
+                           onclick="return confirmStatusChange(<%= cus.isActive()%>, '<%= cus.getFullName().replace("'", "\\'")%>')">
+                            Change Status
+                        </a>
                         <a href="CustomerList?action=detail&id=<%= cus.getId()%>" class="btn btn-info">Detail</a>
                     </td>
                 </tr>
                 <%
-                } // đóng vòng lặp ở đúng chỗ
+                    } // đóng vòng lặp ở đúng chỗ
 %>
             </table>
         </div>
+        <script>
+            function confirmStatusChange(currentStatus, fullName) {
+                const action = currentStatus ? "block" : "unblock";
+                return confirm("Are you sure you want to " + action + " user \"" + fullName + "\"?");
+            }
+        </script>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>

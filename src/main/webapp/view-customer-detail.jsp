@@ -48,8 +48,7 @@
                 <input type="radio" class="form-check-input" name="sex" value="female"
                        <%= ("female".equalsIgnoreCase(custo.getGender()) ? "checked" : "")%> disabled/> Female
             </div>
-            <a href="CustomerList" class="btn btn-secondary" id="back"><i class="bi bi-arrow-return-left"></i> Change Status</a>
-            <button type="submit" class="btn btn-primary" id="submit"><i class="bi bi-tools"></i> Back</button>
+            <a href="CustomerList" class="btn btn-secondary" id="back"><i class="bi bi-arrow-return-left"></i>Back</a>
         </form>
         <%
             }
