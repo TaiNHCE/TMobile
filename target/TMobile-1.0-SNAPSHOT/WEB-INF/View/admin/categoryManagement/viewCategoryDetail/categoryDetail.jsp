@@ -40,7 +40,7 @@
                     if (categoryList != null) {
                         for (Category cate : categoryList) {
                         if(cate.getIsActive() == true){
-                            boolean check = (cate.getCategoryId() == categoryId     );
+                            boolean check = (cate.getCategoryId() == categoryId);
                        
                 %>
                 <div class = "divLogo <%= check ? "activeCategory" : ""%>">

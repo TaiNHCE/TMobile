@@ -1,0 +1,152 @@
+/* BẢNG TỔNG */
+.category-table {
+    width: 100%;
+    border-collapse: separate;           /* để dùng border-spacing */
+    border-spacing: 0 14px;              /* cách dòng theo chiều dọc */
+    background-color: transparent;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* CÁC Ô BẢNG */
+.category-table th, .category-table td {
+    padding: 12px 16px;
+    text-align: left;
+    vertical-align: top;
+    word-wrap: break-word;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+}
+
+/* DÒNG CHI TIẾT: tạo kiểu card cho từng dòng */
+.category-table tr:not(.group-header) {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-radius: 10px;
+}
+
+/* NHÓM TIÊU ĐỀ (Group Header) */
+.group-header {
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.group-header td {
+    background-color: #f0f0f0;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #333;
+}
+
+.group-header:hover td {
+    background-color: #e0e0e0;
+}
+
+.group-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* TÊN THUỘC TÍNH */
+.category-name {
+    font-weight: 500;
+    color: #444;
+    width: 50%; /* ĐÃ GIẢM TỪ 30% XUỐNG 25% */
+    white-space: nowrap;
+    padding-top: 16px;
+}
+
+/* GIÁ TRỊ THUỘC TÍNH */
+.attribute-values {
+    color: #555;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 12px;
+    flex: 1; /* TỰ ĐỘNG CHIẾM PHẦN CÒN LẠI */
+}
+
+/* ITEM GIÁ TRỊ */
+.attribute-item {
+    background-color: #e9ecef;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #212529;
+    max-width: 100%;
+}
+
+/* THÔNG BÁO KHÔNG CÓ DỮ LIỆU */
+.no-data-message {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-style: italic;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+/* ẨN/HIỆN NHÓM CHI TIẾT */
+.group-details {
+    transition: all 0.3s ease;
+}
+
+.group-details.hidden {
+    display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .category-table {
+        font-size: 14px;
+    }
+
+    .group-header h2 {
+        font-size: 16px;
+    }
+
+    .attribute-item {
+        font-size: 13px;
+    }
+
+    .category-name {
+        width: 100%;
+    }
+
+    .attribute-values {
+        flex-direction: column;
+    }
+
+    .group-header td {
+        padding: 12px 16px;
+    }
+}
+
+.group-cell {
+    padding: 0;
+}
+
+.group-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    border-radius: 12px;
+}
+
+.arrow-icon {
+    font-size: 18px;
+    color: #555;
+    transition: transform 0.3s ease;
+}
+

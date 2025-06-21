@@ -8,6 +8,7 @@ model\Product.class
 model\InventoryStatistic.class
 model\CategoryDetailGroup.class
 model\Voucher.class
+controller\StaffProductList.class
 controller\CreateSupplierServlet.class
 controller\LoginStaffServlet.class
 model\Brand.class
@@ -28,6 +29,8 @@ controller\DeleteCategoryServlet.class
 controller\LoginAdminServlet.class
 controller\CheckPhoneServlet.class
 model\RevenueStatistic.class
+controller\StaffViewProductDetailServlet.class
+model\ProductDetail.class
 dao\AccountDAO.class
 model\Staff.class
 utils\DBContext.class
