@@ -14,10 +14,9 @@ public class Suppliers {
     private LocalDateTime lastModify;
     private int deleted;
     private int activate;
-
-    private String contactPerson;   // NEW
-    private String supplyGroup;     // NEW
-    private String description;     // NEW
+    private String contactPerson;   
+    private String supplyGroup;     
+    private String description;     
 
     public Suppliers() {
     }

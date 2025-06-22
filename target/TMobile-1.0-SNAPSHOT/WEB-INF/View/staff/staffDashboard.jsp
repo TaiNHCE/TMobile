@@ -35,7 +35,7 @@
 
             .sidebar {
                 width: 250px;
-                background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+                background:#1e40af;
                 color: white;
                 padding: 20px 0;
             }
@@ -302,15 +302,59 @@
                 background: #e2e8f0;
                 text-decoration: none;
             }
+             /* Sidebar Styles */
+            .sidebar {
+                
+                background: #1e40af;
+                
+            }
+
+            .sidebar-header {
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .sidebar-header h4 {
+                color: white;
+                margin: 0;
+                font-weight: 600;
+            }
+
+            .sidebar-menu {
+                padding: 20px 0;
+            }
+
+            .sidebar-menu a {
+                display: block;
+                padding: 12px 20px;
+                color: rgba(255,255,255,0.8);
+                text-decoration: none;
+                border-left: 3px solid transparent;
+            }
+
+            .sidebar-menu a:hover,
+            .sidebar-menu a.active {
+                background: rgba(255,255,255,0.1);
+                color: white;
+                border-left-color: #fff;
+            }
+
+            .sidebar-menu i {
+                width: 20px;
+                margin-right: 10px;
+            }
+
 
 
         </style>
 
     </head>
     <body>
+
         <div class="container">
             <!-- Include Sidebar -->
-            <jsp:include page="sideBar.jsp" />
+ <jsp:include page="sideBar.jsp" />
 
             <!-- Main Content -->
             <div class="main-content">

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import dao.ImportStockDAO;
@@ -13,7 +9,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import model.InventoryStatistic;
 
@@ -63,33 +62,141 @@ public class ImportStatisticServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String keyword = request.getParameter("search");
+            // Get search parameters
+            String searchKeyword = request.getParameter("search");
+            String fromDateStr = request.getParameter("fromDate");
+            String toDateStr = request.getParameter("toDate");
+            String supplierFilter = request.getParameter("supplier");
+            
+            // Initialize DAOs
             InventoryStatisticDAO invDao = new InventoryStatisticDAO();
             ImportStockDAO dao = new ImportStockDAO(); 
+            
+            // Get inventory list based on filters
             ArrayList<InventoryStatistic> inventoryList;
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                inventoryList = invDao.searchInventory(keyword);
+            
+            // Apply filters
+            if (hasFilters(searchKeyword, fromDateStr, toDateStr, supplierFilter)) {
+                inventoryList = getFilteredInventory(invDao, searchKeyword, fromDateStr, toDateStr, supplierFilter);
             } else {
                 inventoryList = invDao.getAllInventory();
             }
-            // lay du lieu thong ke
+            
+            // Get chart data (always get full data for charts)
             Map<String, Integer> dailyImport = dao.getImportStocksCountByDate();
             Map<String, Integer> monthlyImport = dao.getImportStocksCountByMonth();
             Map<String, Integer> supplierImport = dao.getStocksBySupplier();
             Map<String, Integer> topProductImport = dao.getTopImportedProducts();
-            // dem sang jsp
+            
+            // Set attributes for JSP
             request.setAttribute("inventoryList", inventoryList);
             request.setAttribute("dailyImport", dailyImport);
             request.setAttribute("monthlyImport", monthlyImport);
             request.setAttribute("supplierImport", supplierImport);
             request.setAttribute("topProductImport", topProductImport);
-
+            
+            // Forward to JSP
             request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
+            
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error fetching inventory statistics: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
         }
+    }
+    
+    /**
+     * Check if any filters are applied
+     */
+    private boolean hasFilters(String searchKeyword, String fromDate, String toDate, String supplier) {
+        return (searchKeyword != null && !searchKeyword.trim().isEmpty()) ||
+               (fromDate != null && !fromDate.trim().isEmpty()) ||
+               (toDate != null && !toDate.trim().isEmpty()) ||
+               (supplier != null && !supplier.trim().isEmpty() && !"All".equals(supplier));
+    }
+    
+    /**
+     * Get filtered inventory based on search criteria
+     */
+    private ArrayList<InventoryStatistic> getFilteredInventory(InventoryStatisticDAO invDao, 
+            String searchKeyword, String fromDateStr, String toDateStr, String supplierFilter) {
+        
+        ArrayList<InventoryStatistic> result = new ArrayList<>();
+        
+        try {
+            // Start with all inventory
+            ArrayList<InventoryStatistic> allInventory = invDao.getAllInventory();
+            
+            // Parse dates if provided
+            Date fromDate = null;
+            Date toDate = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            
+            if (fromDateStr != null && !fromDateStr.trim().isEmpty()) {
+                try {
+                    fromDate = sdf.parse(fromDateStr);
+                } catch (ParseException e) {
+                    System.err.println("Error parsing fromDate: " + e.getMessage());
+                }
+            }
+            
+            if (toDateStr != null && !toDateStr.trim().isEmpty()) {
+                try {
+                    toDate = sdf.parse(toDateStr);
+                    // Set time to end of day for toDate
+                    toDate = new Date(toDate.getTime() + 24 * 60 * 60 * 1000 - 1);
+                } catch (ParseException e) {
+                    System.err.println("Error parsing toDate: " + e.getMessage());
+                }
+            }
+            
+            // Apply filters
+            for (InventoryStatistic item : allInventory) {
+                boolean matchesSearch = true;
+                boolean matchesDateRange = true;
+                boolean matchesSupplier = true;
+                
+                // Search filter (search in staff name, supplier name, product ID)
+                if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+                    String keyword = searchKeyword.toLowerCase().trim();
+                    matchesSearch = (item.getFullName() != null && item.getFullName().toLowerCase().contains(keyword)) ||
+                                   (item.getSupplierName() != null && item.getSupplierName().toLowerCase().contains(keyword)) ||
+                                   (String.valueOf(item.getProductId()).contains(keyword));
+                }
+                
+                // Date range filter
+                if (fromDate != null || toDate != null) {
+                    if (item.getImportDate() != null) {
+                        if (fromDate != null && item.getImportDate().before(fromDate)) {
+                            matchesDateRange = false;
+                        }
+                        if (toDate != null && item.getImportDate().after(toDate)) {
+                            matchesDateRange = false;
+                        }
+                    } else {
+                        matchesDateRange = false;
+                    }
+                }
+                
+                // Supplier filter
+                if (supplierFilter != null && !supplierFilter.trim().isEmpty() && !"All".equals(supplierFilter)) {
+                    matchesSupplier = supplierFilter.equals(item.getSupplierName());
+                }
+                
+                // Add item if it matches all filters
+                if (matchesSearch && matchesDateRange && matchesSupplier) {
+                    result.add(item);
+                }
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error in getFilteredInventory: " + e.getMessage());
+            e.printStackTrace();
+            // Return empty list on error
+            return new ArrayList<>();
+        }
+        
+        return result;
     }
 
     /**
@@ -103,7 +210,7 @@ public class ImportStatisticServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
     /**
@@ -113,7 +220,6 @@ public class ImportStatisticServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Import Statistic Servlet with Search and Filter functionality";
+    }
 }
