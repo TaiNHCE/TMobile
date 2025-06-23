@@ -31,7 +31,7 @@
                 <!-- Logo -->
                 <a style = "margin-left: 25%" href="${pageContext.request.contextPath}/TMobile" class="me-3">
                     <img src="${pageContext.request.contextPath}/Logo/logo2.png" 
-                         
+
                          class="header-logo" 
                          style="height: 40px; object-fit: contain;" />
                 </a>
@@ -50,6 +50,7 @@
                         <%
                             if (categoryList != null) {
                                 for (Category cate : categoryList) {
+                                    if (cate.getIsActive()) {
                         %>
                         <li class="dropdown-submenu position-relative">
                             <a class="dropdown-item"
@@ -80,6 +81,7 @@
                             </ul>
                         </li>
                         <%
+                                    }
                                 }
                             }
                         %>
@@ -123,7 +125,7 @@
 
 <style>
 
-    
 
-   
+
+
 </style>
