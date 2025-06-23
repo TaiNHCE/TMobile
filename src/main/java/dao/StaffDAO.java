@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Scanner;
 import model.Account;
 import model.Staff;
-import sun.applet.Main;
 import utils.DBContext;
 
 /**
@@ -134,7 +133,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean createStaffWithAccount(Account account, Staff staff) {
-        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive, EmailVerified, ProfileImageURL) VALUES (?, ?, ?, 1, 1, ?)";
+        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive, EmailVerified, ProfileImageURL) VALUES (?, ?, 2, 1, 1, ?)";
         String insertStaffSQL = "INSERT INTO Staff (StaffID, AccountID, FullName, PhoneNumber, BirthDate, Gender, Position, HiredDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -144,8 +143,7 @@ public class StaffDAO extends DBContext {
             PreparedStatement accountStmt = conn.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
             accountStmt.setString(1, account.getEmail());
             accountStmt.setString(2, account.getPasswordHash());
-            accountStmt.setInt(3, account.getRoleID());
-            accountStmt.setString(4, account.getProfileImageURL());
+            accountStmt.setString(3, account.getProfileImageURL());
 
             int affectedRows = accountStmt.executeUpdate();
 
@@ -203,7 +201,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean updateStaffWithAccount(Account account, Staff staff) {
-        String updateAccountSQL = "UPDATE Accounts SET Email = ?, PasswordHash = ?, RoleID = ?, ProfileImageURL = ? WHERE AccountID = ?";
+        String updateAccountSQL = "UPDATE Accounts SET Email = ?, ProfileImageURL = ? WHERE AccountID = ?";
         String updateStaffSQL = "UPDATE Staff SET FullName = ?, PhoneNumber = ?, BirthDate = ?, Gender = ?, Position = ?, HiredDate = ? WHERE StaffID = ?";
 
         try {
@@ -212,10 +210,8 @@ public class StaffDAO extends DBContext {
             // Cập nhật bảng Accounts
             PreparedStatement accountStmt = conn.prepareStatement(updateAccountSQL);
             accountStmt.setString(1, account.getEmail());
-            accountStmt.setString(2, account.getPasswordHash());
-            accountStmt.setInt(3, account.getRoleID());
-            accountStmt.setString(4, account.getProfileImageURL());
-            accountStmt.setInt(5, account.getAccountID());
+            accountStmt.setString(2, account.getProfileImageURL());
+            accountStmt.setInt(3, account.getAccountID());
 
             int affectedAcc = accountStmt.executeUpdate();
             if (affectedAcc == 0) {

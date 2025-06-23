@@ -12,6 +12,7 @@ import java.math.BigDecimal;
  */
 public class Product {
 
+
     private int productId;
     private String productName;
     private String description;
@@ -48,6 +49,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+
     public Product(int productId, String productName, BigDecimal price, int discount, int stock, String status, boolean isActive) {
         this.productId = productId;
         this.productName = productName;
@@ -56,6 +58,9 @@ public class Product {
         this.stock = stock;
         this.status = status;
         this.isActive = isActive;
+    }
+
+    public Product() {
     }
 
    
@@ -187,5 +192,6 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 
 }

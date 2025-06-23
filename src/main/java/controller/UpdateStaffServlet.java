@@ -41,8 +41,6 @@ public class UpdateStaffServlet extends HttpServlet {
             int staffID = Integer.parseInt(request.getParameter("staffID"));
 
             String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            int roleID = Integer.parseInt(request.getParameter("roleID"));
             String profileImageURL = request.getParameter("profileImageURL");
 
             String fullName = request.getParameter("fullName");
@@ -62,8 +60,6 @@ public class UpdateStaffServlet extends HttpServlet {
             Account account = new Account();
             account.setAccountID(accountID);
             account.setEmail(email);
-            account.setPasswordHash(password); // nên hash nếu cần
-            account.setRoleID(roleID);
             account.setProfileImageURL(profileImageURL);
 
             // Tạo đối tượng Staff

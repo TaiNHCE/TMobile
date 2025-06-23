@@ -10,10 +10,78 @@
         <meta charset="UTF-8">
         <title>Update Staff</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                background-color: #f8f9fa;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            h1, h3 {
+                margin-top: 20px;
+                margin-bottom: 20px;
+                color: #343a40;
+            }
+
+            form {
+                background-color: #ffffff;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            label.form-label {
+                font-weight: 600;
+                color: #495057;
+            }
+
+            .form-control, .form-select {
+                border-radius: 8px;
+            }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #0d6efd;
+                box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            }
+
+            .alert {
+                border-radius: 8px;
+                font-size: 0.95rem;
+            }
+
+            button[type="submit"] {
+                background-color: #0d6efd;
+                border: none;
+                padding: 10px 20px;
+                font-weight: 600;
+                transition: background-color 0.3s ease;
+                border-radius: 8px;
+            }
+
+            button[type="submit"]:hover {
+                background-color: #0b5ed7;
+            }
+
+            a.btn-secondary {
+                margin-left: 10px;
+                border-radius: 8px;
+            }
+
+            #emailError,
+            #phoneError,
+            #birthDateError,
+            #fullNameError {
+                font-size: 0.85rem;
+            }
+
+            hr.section-divider {
+                margin: 30px 0 10px 0;
+                border-top: 2px solid #dee2e6;
+            }
+        </style>    
     </head>
     <body>
         <div class="container mt-4">
-            <h2>Update Staff</h2>
+            <h1>Update Staff</h1>
             <% if (request.getAttribute("errorMessage") != null) {%>
             <div class="alert alert-danger"><%= request.getAttribute("errorMessage")%></div>
             <% }%>
@@ -33,16 +101,10 @@
 
                 </div>
                 <div class="col-md-6">
-                    <label for="password" class="form-label">Password:</label>
-                    <input type="password" id="password" name="password" class="form-control" value="<%= account.getPasswordHash()%>" required>
+                   
                 </div>
                 <div class="col-md-6">
-                    <label for="roleID" class="form-label">Role:</label>
-                    <select id="roleID" name="roleID" class="form-select" required>
-                        <option value="">Select Role</option>
-                        <option value="1" <%= (account.getRoleID() == 1) ? "selected" : ""%>>Admin</option>
-                        <option value="2" <%= (account.getRoleID() == 2) ? "selected" : ""%>>Staff</option>
-                    </select>
+                    
                 </div>
                 <div class="col-md-12">
                     <label for="profileImageURL" class="form-label">Profile Image URL:</label>

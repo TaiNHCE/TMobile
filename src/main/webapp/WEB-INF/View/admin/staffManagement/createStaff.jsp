@@ -5,6 +5,97 @@
         <meta charset="UTF-8">
         <title>Create New Staff</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <style>
+            body {
+                background-color: #f4f8fb;
+                font-family: 'Arial', sans-serif;
+            }
+
+            .container {
+                background-color: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            h2 {
+                text-align: center;
+                color: #333;
+            }
+
+            h3 {
+                color: #555;
+                border-bottom: 2px solid #f0f0f0;
+                padding-bottom: 5px;
+                margin-bottom: 20px;
+            }
+
+            .form-label {
+                font-weight: bold;
+            }
+
+            .form-control {
+                border-radius: 5px;
+                border: 1px solid #ddd;
+            }
+
+            .form-select {
+                border-radius: 5px;
+                border: 1px solid #ddd;
+            }
+
+            .alert {
+                margin-bottom: 20px;
+            }
+
+            .btn {
+                border-radius: 5px;
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                border: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                background-color: #45a049;
+            }
+
+            .btn-secondary {
+                background-color: #6c757d;
+                border: none;
+                color: white;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-secondary:hover {
+                background-color: #5a6368;
+            }
+
+            .form-control:focus {
+                border-color: #4CAF50;
+                box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+            }
+
+            .text-danger {
+                font-size: 0.85rem;
+                margin-top: 5px;
+            }
+
+            .small {
+                font-size: 0.85rem;
+            }
+
+            .col-md-6 {
+                margin-bottom: 15px;
+            }
+
+            .col-md-12 {
+                margin-bottom: 20px;
+            }
+        </style>
     </head>
     <body>
         <div class="container mt-4">
@@ -14,7 +105,7 @@
                 if (errorMessage != null) {
             %>
             <div class="alert alert-danger" role="alert">
-                <%= errorMessage%>
+                <%= errorMessage %>
             </div>
             <%
                 }
@@ -25,7 +116,7 @@
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email:</label>
                     <input type="email" id="email" name="email" class="form-control" required>
-                    <div id="emailError" class="text-danger small mt-1"></div> <!-- chỗ hiện lỗi -->
+                    <div id="emailError" class="text-danger small mt-1"></div>
                 </div>
 
                 <div class="col-md-6">
@@ -33,13 +124,7 @@
                     <input type="password" id="password" name="password" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="roleID" class="form-label">Role:</label>
-                    <select id="roleID" name="roleID" class="form-select" required>
-                        <option value="">Select Role</option>
-                        <option value="1">Admin</option>
-                        <option value="2">Staff</option>
-
-                    </select>
+                   
                 </div>
                 <div class="col-md-12">
                     <label for="profileImageURL" class="form-label">Profile Image URL:</label>
@@ -57,7 +142,6 @@
                     <label for="phoneNumber" class="form-label">Phone Number:</label>
                     <input type="text" id="phoneNumber" name="phoneNumber" class="form-control">
                     <div id="phoneError" class="text-danger small mt-1"></div>
-
                 </div>
                 <div class="col-md-6">
                     <label for="birthDate" class="form-label">Birth Date:</label>
@@ -88,9 +172,12 @@
                 </div>
             </form>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>
+
+
 
 <script>
 

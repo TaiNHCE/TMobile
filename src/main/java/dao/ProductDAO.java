@@ -8,7 +8,9 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 import model.Product;
@@ -170,6 +172,7 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
+
 
     public List<Product> getProductList() {
         List<Product> list = new ArrayList<>();
@@ -363,4 +366,5 @@ public class ProductDAO extends DBContext {
             return false;
         }
     }
+
 }
