@@ -77,8 +77,11 @@ public class StaffProductList extends HttpServlet {
             productList = proDAO.getProductIsNew();
         } else if (filter.equals("Discount")) {
             productList = proDAO.getDiscountedProducts();
-        } else {
-            productList = proDAO.getAllProduct(); // fallback
+        } 
+        else if (filter.equals("Active")) {
+            productList = proDAO.getAllProductActive();
+        }else {
+            productList = proDAO.getAllProductInactive(); // fallback
         }
 
         request.setAttribute("productList", productList);

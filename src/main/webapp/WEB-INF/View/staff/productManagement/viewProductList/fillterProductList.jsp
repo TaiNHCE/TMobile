@@ -34,7 +34,8 @@
                 <select name="filter" id="filter" class="form-select" onchange="this.form.submit()" 
                         style="width: 250px; display: inline-block;">
                     <option value="All" <%= "All".equals(selectedFilter) ? "selected" : ""%>>All products</option>
-                    <option value="Hidden" <%= "hidden".equals(selectedFilter) ? "selected" : ""%>>Hidden products</option>
+                    <option value="Active" <%= "Active".equals(selectedFilter) ? "selected" : ""%>>Active products</option>
+                    <option value="Hidden" <%= "Hidden".equals(selectedFilter) ? "selected" : ""%>>Hidden products</option>
                     <option value="Featured" <%= "Featured".equals(selectedFilter) ? "selected" : ""%>>Featured products</option>
                     <option value="Bestseller" <%= "Bestseller".equals(selectedFilter) ? "selected" : ""%>>Bestseller products</option>
                     <option value="New" <%= "New".equals(selectedFilter) ? "selected" : ""%>>New products</option>

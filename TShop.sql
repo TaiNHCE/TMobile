@@ -120,7 +120,7 @@ CREATE TABLE Products (
     CreatedAt DATETIME DEFAULT GETDATE(),
     UpdateAt DATETIME DEFAULT GETDATE(),
     WarrantyPeriod INT,
-    isActive BIT DEFAULT 1
+    isActive BIT default 0
 );
 
 CREATE TABLE ProductImages (
@@ -465,7 +465,7 @@ VALUES
 	  ('Samsung Galaxy A74', 'Large display, powerful chip, long-lasting 5000mAh battery.', 29990000, 0, 20, 'In stock', 1, 1, 2, 0, 1, 1, 12),
 	  ('Samsung Galaxy Z Flip5', 'Stylish foldable design, 120Hz AMOLED display, powerful processor', 9900000, 0, 20, 'In stock', 1, 1, 2, 0, 0, 1, 12);
 	  
-
+	  
 -- insert data productImage table
 insert into ProductImages(ProductID, ImageURL, AltText)
 VALUES (1, 'https://cdn.tgdd.vn/Products/Images/42/305658/iphone-15-pro-max-blue-thumbnew-600x600.jpg', 'Product image of iPhone 15 Pro Max – modern and premium smartphone design'),

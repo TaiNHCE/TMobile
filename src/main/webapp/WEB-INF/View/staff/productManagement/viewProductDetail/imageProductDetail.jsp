@@ -29,25 +29,25 @@
                 %>
                 <div class="col-md-12">
 
-                    <div class="divAnhLon"> 
+                    <div class="divAnhLon text-center"> 
                         <img id="mainImage" src="<%= product.getImageUrl()%>" class="img-fluid mb-3 rounded anhLon">
                     </div>
 
                     <div class="d-flex flex-wrap gap-2 row div4AnhNho">
-                        <div class="img-thumbnail" style = "margin-left: 10%;">
-                            <img class = "col-md-2" src="<%= proDetail.getImageUrl1()%>" onclick="changeMainImage(this.src)">
+                        <div class="img-thumbnail col-auto" style = "margin-left: 8%;">
+                            <img class ="" src="<%= proDetail.getImageUrl1()%>" onclick="changeMainImage(this.src)">
                         </div>
 
-                        <div class="img-thumbnail">
-                            <img class = "col-md-2" src="<%= proDetail.getImageUrl2()%>" onclick="changeMainImage(this.src)">
+                        <div class="img-thumbnail col-auto">
+                            <img class = "" src="<%= proDetail.getImageUrl2()%>" onclick="changeMainImage(this.src)">
                         </div>
 
-                        <div class="img-thumbnail">
-                            <img class = "col-md-2" src="<%= proDetail.getImageUrl3()%>" onclick="changeMainImage(this.src)">
+                        <div class="img-thumbnail col-auto">
+                            <img class = "" src="<%= proDetail.getImageUrl3()%>" onclick="changeMainImage(this.src)">
                         </div>
 
-                        <div class="img-thumbnail">
-                            <img class = "col-md-2" src="<%= proDetail.getImageUrl4()%>" onclick="changeMainImage(this.src)">
+                        <div class="img-thumbnail col-auto">
+                            <img class = "" src="<%= proDetail.getImageUrl4()%>" onclick="changeMainImage(this.src)">
                         </div>
                     </div>
                 </div>

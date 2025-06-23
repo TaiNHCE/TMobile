@@ -6,6 +6,7 @@ D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\dao\VoucherDAO.jav
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\CheckEmailServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\model\ProductDetail.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\InventoryStatisticServlet.java
+D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\StaffDeleteProductServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\LoginServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\AdminDashboard.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\CategoryViewServlet.java
@@ -16,6 +17,7 @@ D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\CheckPh
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\HomeServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\CategoryDetailServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\LoginStaffServlet.java
+D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\StaffUpdateProductDetailServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\model\CategoryDetail.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\model\Suppliers.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\dao\ImportStockDAO.java
@@ -35,6 +37,7 @@ D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\Activat
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\CreateCategoryServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\DeleteSupplierServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\model\PurchaseOrder.java
+D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\StaffUpdateInfoServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\dao\BrandDAO.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\controller\StaffListServlet.java
 D:\ChuyenNganhKi05\SWP391\Assigment\Tai\TMobile\src\main\java\model\InventoryStatistic.java

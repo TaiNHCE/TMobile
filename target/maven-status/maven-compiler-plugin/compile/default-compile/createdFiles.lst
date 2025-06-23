@@ -1,5 +1,6 @@
 controller\DeleteSupplierServlet.class
 controller\UpdateCategoryServlet.class
+controller\StaffUpdateProductDetailServlet.class
 controller\CreateCategoryServlet.class
 controller\ImportStatisticServlet.class
 dao\SupplierDAO.class
@@ -10,6 +11,7 @@ model\CategoryDetailGroup.class
 model\Voucher.class
 controller\StaffProductList.class
 controller\CreateSupplierServlet.class
+controller\StaffUpdateInfoServlet.class
 controller\LoginStaffServlet.class
 model\Brand.class
 controller\AdminDashboard.class
@@ -32,6 +34,7 @@ model\RevenueStatistic.class
 controller\StaffViewProductDetailServlet.class
 model\ProductDetail.class
 dao\AccountDAO.class
+controller\StaffDeleteProductServlet.class
 model\Staff.class
 utils\DBContext.class
 controller\CategoryDetailServlet.class

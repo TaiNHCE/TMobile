@@ -23,7 +23,7 @@
 
     </head>
     <body>
-
+        <jsp:include page="/WEB-INF/View/staff/productManagement/deleteProduct/staffDeleteProduct.jsp" />
         <div class = "" style = "width: 80%; margin-left: 18.9%">
 
             <%                if (productList != null) {
@@ -56,7 +56,7 @@
                         <td><%=giaFormatted%></td>
                         <td><%= product.getDiscount()%>%</td>
                         <td><%= product.getStatus()%></td>
-                        
+
                         <td><%= product.getCategoryName()%></td>
                         <td><%= product.getBrandName()%></td>
 
@@ -78,7 +78,7 @@
                         <td>
                             <div class="d-flex gap-1">
                                 <a style = "text-align: center" href="StaffViewProductDetail?productId=<%= product.getProductId()%>" class="btn btn-warning" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
-                                <a style = "text-align: center" href="ProductDetail?productId=<%= product.getProductId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit</a>
+                                <a style = "text-align: center" href="StaffUpdateInfo?productId=<%= product.getProductId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit</a>
                                 <button style = "text-align: center" class="btn btn-danger" onclick="confirmDelete(<%= product.getProductId()%>)">Delete</button>
                             </div>
                         </td>

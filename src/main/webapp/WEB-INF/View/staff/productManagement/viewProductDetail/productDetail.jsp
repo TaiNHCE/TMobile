@@ -4,6 +4,7 @@
     Author     : HP - Gia Khiêm
 --%>
 
+<%@page import="model.Product"%>
 <%@page import="model.ProductDetail"%>
 <%@page import="model.CategoryDetail"%>
 <%@page import="model.CategoryDetailGroup"%>
@@ -13,17 +14,24 @@
     List<CategoryDetailGroup> categoryDetailGroupList = (List<CategoryDetailGroup>) request.getAttribute("categoryGroupList");
     List<CategoryDetail> categoryDetailList = (List<CategoryDetail>) request.getAttribute("categoryDetailList");
     List<ProductDetail> productDetailList = (List<ProductDetail>) request.getAttribute("productDetailList");
+    Product product = (Product) request.getAttribute("product");
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+
         <link rel="stylesheet" href="Css/productDetail.css">
     </head>
     <body>
         <div style = "margin-top: 6%;">
-            <h3>Technical Specifications</h3>
+            <div style = "display: flex;">
+                <h3 style = "margin-right: 38%;">Technical Specifications</h3>
+                <a style = "text-align: center; margin-bottom: 1%; border: none; background-color: #00b8d9;" href="StaffUpdateProductDetail?productId=<%= product.getProductId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit Detail</a>
+
+            </div>
+
             <div class = "container col-md-12" style = "background-color: #FFFFFF; border-radius: 15px;">
                 <div class = "row">
                     <div class="col-md-12">
