@@ -674,17 +674,7 @@
         </script>
         <!-- error -->
         <script>
-            //            function redirectToImport() {
-            //                const urlParams = new URLSearchParams(window.location.search);
-            ////                const id = urlParams.get('id'); // Lấy id từ URL
-            //                window.location.href = `ImportStock`;
-            ////                if (id) {
-            ////                    window.location.href = `ImportStock?importStockId=\${id}`;
-            ////                } else {
-            ////                    alert("Không tìm thấy ID trong URL!");
-            ////                }
-            //            }
-
+            
             function redirectToImport() {
                 const form = document.createElement("form");
                 form.method = "POST";
