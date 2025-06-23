@@ -1,3 +1,4 @@
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*"%>
 <%@page import="model.InventoryStatistic"%>
@@ -9,7 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/manageStatistic.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/manageStatistic2.css">
 
    
         </head>
@@ -42,7 +43,7 @@
                         <%
                             }
                         %>
-                        <table class="table table-bordered table-hover align-middle text-center">
+                        <table class="table table-bordered table-hover align-middle text-center custom-table">
                             <thead>
                                 <tr>
                                     <th>Product ID</th>

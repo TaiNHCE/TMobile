@@ -4,6 +4,10 @@
  */
 package controller;
 
+import dao.ProductDAO;
+import dao.RevenueStatisticDAO;
+import dao.StaffDAO;
+import dao.SupplierDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Calendar;
 
 /**
  *
@@ -58,6 +63,25 @@ public class AdminDashboard extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        StaffDAO staffDAO = new StaffDAO();
+        ProductDAO productDAO = new ProductDAO();
+        SupplierDAO supplierDAO = new SupplierDAO();
+        RevenueStatisticDAO revenueDAO = new RevenueStatisticDAO();
+
+        int totalStaff = staffDAO.getTotalStaff();
+        int totalProduct = productDAO.getTotalProducts();
+        int totalSupplier = supplierDAO.getTotalSuppliers();
+
+        Calendar now = Calendar.getInstance();
+        int month = now.get(Calendar.MONTH) + 1;
+        int year = now.get(Calendar.YEAR);
+        long monthlyRevenue = revenueDAO.getMonthlyRevenue(month, year);
+
+        request.setAttribute("totalStaff", totalStaff);
+        request.setAttribute("totalProduct", totalProduct);
+        request.setAttribute("totalSupplier", totalSupplier);
+        request.setAttribute("monthlyRevenue", monthlyRevenue);
+
         request.getRequestDispatcher("/WEB-INF/View/admin/adminDashboard.jsp").forward(request, response);
     }
 

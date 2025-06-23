@@ -3,6 +3,7 @@
     Created on : Jun 19, 2025
     Author     : [Your Name]
 --%>
+
 <%@page import="java.util.List"%>
 <%@page import="model.Product"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

@@ -66,13 +66,13 @@
                                 <td><%= s.getEmail()%></td>
                                 <td><span class="<%= statusClass%>"><%= statusText%></span></td>
                                 <td class="action-col">
-                                    <a href="ViewSupplier?id=<%= s.getSupplierID()%>" class="btn-detail">Detail</a>
-                                    <a href="UpdateSupplier?id=<%= s.getSupplierID()%>" class="btn-edit">Edit</a>
+                                    <a href="ViewSupplier?id=<%= s.getSupplierID()%>" class="btn btn-primary">Detail</a>
+                                    <a href="UpdateSupplier?id=<%= s.getSupplierID()%>" class="btn btn-warning">Edit</a>
 
                                     <form action="DeleteSupplier" method="get" style="display:inline;">
                                         <input type="hidden" name="supplierID" value="<%= s.getSupplierID()%>"/>
                                         <input type="hidden" name="taxId" value="<%= s.getTaxId()%>"/>
-                                        <button type="submit" class="btn-delete">Delete</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </td>
                             </tr>

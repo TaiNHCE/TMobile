@@ -108,7 +108,7 @@
                 <%= errorMessage %>
             </div>
             <%
-                }
+}
             %>
             <form action="CreateStaffServlet" method="post" class="row g-3">
                 <!-- Account Information -->
@@ -124,11 +124,7 @@
                     <input type="password" id="password" name="password" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="roleID" class="form-label">Role:</label>
-                    <select id="roleID" name="roleID" class="form-select" required>
-                        <option value="">Select Role</option>
-                        <option value="staff">Staff</option>
-                    </select>
+                   
                 </div>
                 <div class="col-md-12">
                     <label for="profileImageURL" class="form-label">Profile Image URL:</label>
@@ -167,7 +163,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="hiredDate" class="form-label">Hired Date:</label>
-                    <input type="date" id="hiredDate" name="hiredDate" class="form-control" required>
+<input type="date" id="hiredDate" name="hiredDate" class="form-control" required>
                 </div>
 
                 <div class="col-12">
@@ -248,7 +244,7 @@
                 .then(data => {
                     if (data === "EXISTS") {
                         phoneError.textContent = "Phone number already exists.";
-                        submitBtn.disabled = true;
+submitBtn.disabled = true;
                     }
                 })
                 .catch(error => {

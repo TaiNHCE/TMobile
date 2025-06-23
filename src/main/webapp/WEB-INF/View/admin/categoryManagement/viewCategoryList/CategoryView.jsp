@@ -15,8 +15,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <link rel="stylesheet" href="Css/viewCategoryList.css">
         
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/viewCategoryList3.css">
+
     </head>
     <body>
         <jsp:include page="/WEB-INF/View/admin/categoryManagement/deleteCategory/deleteCategory.jsp" />
@@ -41,38 +42,41 @@
             <%
                 if (categoryList != null) {
             %>
-            <table class="table table-striped table-hover">
-                <tr class = "tableRow">
-                    <td class ="tieuDe" style = "text-align: center">ID</td>
-                    <td class ="tieuDe" style = "text-align: center">Category Name</td>
-                    <td class ="tieuDe" style = "text-align: center">Description</td>
-                    <td class ="tieuDe" style = "text-align: center">Quantity</td>
-                    <td class ="tieuDe" style = "text-align: center">Created Date</td>
-                    <td class ="tieuDe" style = "text-align: center">Action</td>
-                </tr>
-                <%
-                    for (Category cate : categoryList) {
-                        if (cate.getIsActive()) {
-                %>
-                <tr>
-                    <td><%= cate.getCategoryId()%></td>
-                    <td><%= cate.getCategoryName()%></td>
-                    <td><%= cate.getDescriptionCategory()%></td>
-                    <td><%= 50%></td>
-                    <td><%= cate.getCreatedAt()%></td>
+            <table class="table table-striped table-hover custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Created Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>                
+                    <%
+                        for (Category cate : categoryList) {
+                            if (cate.getIsActive()) {
+                    %>
+                    <tr>
+                        <td><%= cate.getCategoryId()%></td>
+                        <td><%= cate.getCategoryName()%></td>
+                        <td><%= cate.getDescriptionCategory()%></td>
+                        <td><%= 50%></td>
+                        <td><%= cate.getCreatedAt()%></td>
 
 
-                    <td>
-                        <a href="CategoryDetail?categoryId=<%= cate.getCategoryId()%>" class="btn btn-warning" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
-                        <a href="UpdateCategory?categoryId=<%= cate.getCategoryId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit</a>
-                        <button class="btn btn-danger" onclick="confirmDelete(<%= cate.getCategoryId()%>)">Delete</button>
-                    </td>
-                </tr>
+                        <td>
+                            <a href="CategoryDetail?categoryId=<%= cate.getCategoryId()%>" class="btn btn-primary" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
+                            <a href="UpdateCategory?categoryId=<%= cate.getCategoryId()%>" class="btn btn-warning" ><i class="bi bi-tools"></i> Edit</a>
+                            <button class="btn btn-danger" onclick="confirmDelete(<%= cate.getCategoryId()%>)">Delete</button>
+                        </td>
+                    </tr>
 
-                <%
+                    <%
+                            }
                         }
-                    }
-                %>
+                    %>
             </table>
             <%
                 } else {

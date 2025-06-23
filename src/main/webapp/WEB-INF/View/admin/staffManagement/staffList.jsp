@@ -1,3 +1,4 @@
+
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="model.Staff"%>
@@ -16,7 +17,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
 
         <!-- Dashboard CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/staffList1.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/staffList2.css">
     </head>
     <body>
         <div class="container">
@@ -60,8 +61,8 @@
                                 <td><%= sta.getFullName()%></td>
                                 <td><%= sta.getHiredDate()%></td>
                                 <td>
-                                    <a href="UpdateStaffServlet?action=update&id=<%= sta.getStaffID()%>" class="btn btn-primary btn-sm">Update</a>
-                                    <a href="StaffList?action=detail&id=<%= sta.getStaffID()%>" class="btn btn-info btn-sm">Detail</a>
+                                    <a href="StaffList?action=detail&id=<%= sta.getStaffID()%>" class="btn btn-primary btn-sm">Detail</a>
+                                    <a href="UpdateStaffServlet?action=update&id=<%= sta.getStaffID()%>" class="btn btn-warning btn-sm">Update</a>
                                     <a href="DeleteStaffServlet?action=delete&id=<%= sta.getStaffID()%>" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>

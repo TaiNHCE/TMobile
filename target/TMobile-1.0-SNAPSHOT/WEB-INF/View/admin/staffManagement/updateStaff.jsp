@@ -93,7 +93,7 @@
 
                 <!-- Account Information -->
                 <h3>Account Information</h3>
-                <div class="col-md-6">
+<div class="col-md-6">
                     <label for="email" class="form-label">Email:</label>
                     <input type="email" id="email" name="email" class="form-control" value="<%= account.getEmail()%>" required>
                     <div id="emailError" class="text-danger small mt-1"></div> 
@@ -101,16 +101,10 @@
 
                 </div>
                 <div class="col-md-6">
-                    <label for="password" class="form-label">Password:</label>
-                    <input type="password" id="password" name="password" class="form-control" value="<%= account.getPasswordHash()%>" required>
+                   
                 </div>
                 <div class="col-md-6">
-                    <label for="roleID" class="form-label">Role:</label>
-                    <select id="roleID" name="roleID" class="form-select" required>
-                        <option value="">Select Role</option>
-
-                        <option value="2" <%= (account.getRoleID() == 2) ? "selected" : ""%>>Staff</option>
-                    </select>
+                    
                 </div>
                 <div class="col-md-12">
                     <label for="profileImageURL" class="form-label">Profile Image URL:</label>
@@ -149,7 +143,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="position" class="form-label">Position:</label>
-                    <input type="text" id="position" name="position" class="form-control" value="<%= staff.getPosition()%>" required>
+<input type="text" id="position" name="position" class="form-control" value="<%= staff.getPosition()%>" required>
                 </div>
                 <div class="col-md-6">
                     <label for="hiredDate" class="form-label">Hired Date:</label>
@@ -222,8 +216,7 @@
             submitBtn.disabled = true;
             return;
         }
-
-        // Chỉ kiểm tra nếu thay đổi số điện thoại
+// Chỉ kiểm tra nếu thay đổi số điện thoại
         if (phone !== currentPhone) {
             fetch("CheckPhoneServlet?phone=" + encodeURIComponent(phone))
                     .then(response => response.text())

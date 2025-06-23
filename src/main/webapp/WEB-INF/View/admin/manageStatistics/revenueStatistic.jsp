@@ -9,8 +9,19 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/revenueStatistic.css">
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>            
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            .chart-desc {
+                font-size: 15px;
+                font-weight: bold;
+                color: #444;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+            .chart-box {
+                margin-bottom: 32px;
+            }
+        </style>
     </head>
     <body>
         <div class="container-fluid">
@@ -29,35 +40,45 @@
                         ArrayList<RevenueStatistic> chartDayData = (ArrayList<RevenueStatistic>) request.getAttribute("chartDayData");
                         ArrayList<RevenueStatistic> chartMonthData = (ArrayList<RevenueStatistic>) request.getAttribute("chartMonthData");
 
-                        StringBuilder dayLabels = new StringBuilder();
-                        StringBuilder dayData = new StringBuilder();
+                        // ==== Danh sách category cố định ====
+                        List<String> fixCategories = Arrays.asList("Phone", "Laptop", "Accessories", "Watch");
+                        Map<String, Long> categoryRevenueDay = new LinkedHashMap<>();
+                        Map<String, Long> categoryRevenueMonth = new LinkedHashMap<>();
+                        for (String cat : fixCategories) {
+                            categoryRevenueDay.put(cat, 0L);
+                            categoryRevenueMonth.put(cat, 0L);
+                        }
+                        // ==== Gán doanh thu cho từng category (nếu có) ====
                         if (chartDayData != null) {
                             for (RevenueStatistic r : chartDayData) {
-                                dayLabels.append("\"").append(r.getCategoryName()).append("\",");
-                                dayData.append(r.getTotalRevenue()).append(",");
+                                if (categoryRevenueDay.containsKey(r.getCategoryName()))
+                                    categoryRevenueDay.put(r.getCategoryName(), r.getTotalRevenue());
                             }
-                            if (dayLabels.length() > 0) {
-                                dayLabels.setLength(dayLabels.length() - 1);
-                            }
-                            if (dayData.length() > 0) {
-                                dayData.setLength(dayData.length() - 1);
+                        }
+                        if (chartMonthData != null) {
+                            for (RevenueStatistic r : chartMonthData) {
+                                if (categoryRevenueMonth.containsKey(r.getCategoryName()))
+                                    categoryRevenueMonth.put(r.getCategoryName(), r.getTotalRevenue());
                             }
                         }
 
+                        StringBuilder dayLabels = new StringBuilder();
+                        StringBuilder dayData = new StringBuilder();
+                        for (String cat : fixCategories) {
+                            dayLabels.append("\"").append(cat).append("\",");
+                            dayData.append(categoryRevenueDay.get(cat)).append(",");
+                        }
+                        if (dayLabels.length() > 0) dayLabels.setLength(dayLabels.length() - 1);
+                        if (dayData.length() > 0) dayData.setLength(dayData.length() - 1);
+
                         StringBuilder monthLabels = new StringBuilder();
                         StringBuilder monthData = new StringBuilder();
-                        if (chartMonthData != null) {
-                            for (RevenueStatistic r : chartMonthData) {
-                                monthLabels.append("\"").append(r.getCategoryName()).append("\",");
-                                monthData.append(r.getTotalRevenue()).append(",");
-                            }
-                            if (monthLabels.length() > 0) {
-                                monthLabels.setLength(monthLabels.length() - 1);
-                            }
-                            if (monthData.length() > 0) {
-                                monthData.setLength(monthData.length() - 1);
-                            }
+                        for (String cat : fixCategories) {
+                            monthLabels.append("\"").append(cat).append("\",");
+                            monthData.append(categoryRevenueMonth.get(cat)).append(",");
                         }
+                        if (monthLabels.length() > 0) monthLabels.setLength(monthLabels.length() - 1);
+                        if (monthData.length() > 0) monthData.setLength(monthData.length() - 1);
                     %>
 
                     <% if (message != null) {%>
@@ -109,11 +130,17 @@
                         </div>
                     </div>
 
-
-
                     <script>
+                        const barColors = [
+                            "#14dbff", // Phone
+                            "#ffe53b", // Laptop
+                            "#bbbbbb", // Accessories
+                            "#14ffb1"  // Watch
+                        ];
+                        // Dữ liệu cho biểu đồ ngày
                         const dayLabels = [<%= dayLabels.toString()%>];
                         const dayData = [<%= dayData.toString()%>];
+                        // Dữ liệu cho biểu đồ tháng
                         const monthLabels = [<%= monthLabels.toString()%>];
                         const monthData = [<%= monthData.toString()%>];
 
@@ -123,20 +150,34 @@
                                 data: {
                                     labels: labels,
                                     datasets: [{
-                                            label: 'Revenue (₫)',
                                             data: data,
-                                            backgroundColor: ['green', 'blue', 'orange', 'red', 'gray']
+                                            backgroundColor: barColors,
+                                            borderRadius: 16,
+                                            borderSkipped: false,
+                                            barPercentage: 0.6,
+                                            categoryPercentage: 0.6
                                         }]
                                 },
                                 options: {
                                     responsive: true,
+                                    maintainAspectRatio: true,
+                                    animation: false,
                                     plugins: {legend: {display: false}},
                                     scales: {
+                                        x: {
+                                            grid: {display: false, drawBorder: false},
+                                            ticks: {
+                                                color: "#a7a7a7",
+                                                font: {size: 14, weight: '400', family: "'Montserrat', Arial, sans-serif"}
+                                            }
+                                        },
                                         y: {
-                                            beginAtZero: true,
+                                            grid: {display: false},
                                             ticks: {
                                                 callback: val => val.toLocaleString() + ' ₫'
-                                            }
+                                            },
+                                            beginAtZero: true,
+                                            min: 0
                                         }
                                     }
                                 }
