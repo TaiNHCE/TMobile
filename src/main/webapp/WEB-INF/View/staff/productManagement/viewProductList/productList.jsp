@@ -24,21 +24,18 @@
     </head>
     <body>
         <jsp:include page="/WEB-INF/View/staff/productManagement/deleteProduct/staffDeleteProduct.jsp" />
-        <div class = "" style = "width: 80%; margin-left: 18.9%">
+        <div class = "" style = "width: 93%;">
 
             <%                if (productList != null) {
             %>
             <div style="overflow-x: auto; width: 100%;">
                 <table class="table table-striped table-hover">
-                    <tr class = "tableRow">
-                        <td class ="tieuDe" style = "text-align: center">ID</td>
-                        <td class ="tieuDe" style = "text-align: center">Product Name</td>
+                    <tr class = "tableRow" style = "background-color: #2563eb">
+                        <td class ="tieuDe" style = "text-align: center; background-color: #2563eb; color: #fff; padding: 14px 16px;">ID</td>
+                        <td class ="tieuDe" style = "text-align: center; background-color: #2563eb; color: #fff; padding: 14px 16px;">Product Name</td>
                         <td class ="tieuDe" style = "text-align: center">Price</td>
-                        <td class ="tieuDe" style = "text-align: center">Discount</td>
-                        <td class ="tieuDe" style = "text-align: center">status</td>
                         <td class ="tieuDe" style = "text-align: center">Category</td>
                         <td class ="tieuDe" style = "text-align: center">Brand</td>
-                        <td class ="tieuDe" style = "text-align: center">Active</td>
                         <td class ="tieuDe" style = "text-align: center">Image</td>
                         <td class ="tieuDe" style = "text-align: center">Action</td>
                     </tr>
@@ -54,18 +51,16 @@
                         <td><%= product.getProductId()%></td>
                         <td><%= product.getProductName()%></td>
                         <td><%=giaFormatted%></td>
-                        <td><%= product.getDiscount()%>%</td>
-                        <td><%= product.getStatus()%></td>
 
                         <td><%= product.getCategoryName()%></td>
                         <td><%= product.getBrandName()%></td>
 
-                        <td>
+<!--                        <td>
                             <div class="pretty-checkbox">
                                 <input type="checkbox" id="active-<%= product.getProductId()%>" disabled <%= product.isIsActive() ? "checked" : ""%> />
                                 <label for="active-<%= product.getProductId()%>"></label>
                             </div>
-                        </td>
+                        </td>-->
 
 
                         <%

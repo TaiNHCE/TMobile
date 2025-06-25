@@ -20,14 +20,14 @@
     
     <body>
         <div>
-            <h1 class = "col-md-9 fw-bold display-5" style = "margin-left: 18.9%; margin-top: 2%">
+            <h1 class = "" style = " color: #232946; margin-top: 24px; font-weight: 800; font-size: 2.5rem; letter-spacing: 1px;">
                 Product Management
             </h1>
         </div>
 
-        <div style="display: flex; align-items: center; margin-top: 3%;">
+        <div style="display: flex; align-items: center; margin-top: 3%; width: 80%">
             
-            <p style="margin-left: 22%; color: black; font-weight: 500; font-size: 200%;"><%= (selectedFilter != null && !selectedFilter.isEmpty()) ? (selectedFilter + " ") : "All" %>Product</p><!-- comment -->
+            <p style=" color: black; font-weight: 500; font-size: 200%;"><%= (selectedFilter != null && !selectedFilter.isEmpty()) ? (selectedFilter + " ") : "All" %>Product</p><!-- comment -->
             
             <form style="margin-left: 15%; margin-bottom: 1%; margin-right: 2%" action="StaffProduct" method="get">
                 <label for="filter" class="form-label fw-bold me-2">Filter Products:</label>
@@ -43,7 +43,7 @@
                 </select>
             </form>
 
-            <a href="CreateCategory" 
+            <a href="StaffAddProduct" 
                class="btn btn-success d-flex align-items-center shadow rounded-pill px-3 py-2"
                style="width: fit-content; text-decoration: none; margin-bottom: 1%;">
                 <img src="https://cdn0.iconfinder.com/data/icons/round-ui-icons/512/add_blue.png" 

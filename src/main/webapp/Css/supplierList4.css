@@ -106,7 +106,7 @@ th {
     background: #2563eb;
     color: #fff;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 14px;
 }
 
 tbody tr:nth-child(even) {
@@ -173,39 +173,6 @@ th:last-child {
     font-size: 14px;
     transition: all 0.2s ease;
 }
-
-.btn-detail {
-    background: #b8cfe9;
-    color: #1652a3 !important;
-}
-
-.btn-detail:hover {
-    background: #6d8ef3;
-    color: #1652a3 !important;
-    text-decoration: none !important;
-}
-
-.btn-edit {
-    background: #fef9c3 !important;
-    color: #92400e !important;
-}
-
-.btn-edit:hover {
-    background: #fde047 !important;
-    color: #78350f !important;
-    text-decoration: none !important;
-}
-
-.btn-delete {
-    background: #f87171;
-    color: #fff !important;
-}
-
-.btn-delete:hover {
-    background: #e11d48;
-    color: #fff !important;
-}
-
 /* Utility Classes */
 .text-center {
     text-align: center;
