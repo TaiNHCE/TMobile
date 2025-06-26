@@ -23,7 +23,7 @@ import model.ProductDetail;
  *
  * @author HP - Gia Khiêm
  */
-@WebServlet(name = "StaffViewProductDetailServlet", urlPatterns = {"/StaffViewProductDetail"})
+@WebServlet(name = "StaffViewProductDetailServlet", urlPatterns = {"/AdminViewProductDetail"})
 public class StaffViewProductDetailServlet extends HttpServlet {
 
     /**

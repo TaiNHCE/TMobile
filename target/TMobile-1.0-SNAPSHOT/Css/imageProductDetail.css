@@ -5,7 +5,7 @@
 
 .divAnhLon {
     height: 250px;
-    width: 175px;
+    width: 100%;
 }
 
 .anhLon {
@@ -47,4 +47,15 @@
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+/* Trong file Css/imageProductDetail.css hoặc <style> */
+.main-img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;       /* Điều chỉnh cao tối đa nếu muốn */
+    object-fit: contain;     /* Giữ nguyên tỷ lệ, không cắt ảnh */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
 

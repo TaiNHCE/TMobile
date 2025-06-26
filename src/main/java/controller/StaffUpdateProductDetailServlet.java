@@ -32,7 +32,7 @@ import model.ProductDetail;
  * @author HP - Gia Khiêm
  */
 @MultipartConfig
-@WebServlet(name = "StaffUpdateProductDetailServlet", urlPatterns = {"/StaffUpdateProductDetail"})
+@WebServlet(name = "StaffUpdateProductDetailServlet", urlPatterns = {"/AdminUpdateProductDetail"})
 public class StaffUpdateProductDetailServlet extends HttpServlet {
 
     private Cloudinary cloudinary;

@@ -77,13 +77,9 @@ StaffDAO dao = new StaffDAO();
             boolean success = dao.updateStaffWithAccount(account, staff);
 
             if (success) {
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/updateSuccess.jsp").forward(request, response);
-
+                response.sendRedirect("StaffList?successedit=1");
             } else {
-                request.setAttribute("errorMessage", "Failed to update staff.");
-                request.setAttribute("staff", staff);
-                request.setAttribute("account", account);
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/updateStaff.jsp").forward(request, response);
+                response.sendRedirect("StaffList?erroredit=1");
             }
 
         } catch (Exception e) {

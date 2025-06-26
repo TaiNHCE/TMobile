@@ -15,7 +15,7 @@
 
         <!-- Banner -->
         <div class="col-md-12" style = "margin-top: 0.5%">
-            <img style = "width: 100%;" src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750662449/banner-laptop_l8ezyf.png" alt="Banner" class="img-fluid">
+            <img style = "width: 100%;" src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750922275/Banner1Dai_zpslth.png" alt="Banner" class="img-fluid">
         </div>
 
     </body>

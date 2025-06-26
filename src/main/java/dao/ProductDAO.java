@@ -605,7 +605,34 @@ public class ProductDAO extends DBContext {
             e.printStackTrace();
         }
         return productDetailList;
+    }
+    
+    public ProductDetail getOneProductDetailById(int productId) {
+        ProductDetail productDetail = null;
+        String sql = "SELECT p.ProductDetailID, p.ProductID, p.CategoryDetailID, p.AttributeValue, ip.ImageURL1, ip.ImageURL2, ip.ImageURL3, "
+                + "ip.ImageURL4 "
+                + "FROM ProductDetails p "
+                + "LEFT JOIN ImgProductDetails ip ON p.ProductDetailID = ip.ProductDetailID "
+                + "where p.ProductID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int productDetailId = rs.getInt("ProductDetailID");
 
+                int categoryDetailId = rs.getInt("CategoryDetailID");
+                String attributeValue = rs.getString("AttributeValue");
+                String imageUrl1 = rs.getString("ImageURL1");
+                String imageUrl2 = rs.getString("ImageURL2");
+                String imageUrl3 = rs.getString("ImageURL3");
+                String imageUrl4 = rs.getString("ImageURL4");
+                productDetail = new ProductDetail(productDetailId, productId, categoryDetailId, attributeValue, imageUrl1, imageUrl2, imageUrl3, imageUrl4);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productDetail;
     }
 
     public boolean deleteProduct(int productId) {
@@ -661,7 +688,45 @@ public class ProductDAO extends DBContext {
         return false;
     }
 
-//    <===================================================== GIA KHIÊM ======================================================>
+    public boolean updateProductDetail(int productId, int productDetailID, String proDetail, String url1, String url2, String url3, String url4, String mainUrl) {
+        String sql1 = "UPDATE ProductImages SET ImageURL = ? where ProductID = ?";
+
+        String sql2 = "UPDATE ProductDetails SET AttributeValue = ? WHERE ProductDetailID  = ?";
+
+        String sql3 = "UPDATE ImgProductDetails SET ImageURL1 = ?, ImageURL2 = ?, ImageURL3 = ?, ImageURL4 = ? WHERE ProductDetailID = ?";
+
+        try (
+                PreparedStatement pstmt1 = conn.prepareStatement(sql1);  
+                PreparedStatement pstmt2 = conn.prepareStatement(sql2); 
+                PreparedStatement pstmt3 = conn.prepareStatement(sql3)) {
+            
+            // Update mainimage
+            pstmt1.setString(1, mainUrl);
+            pstmt1.setInt(2, productId);
+
+            int rows1 = pstmt1.executeUpdate();
+            
+            // Update product detail
+            pstmt2.setString(1, proDetail);
+            pstmt2.setInt(2, productDetailID);
+
+            int rows2 = pstmt2.executeUpdate();
+            
+            // Update img detail
+            pstmt3.setString(1, url1);
+            pstmt3.setString(2, url2);
+            pstmt3.setString(3, url3);
+            pstmt3.setString(4, url4);
+            pstmt3.setInt(5, productDetailID);
+
+            int rows3 = pstmt3.executeUpdate();
+
+            return rows1 > 0 && rows2 > 0 && rows3 > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public int getTotalProducts() {
         String sql = "SELECT COUNT(*) FROM Products";
         try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
@@ -674,4 +739,5 @@ public class ProductDAO extends DBContext {
         return 0;
     }
 
+//    <===================================================== GIA KHIÊM ======================================================>
 }

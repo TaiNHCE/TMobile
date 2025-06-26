@@ -16,10 +16,10 @@
         <!-- Banner -->
         <div class="col-md-12 category-banner-full2" style = "margin-top: 1%">
             <div class="blue-overlay"></div>
-            <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750668186/banner5_lxp3gw.png" alt="Banner" class="img-fluid">
             <div class="banner-text">
-                <p class = "welcom">Chào mừng đến với TShop!</p>
-                <p class = "Intro">Thế giới Điện thoại, Laptop, Đồng hồ, Tablet chính hãng</p>
+                <p class="welcom">Welcome to TShop!</p>
+            <p class="Intro">Explore our premium selection of TVs, Refrigerators, Air Conditioners & more</p>
+
             </div>
         </div>
 

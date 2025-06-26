@@ -120,7 +120,7 @@
 
             <div style="display: flex; border-radius: 10px;">
                 <div class = "col-md-4" style="border-radius: 5px; margin-bottom: 1%">
-                    <img style="width: 100%; height: auto" src="https://cdn.prod.website-files.com/6073fad993ae97919f0b0772/609fa687874b84361fc495db_%C4%91t.jpg">
+                    <img style="width: 100%; height: auto" src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919684/NewProduct_koquly.png">
                 </div>
 
                 <!-- PHẦN SẢN PHẨM CUỘN NGANG -->

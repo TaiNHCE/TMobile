@@ -66,15 +66,11 @@ public class CreateStaffServlet extends HttpServlet {
             boolean success = dao.createStaffWithAccount(account, staff);
 
             if (success) {
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/createStaffSuccess.jsp").forward(request, response);
-
+                response.sendRedirect("StaffList?successcreate=1");
             } else {
-// Thất bại → quay lại form và báo lỗi
-                request.setAttribute("errorMessage", "Failed to create staff.");
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/createStaff.jsp").forward(request, response);
+                response.sendRedirect("StaffList?errorcreate=1");
             }
-
-        } catch (Exception e) {
+} catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/createStaff.jsp").forward(request, response);

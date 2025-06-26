@@ -21,7 +21,7 @@ import model.Product;
  *
  * @author HP - Gia Khiêm
  */
-@WebServlet(name = "StaffProductList", urlPatterns = {"/StaffProduct"})
+@WebServlet(name = "StaffProductList", urlPatterns = {"/AdminProduct"})
 public class StaffProductList extends HttpServlet {
 
     /**
@@ -86,7 +86,7 @@ public class StaffProductList extends HttpServlet {
 
         request.setAttribute("productList", productList);
         request.setAttribute("selectedFilter", filter); // để giữ lại lựa chọn sau reload
-        request.getRequestDispatcher("/WEB-INF/View/staff/productManagement/viewProductList/staffProductList.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/View/admin/productManagement/viewProductList/staffProductList.jsp").forward(request, response);
     }
 
     /**

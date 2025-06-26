@@ -2,7 +2,7 @@
 <%@page import="model.CategoryDetail"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Category"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8"%>
 <%
     List<CategoryDetail> categoryDetailList = (List<CategoryDetail>) request.getAttribute("categoryDetailList");
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
@@ -10,46 +10,151 @@
     int categoryId = (int) request.getAttribute("categoryId");
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Category Detail</title>
-    <link rel="stylesheet" href="Css/categoryDetail.css">
-    <link rel="stylesheet" href="Css/productDetail.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 3%;
+            margin-bottom: 3%;
+        }
+
+        .header h1 {
+            font-size: 40px;
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .category-card {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 3%;
+            overflow-x: auto;
+        }
+
+        .category-card .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 12px;
+            display: inline-block;
+            width: 160px;
+            text-align: center;
+        }
+
+        .category-card .card.active {
+            border: 2px solid #0d6efd;
+        }
+
+        .category-card img {
+            max-width: 100%;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .category-card h2 {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .technical-specs {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .technical-specs h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .category-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .category-table td,
+        .category-table th {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .group-header {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        .group-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .arrow-icon {
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 10px;
+            color: gray;
+        }
+
+    </style>
 </head>
 <body>
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 3%; margin-top: 3%">
-        <h1 class="display-5 fw-bold" style="font-size: 320%; margin: 0;">Category</h1>
-        <span style="font-size: 120%; color: gray; margin-top: 4%;">View Category Detail</span>
-    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Category Detail</h1>
+        </div>
 
-    <!-- Category name -->
-    <div style="border-radius: 12px; border: 1px solid #ccc; width: 85%; height: 25%; margin-bottom: 3%;">
-        <h2 style="margin-left: 1%;">Category Name</h2>
-        <hr>
-        <div>
+        <!-- Category Cards -->
+        <div class="category-card">
             <%
                 if (categoryList != null) {
                     for (Category cate : categoryList) {
                         if (cate.getIsActive()) {
                             boolean check = (cate.getCategoryId() == categoryId);
             %>
-            <div class="divLogo <%= check ? "activeCategory" : "" %>">
-                <img class="logoCategory" src="<%= cate.getImgUrlLogo() %>">
-                <h2 style="margin-left: 9%;"><%= cate.getCategoryName() %></h2>
+            <div class="card <%= check ? "active" : "" %>">
+                <img src="<%= cate.getImgUrlLogo() %>" alt="Category Logo">
+                <h2><%= cate.getCategoryName() %></h2>
             </div>
             <%      }
                     }
                 }
             %>
         </div>
-    </div>
 
-    <!-- Technical Specifications -->
-    <h2>Technical Specifications</h2>
-    <div style="background-color: #FFFFFF; border-radius: 15px; width: 85%">
-        <div style="width: 100%">
+        <!-- Technical Specifications -->
+        <div class="technical-specs">
+            <h2>Technical Specifications</h2>
             <table class="category-table">
                 <tbody>
                 <%
@@ -59,8 +164,8 @@
                 %>
                     <!-- Group Header Row -->
                     <tr class="group-header" onclick="toggleDetails(<%= groupIndex %>)">
-                        <td colspan="2" class="group-cell">
-                            <div class="group-header-content">
+                        <td colspan="2">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <h2><%= cateGroup.getNameCategoryDetailsGroup() %></h2>
                                 <span class="arrow-icon" id="arrow<%= groupIndex %>">▼</span>
                             </div>
@@ -107,10 +212,4 @@
         }
     </script>
 </body>
-
-<style>
-    .hidden {
-    display: none !important;
-}
-</style>
 </html>

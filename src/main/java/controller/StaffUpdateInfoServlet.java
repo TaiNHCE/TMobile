@@ -34,7 +34,7 @@ import model.Product;
  * @author HP - Gia Khiêm
  */
 @MultipartConfig
-@WebServlet(name = "StaffUpdateInfoServlet", urlPatterns = {"/StaffUpdateInfo"})
+@WebServlet(name = "StaffUpdateInfoServlet", urlPatterns = {"/AdminUpdateInfo"})
 public class StaffUpdateInfoServlet extends HttpServlet {
 
     private Cloudinary cloudinary;
@@ -182,9 +182,9 @@ public class StaffUpdateInfoServlet extends HttpServlet {
         boolean res = proDAO.updateProductInfo(id, productName, price, stock, Category, Brand, isFeatured, isBestSeller, isNew, isActive,imageUrl);
 
         if (res) {
-            response.sendRedirect("StaffUpdateInfo?productId=" + id + "&success=1");
+            response.sendRedirect("AdminUpdateInfo?productId=" + id + "&success=1");
         } else {
-            response.sendRedirect("StaffUpdateInfo?productId=" + id + "&error=1");
+            response.sendRedirect("AdminUpdateInfo?productId=" + id + "&error=1");
         }
 
     }

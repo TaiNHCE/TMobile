@@ -21,7 +21,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sản phẩm mới</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/newProduct1.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/newProduct2.css">
         <style>
             #product-scroll-discount {
                 display: flex;

@@ -82,6 +82,7 @@ public class Product {
         this.isActive = isActive;
     }
 
+    public Product(){}
     public int getProductId() {
         return productId;
     }

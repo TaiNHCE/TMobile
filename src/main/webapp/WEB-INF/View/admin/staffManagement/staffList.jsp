@@ -1,4 +1,3 @@
-
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="model.Staff"%>
@@ -17,7 +16,8 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
 
         <!-- Dashboard CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/staffList2.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
         <div class="container">
@@ -25,21 +25,18 @@
             <div class="wrapper">
                 <main class="main-content">
                     <h1>Staff List</h1>
+                    <button class="create-btn" onclick="location.href = 'CreateStaffServlet'">Create</button>
 
-                    <!-- Create Button -->
-                    <div class="d-flex justify-content-end mb-3">
-                        <button class="btn btn-success" onclick="location.href = 'CreateStaffServlet'">Create</button>
-                    </div>
 
                     <!-- Search Form -->
-                    <form class="d-flex mb-4" action="StaffList" method="get">
+                    <form class="search-form" action="StaffList" method="get">
                         <input type="hidden" name="action" value="search">
-                        <input type="text" name="keyword" class="form-control me-2" placeholder="Search staff by name">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <input type="text" name="keyword" class="form-control" placeholder="Search staff by name">
+                        <button type="submit" class="search-btn">Search</button>
                     </form>
 
                     <!-- Staff Table -->
-                    <table class="table table-striped table-hover">
+                    <table aria-label="Staff table">
                         <thead>
                             <tr>
                                 <th>Staff ID</th>
@@ -60,10 +57,11 @@
                                 <td><%= sta.getEmail()%></td>
                                 <td><%= sta.getFullName()%></td>
                                 <td><%= sta.getHiredDate()%></td>
-                                <td>
-                                    <a href="StaffList?action=detail&id=<%= sta.getStaffID()%>" class="btn btn-primary btn-sm">Detail</a>
-                                    <a href="UpdateStaffServlet?action=update&id=<%= sta.getStaffID()%>" class="btn btn-warning btn-sm">Update</a>
-                                    <a href="DeleteStaffServlet?action=delete&id=<%= sta.getStaffID()%>" class="btn btn-danger btn-sm">Delete</a>
+                                <td class="action-col">
+<a href="StaffList?action=detail&id=<%= sta.getStaffID()%>" class="btn btn-primary">Detail</a>
+                                    <a href="UpdateStaffServlet?action=update&id=<%= sta.getStaffID()%>" class="btn btn-warning">Edit</a>
+                                    <button class="btn btn-danger" onclick="confirmDeleteStaff(<%= sta.getStaffID()%>)">Delete</button>
+
                                 </td>
                             </tr>
                             <%
@@ -96,3 +94,79 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
+<% String successdelete = request.getParameter("successdelete"); %>
+<% String errordelete = request.getParameter("errordelete"); %>
+<% String successedit = request.getParameter("successedit"); %>
+<% String erroredit = request.getParameter("erroredit"); %>
+<% String successcreate = request.getParameter("successcreate"); %>
+<% String errorcreate = request.getParameter("errorcreate"); %>
+
+
+
+<script>
+
+
+
+                                        function confirmDeleteStaff(staffID) {
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "This staff will be deleted.",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                confirmButtonText: 'Delete',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    window.location.href = 'DeleteStaffServlet?action=delete&id=' + staffID;
+                                                }
+                                            });
+}
+                                        window.onload = function () {
+    <% if ("1".equals(successdelete)) { %>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Deleted!',
+                                                text: 'The staff has been deleted.',
+                                                timer: 2000
+                                            });
+    <% } else if ("1".equals(errordelete)) { %>
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Failed!',
+                                                text: 'Could not delete the staff.',
+                                                timer: 2000
+                                            });
+    <% }%>
+    <% if ("1".equals(successedit)) { %>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Edited!',
+                                                text: 'The staff has been edited.',
+                                                timer: 2000
+                                            });
+    <% } else if ("1".equals(erroredit)) { %>
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Failed!',
+                                                text: 'Could not edit the staff.',
+                                                timer: 2000
+                                            });
+    <% }%>    <% if ("1".equals(successcreate)) { %>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Created!',
+                                                text: 'The staff has been created.',
+                                                timer: 2000
+                                            });
+    <% } else if ("1".equals(errorcreate)) { %>
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Failed!',
+                                                text: 'Could not created the staff.',
+                                                timer: 2000
+                                            });
+    <% }%>
+                                        };
+</script>

@@ -30,7 +30,7 @@
             <div class="d-flex align-items-center">
                 <!-- Logo -->
                 <a style = "margin-left: 25%" href="${pageContext.request.contextPath}/TMobile" class="me-3">
-                    <img src="${pageContext.request.contextPath}/Logo/logo2.png" 
+                    <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919684/Logo_nl7ahl.png" 
 
                          class="header-logo" 
                          style="height: 40px; object-fit: contain;" />
@@ -95,7 +95,7 @@
                     <input type="text"
                            name="keyword"
                            class="form-control"
-                           placeholder="Nhập tên điện thoại, máy tính, phụ kiện... cần tìm"
+                           
                            style="padding-right: 40px;">
                     <button type="submit"
                             class="search-btn btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y">
@@ -109,7 +109,7 @@
                 <a style = "border-radius: 15px;" href="${pageContext.request.contextPath}/login.jsp" class="btn btn-outline-dark me-2" title="Tài khoản">
                     <i class="bi bi-person"></i>
                 </a>
-                <a style = "width: 60%; border-radius: 15px;" href="${pageContext.request.contextPath}/cart" class="btn btn-outline-dark" title="Giỏ hàng">
+                <a style = "width: 60%; border-radius: 15px;" href="${pageContext.request.contextPath}/CartList" class="btn btn-outline-dark" title="Giỏ hàng">
                     <i class="bi bi-cart"></i> Cart
                 </a>
             </div>

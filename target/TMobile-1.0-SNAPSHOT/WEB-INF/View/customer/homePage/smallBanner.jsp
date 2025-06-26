@@ -28,10 +28,10 @@
         <!-- Banner -->
         <div class="row" style = "margin-left: 0.3%;">
             <div class="category-banner-full2" style="margin-top: 1%; width: 48%;">
-                <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750662449/banner-laptop_l8ezyf.png" alt="Banner 1" class="img-fluid">
+                <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919684/Banner5_scpip9.png" alt="Banner 1" class="img-fluid">
             </div>
             <div class="category-banner-full2" style="margin-top: 1%; width: 48%;">
-                <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750662449/banner-tablet_qejs1m.png" alt="Banner 2" class="img-fluid">
+                <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919682/Banner_5_ayt9h5.png" alt="Banner 2" class="img-fluid">
             </div>
         </div>
 

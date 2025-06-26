@@ -94,28 +94,6 @@
                         <div class="stat-value text-success"><%= nf.format(monthlyRevenue) %> ₫</div>
                     </div>
                 </div>
-
-                <div class="content-area mt-4">
-                    <div class="content-header">
-                        Recent Admin Activities
-                    </div>
-                    <div class="content-body">
-                        <table class="data-table table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Activity</th>
-                                    <th>User</th>
-                                    <th>Module</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dynamic content can be added here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </main>
         </div>
     </body>
