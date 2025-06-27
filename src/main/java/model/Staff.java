@@ -18,6 +18,7 @@ public class Staff {
     private String hiredDate;
     private String birthDay;
     private String gender;
+    private String position;
 
     public Staff() {
     }
@@ -29,12 +30,13 @@ public class Staff {
         this.hiredDate = hiredDate;
     }
 
-    public Staff(int staffID, String email, String fullName, String phone, String hiredDate, String birthDay, String gender) {
+    public Staff(int staffID, String email, String fullName, String phone, String hiredDate,String position, String birthDay, String gender) {
         this.staffID = staffID;
         this.email = email;
         this.fullName = fullName;
         this.phone = phone;
         this.hiredDate = hiredDate;
+        this.position = position;
         this.birthDay = birthDay;
         this.gender = gender;
     }
@@ -45,6 +47,14 @@ public class Staff {
 
     public void setStaffID(int staffID) {
         this.staffID = staffID;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getEmail() {

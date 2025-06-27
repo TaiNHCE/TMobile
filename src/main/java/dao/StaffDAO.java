@@ -47,7 +47,7 @@ public class StaffDAO extends DBContext {
 
     public Staff getStaffByID(int staffID) {
         Staff sta = null;
-        String sql = "SELECT StaffID, a.Email, FullName,s.PhoneNumber, HiredDate,s.BirthDate,s.Gender  FROM Staff s JOIN Accounts a ON s.AccountID = a.AccountID Where StaffID = ?";
+        String sql = "SELECT StaffID, a.Email, FullName,s.PhoneNumber, HiredDate,Position,s.BirthDate,s.Gender  FROM Staff s JOIN Accounts a ON s.AccountID = a.AccountID Where StaffID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, staffID);
             try ( ResultSet rs = ps.executeQuery()) {
@@ -58,9 +58,10 @@ public class StaffDAO extends DBContext {
                     String phone = rs.getString("PhoneNumber");
                     Date hiredDate = rs.getTimestamp("HiredDate");
                     String formattedDate = new SimpleDateFormat("dd-MM-yyyy").format(hiredDate);
+                    String position = rs.getString("Position");
                     String birthday = rs.getString("BirthDate");
                     String gender = rs.getString("Gender");
-                    sta = new Staff(id, email, fullName, phone, formattedDate, birthday, gender);
+                    sta = new Staff(id, email, fullName, phone, formattedDate,position, birthday, gender);
                 }
             }
         } catch (Exception e) {

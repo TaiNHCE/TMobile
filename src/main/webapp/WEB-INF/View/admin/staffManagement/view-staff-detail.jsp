@@ -38,6 +38,14 @@
                 <input type="text" class="form-control" name="email" id="email" required value="<%= sta.getEmail()%>" readonly />
             </div>
             <div class="mb-3">
+                <label class="form-label">Hired Date: </label>
+                <input type="text" class="form-control" name="fullname" id="hiredate" required value="<%= sta.getHiredDate()%>" readonly />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Position: </label>
+                <input type="text" class="form-control" name="fullname" id="position" required value="<%= sta.getPosition()%>" readonly />
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Date of Birth:</label>
                 <input type="date"class="form-control" name="dob" id="dob" required value="<%= sta.getBirthDay()%>"readonly  />
             </div>
