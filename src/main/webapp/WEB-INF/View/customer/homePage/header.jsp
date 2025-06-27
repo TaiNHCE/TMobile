@@ -4,6 +4,7 @@
     Author     : HP - Gia Khiêm
 --%>
 
+<%@page import="model.Account"%>
 <%@page import="model.Brand"%>
 <%@page import="model.Category"%>
 <%@page import="java.util.List"%>
@@ -11,6 +12,7 @@
 <%
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
     List<Brand> brandList = (List<Brand>) request.getAttribute("brandList");
+    Account user = (Account) session.getAttribute("user");
 %>
 <!DOCTYPE html>
 <html>
@@ -95,7 +97,7 @@
                     <input type="text"
                            name="keyword"
                            class="form-control"
-                           
+
                            style="padding-right: 40px;">
                     <button type="submit"
                             class="search-btn btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y">
@@ -106,9 +108,25 @@
 
             <!-- (3) PHẢI: TÀI KHOẢN & GIỎ HÀNG -->
             <div style = "width: 15%; margin-right: 5%" class="header-right d-flex align-items-center">
-                <a style = "border-radius: 15px;" href="${pageContext.request.contextPath}/login.jsp" class="btn btn-outline-dark me-2" title="Tài khoản">
+                <% if (user == null) { %>
+                <a style = "border-radius: 15px;" href="${pageContext.request.contextPath}/Login" class="btn btn-outline-dark me-2" title="Tài khoản">
                     <i class="bi bi-person"></i>
                 </a>
+                <% } else {%>
+                <!-- Đã đăng nhập -->
+                <div class="dropdown">
+                <a style = "border-radius: 15px;" class="btn btn-outline-dark me-2" title="Tài khoản">
+                    <i class="bi bi-person"></i>
+                </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="ViewProfile?id=<%= user.getAccountID()%>">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="change-password.jsp">Đổi mật khẩu</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="logout">Đăng xuất</a></li>
+                    </ul>
+                </div>
+                <% }%>
+
                 <a style = "width: 60%; border-radius: 15px;" href="${pageContext.request.contextPath}/CartList" class="btn btn-outline-dark" title="Giỏ hàng">
                     <i class="bi bi-cart"></i> Cart
                 </a>

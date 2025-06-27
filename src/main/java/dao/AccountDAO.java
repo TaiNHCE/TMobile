@@ -74,6 +74,44 @@ public class AccountDAO extends DBContext {
     }
     return false;
 }   
+   public boolean changePassword(int id, String oldPassword, String newPassword) {
+    String sqlCheck = "SELECT Password FROM Accounts WHERE AccountID = ?";
+    String sqlUpdate = "UPDATE Accounts SET Password = ? WHERE AccountID = ?";
+    
+    try (PreparedStatement checkStmt = conn.prepareStatement(sqlCheck)) {
+        checkStmt.setInt(1, id);
+        ResultSet rs = checkStmt.executeQuery();
+        
+        if (rs.next()) {
+            String currentPasswordHash = rs.getString("Password");
+            String oldPasswordHash = hashMD5(oldPassword);
+            
+            // Kiểm tra mật khẩu cũ đúng không
+            if (!currentPasswordHash.equals(oldPasswordHash)) {
+                return false; // Mật khẩu cũ sai
+            }
+        } else {
+            return false; // Không tìm thấy account
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+
+    // Nếu đúng thì update mật khẩu mới
+    try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
+        String newPasswordHash = hashMD5(newPassword);
+        updateStmt.setString(1, newPasswordHash);
+        updateStmt.setInt(2, id);
+        int rowsAffected = updateStmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
