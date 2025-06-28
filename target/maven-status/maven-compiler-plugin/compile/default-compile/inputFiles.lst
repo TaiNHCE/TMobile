@@ -2,6 +2,7 @@ E:\Ki 5\SWP391\TMobile\src\main\java\dao\RevenueStatisticDAO.java
 E:\Ki 5\SWP391\TMobile\src\main\java\model\CartItem.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\RemoveCartItemServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\CreateStaffServlet.java
+E:\Ki 5\SWP391\TMobile\src\main\java\controller\ViewImportStockServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\model\Voucher.java
 E:\Ki 5\SWP391\TMobile\src\main\java\dao\CategoryDAO.java
 E:\Ki 5\SWP391\TMobile\src\main\java\dao\BrandDAO.java
@@ -57,6 +58,7 @@ E:\Ki 5\SWP391\TMobile\src\main\java\controller\StaffProductList.java
 E:\Ki 5\SWP391\TMobile\src\main\java\model\Staff.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\LoginStaffServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\LogoutServlet.java
+E:\Ki 5\SWP391\TMobile\src\main\java\controller\ImportHistoryDetailServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\model\ProductDetail.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\LoginServlet.java
 E:\Ki 5\SWP391\TMobile\src\main\java\controller\UpdateCategoryServlet.java

@@ -3,7 +3,7 @@
     <div class="sidebar-header">
         <h4>
             <i class="fas fa-mobile-alt"></i>
-            TShop
+            TMobile
         </h4>
     </div>
     <div class="sidebar-menu">

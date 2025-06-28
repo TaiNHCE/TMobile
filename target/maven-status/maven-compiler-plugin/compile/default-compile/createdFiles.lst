@@ -16,6 +16,7 @@ controller\CreateSupplierServlet.class
 controller\StaffUpdateInfoServlet.class
 controller\ImportStockServlet.class
 controller\LoginStaffServlet.class
+controller\ViewImportStockServlet.class
 model\Brand.class
 controller\AdminDashboard.class
 utils\testDB.class

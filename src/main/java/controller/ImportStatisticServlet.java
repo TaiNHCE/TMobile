@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import model.InventoryStatistic;
 
@@ -50,6 +52,32 @@ public class ImportStatisticServlet extends HttpServlet {
         }
     }
 
+    private Map<String, Integer> getTop5ShortName(Map<String, Integer> origin) {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        Map<String, Integer> nameCount = new HashMap<>();
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : origin.entrySet()) {
+            String name = entry.getKey();
+            String shortName = name;
+            if (name.length() > 22) {
+                shortName = name.substring(0, 22) + "...";
+            }
+            if (result.containsKey(shortName)) {
+                int suffix = nameCount.getOrDefault(shortName, 1) + 1;
+                nameCount.put(shortName, suffix);
+                shortName = shortName + " #" + suffix;
+            } else {
+                nameCount.put(shortName, 1);
+            }
+            result.put(shortName, entry.getValue());
+            count++;
+            if (count >= 5) {
+                break;
+            }
+        }
+        return result;
+    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -60,37 +88,67 @@ public class ImportStatisticServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            String keyword = request.getParameter("search");
-            InventoryStatisticDAO invDao = new InventoryStatisticDAO();
-            ImportStockDAO dao = new ImportStockDAO(); 
-            ArrayList<InventoryStatistic> inventoryList;
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                inventoryList = invDao.searchInventory(keyword);
-            } else {
-                inventoryList = invDao.getAllInventory();
-            }
-            // lay du lieu thong ke
-            Map<String, Integer> dailyImport = dao.getImportStocksCountByDate();
-            Map<String, Integer> monthlyImport = dao.getImportStocksCountByMonth();
-            Map<String, Integer> supplierImport = dao.getStocksBySupplier();
-            Map<String, Integer> topProductImport = dao.getTopImportedProducts();
-            // dem sang jsp
-            request.setAttribute("inventoryList", inventoryList);
-            request.setAttribute("dailyImport", dailyImport);
-            request.setAttribute("monthlyImport", monthlyImport);
-            request.setAttribute("supplierImport", supplierImport);
-            request.setAttribute("topProductImport", topProductImport);
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
+        String keyword = request.getParameter("search");
+        InventoryStatisticDAO invDao = new InventoryStatisticDAO();
+        ImportStockDAO dao = new ImportStockDAO();
 
-            request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Error fetching inventory statistics: " + e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
+        ArrayList<InventoryStatistic> inventoryList;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            inventoryList = invDao.searchInventory(keyword);
+        } else {
+            inventoryList = invDao.getAllInventory();
         }
+
+        // Lấy danh sách thống kê
+        Map<String, Integer> dailyImport = dao.getImportStocksCountByDate();
+        Map<String, Integer> monthlyImport = dao.getImportStocksCountByMonth();
+        Map<String, Integer> supplierImport = dao.getStocksBySupplier();
+        Map<String, Integer> topProductImport = dao.getTopImportedProducts();
+
+        // Lấy top 5, build 2 map: short name (label), full name (tooltip)
+        Map<String, Integer> top5ProductImportShort = new LinkedHashMap<>();
+        Map<String, String> top5ProductImportFull = new LinkedHashMap<>();
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : topProductImport.entrySet()) {
+            if (count >= 5) break;
+            String fullName = entry.getKey();
+            String shortName = fullName;
+            if (shortName.length() > 20) shortName = shortName.substring(0, 20) + "...";
+            // Tránh trùng label
+            int idx = 2;
+            String check = shortName;
+            while (top5ProductImportShort.containsKey(check)) {
+                check = shortName + " #" + idx++;
+            }
+            shortName = check;
+
+            top5ProductImportShort.put(shortName, entry.getValue());
+            top5ProductImportFull.put(shortName, fullName);
+            count++;
+        }
+
+        // Tương tự cho supplier nếu muốn, hoặc giữ nguyên như cũ
+        Map<String, Integer> top5SupplierImport = getTop5ShortName(supplierImport);
+
+        request.setAttribute("inventoryList", inventoryList);
+        request.setAttribute("dailyImport", dailyImport);
+        request.setAttribute("monthlyImport", monthlyImport);
+        request.setAttribute("supplierImport", top5SupplierImport);
+        request.setAttribute("topProductImportShort", top5ProductImportShort);
+        request.setAttribute("topProductImportFull", top5ProductImportFull);
+
+        request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("error", "Error fetching inventory statistics: " + e.getMessage());
+        request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
     }
+}
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
