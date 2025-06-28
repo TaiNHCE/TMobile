@@ -22,16 +22,16 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
 
-        <link rel="stylesheet" href="Css/productDetail.css">
+        <link rel="stylesheet" href="Css/productDetail1.css">
     </head>
     <body>
-        <div style = "margin-top: 6%;">
-            <div style = "display: flex;">
-                <h3 style = "margin-right: 38%;">Technical Specifications</h3>
-                <a style = "text-align: center; margin-bottom: 1%; border: none; background-color: #00b8d9;" href="AdminUpdateProductDetail?productId=<%= product.getProductId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit Detail</a>
-
+        <div style = "margin-top: 16%;">
+            
+            <div>
+                <h4>
+                    Technical specifications
+                </h4>
             </div>
-
             <div class = "container col-md-12" style = "background-color: #FFFFFF; border-radius: 15px;">
                 <div class = "row">
                     <div class="col-md-12">
@@ -45,7 +45,7 @@
                             <tr class="group-header" onclick="toggleDetails(<%= groupIndex%>)">
                                 <td colspan="2" class="group-cell">
                                     <div class="group-header-content">
-                                        <h2><%= cateGroup.getNameCategoryDetailsGroup()%></h2>
+                                        <h2 style="max-width: 50%; word-wrap: break-word; overflow-wrap: break-word; margin: 0;"><%= cateGroup.getNameCategoryDetailsGroup()%></h2>
                                         <span class="arrow-icon" id="arrow<%= groupIndex%>">▼</span>
                                     </div>
                                 </td>

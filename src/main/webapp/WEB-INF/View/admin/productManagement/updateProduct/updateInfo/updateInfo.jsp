@@ -1,10 +1,13 @@
 <body>
 
     <div class="main-content">
-                <jsp:include page="/sideBar.jsp"/>
-
-        <jsp:include page="/WEB-INF/View/staff/productManagement/updateProduct/updateInfo/productTitle.jsp" />
-        <jsp:include page="/WEB-INF/View/staff/productManagement/updateProduct/updateInfo/update.jsp" />
+        <jsp:include page="/sideBar.jsp"/>
+        <div>
+            <jsp:include page="/WEB-INF/View/admin/productManagement/updateProduct/updateInfo/productTitle.jsp" />
+        </div>
+        <div style = "margin-left: 4%;">
+            <jsp:include page="/WEB-INF/View/admin/productManagement/updateProduct/updateInfo/update.jsp" />
+        </div>
     </div>
 
     <style>

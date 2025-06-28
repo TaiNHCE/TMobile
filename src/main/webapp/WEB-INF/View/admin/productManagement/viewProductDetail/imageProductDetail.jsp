@@ -16,12 +16,13 @@
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        <link rel="stylesheet" href="Css/imageProductDetail.css">
+        <link rel="stylesheet" href="Css/imageProductDetail1.css">
     </head>
 
     <body>
+        <h3><%= product.getProductName()%></h3>
         <div class="container">
-            <h3><%= product.getProductName()%></h3>
+            
             <div class = "divAllImg" style = "width: 100%">
                 <%
                     if (productDetail != null && product != null) {
@@ -32,7 +33,7 @@
                         <img style = "width: 100%" id="mainImage" src="<%= product.getImageUrl()%>" class="anhLon img-fluid main-img">
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 row div4AnhNho">
+                    <div style = "" class="d-flex flex-wrap gap-2 row div4AnhNho">
                         <div class="img-thumbnail col-auto" style = "margin-left: 8%;">
                             <img class ="" src="<%= proDetail.getImageUrl1()%>" onclick="changeMainImage(this.src)">
                         </div>

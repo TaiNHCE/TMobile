@@ -582,7 +582,7 @@ public class ProductDAO extends DBContext {
         String sql = "SELECT p.ProductDetailID, p.ProductID, p.CategoryDetailID, p.AttributeValue, ip.ImageURL1, ip.ImageURL2, ip.ImageURL3, "
                 + "ip.ImageURL4 "
                 + "FROM ProductDetails p "
-                + "LEFT JOIN ImgProductDetails ip ON p.ProductDetailID = ip.ProductDetailID "
+                + "LEFT JOIN ImgProductDetails ip ON p.ProductID = ip.ProductID "
                 + "where p.ProductID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -612,7 +612,7 @@ public class ProductDAO extends DBContext {
         String sql = "SELECT p.ProductDetailID, p.ProductID, p.CategoryDetailID, p.AttributeValue, ip.ImageURL1, ip.ImageURL2, ip.ImageURL3, "
                 + "ip.ImageURL4 "
                 + "FROM ProductDetails p "
-                + "LEFT JOIN ImgProductDetails ip ON p.ProductDetailID = ip.ProductDetailID "
+                + "LEFT JOIN ImgProductDetails ip ON p.ProductID = ip.ProductID "
                 + "where p.ProductID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -693,7 +693,7 @@ public class ProductDAO extends DBContext {
 
         String sql2 = "UPDATE ProductDetails SET AttributeValue = ? WHERE ProductDetailID  = ?";
 
-        String sql3 = "UPDATE ImgProductDetails SET ImageURL1 = ?, ImageURL2 = ?, ImageURL3 = ?, ImageURL4 = ? WHERE ProductDetailID = ?";
+        String sql3 = "UPDATE ImgProductDetails SET ImageURL1 = ?, ImageURL2 = ?, ImageURL3 = ?, ImageURL4 = ? WHERE ProductID = ?";
 
         try (
                 PreparedStatement pstmt1 = conn.prepareStatement(sql1);  
@@ -717,7 +717,7 @@ public class ProductDAO extends DBContext {
             pstmt3.setString(2, url2);
             pstmt3.setString(3, url3);
             pstmt3.setString(4, url4);
-            pstmt3.setInt(5, productDetailID);
+            pstmt3.setInt(5, productId);
 
             int rows3 = pstmt3.executeUpdate();
 

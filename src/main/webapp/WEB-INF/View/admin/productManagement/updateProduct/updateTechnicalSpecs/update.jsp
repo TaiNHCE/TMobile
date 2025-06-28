@@ -35,7 +35,7 @@
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        <link rel="stylesheet" href="Css/productDetail.css">
+        <link rel="stylesheet" href="Css/productDetail1.css">
     </head>
     <body>
         <div class="container">
@@ -48,7 +48,7 @@
                         for (ProductDetail proDetail : productDetailList) {
                 %>
 
-                <form method="post" action="StaffUpdateProductDetail?productId=<%= product.getProductId()%>" enctype="multipart/form-data">
+                <form method="post" action="AdminUpdateProductDetail?productId=<%= product.getProductId()%>" enctype="multipart/form-data">
                     <div class = "row">
                         <!-- ✅ Div cha bọc cả ảnh lớn và 4 ảnh nhỏ — có nền trắng -->
                         <div style="width: 45%; background-color: #ffffff; padding: 16px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
@@ -173,6 +173,7 @@
                                                                 hasValue = true;
                                                 %>
                                                 <input type="text" 
+                                                       style="width: auto; max-width: 300px;"
                                                        class="attribute-item" 
                                                        name="attribute_<%= proDetail.getCategoryDetailID()%>" 
                                                        value="<%= proDetail.getAttributeValue()%>">
