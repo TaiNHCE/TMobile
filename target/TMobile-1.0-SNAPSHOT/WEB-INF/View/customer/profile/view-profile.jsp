@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <table class="table table-borderless">
                             <tr>
-                                <th>Staff ID:</th>
+                                <th>ID:</th>
                                 <td>
                                     <%= sta.getId()%>
                                 </td>
