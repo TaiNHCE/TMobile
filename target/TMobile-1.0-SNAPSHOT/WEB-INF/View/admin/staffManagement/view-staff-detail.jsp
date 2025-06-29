@@ -49,6 +49,7 @@
                                     <%= sta.getPhone()%>
                                 </td>
                             </tr>
+                            
                             <tr>
                                 <th>Email:</th>
                                 <td>
