@@ -4,6 +4,7 @@ controller\StaffUpdateProductDetailServlet.class
 controller\CreateCategoryServlet.class
 controller\ImportStatisticServlet.class
 dao\SupplierDAO.class
+dao\CustomerDAO.class
 dao\CategoryDAO.class
 model\Product.class
 model\InventoryStatistic.class
@@ -11,6 +12,7 @@ model\CategoryDetailGroup.class
 model\Voucher.class
 controller\StaffProductList.class
 dao\AccounttestDAO.class
+model\Customer.class
 model\ProductVariant.class
 controller\CreateSupplierServlet.class
 controller\StaffUpdateInfoServlet.class
@@ -18,6 +20,7 @@ controller\ImportStockServlet.class
 controller\LoginStaffServlet.class
 model\Brand.class
 controller\AdminDashboard.class
+controller\CustomerListServlet.class
 utils\testDB.class
 dao\ImportStockDetailDAO.class
 dao\StaffDAO.class
