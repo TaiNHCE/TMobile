@@ -11,7 +11,7 @@
             <i class="fas fa-tachometer-alt"></i>
             Dashboard
         </a>
-        <a href="/orders">
+        <a href="ViewOrderList">
             <i class="fas fa-shopping-cart"></i>
             Orders
         </a>
