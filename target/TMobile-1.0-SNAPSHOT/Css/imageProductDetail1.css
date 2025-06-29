@@ -52,7 +52,6 @@
     width: 100%;
     max-height: 400px;       /* Điều chỉnh cao tối đa nếu muốn */
     object-fit: contain;     /* Giữ nguyên tỷ lệ, không cắt ảnh */
-    border: 1px solid #ccc;
     border-radius: 10px;
 }
 

@@ -83,14 +83,34 @@
     padding: 6px 12px;
     font-size: 14px;
     
-    display: inline-block;
     max-width: 100%;
-    white-space: nowrap;
+    
     box-sizing: border-box;
     cursor: default;
     line-height: 1.4;
     user-select: none;
 }
+
+.attribute-input {
+    background-color: #adb5bd;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 14px;
+
+    display: inline-block;
+    width: auto;              /* 👈 Tự động giãn theo chữ */
+    max-width: 100%;          /* 👈 Không tràn vùng cha */
+    white-space: nowrap;      /* 👈 Không xuống dòng */
+
+    box-sizing: border-box;
+    line-height: 1.4;
+    cursor: text;
+    user-select: auto;
+}
+
+
 
 /* THÔNG BÁO KHÔNG CÓ DỮ LIỆU */
 .no-data-message {

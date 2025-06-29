@@ -77,16 +77,16 @@ public class AdminProductList extends HttpServlet {
             productList = proDAO.getProductIsNew();
         } else if (filter.equals("Discount")) {
             productList = proDAO.getDiscountedProducts();
-        } 
-        else if (filter.equals("Active")) {
+        } else if (filter.equals("Active")) {
             productList = proDAO.getAllProductActive();
-        }else {
+        } else {
             productList = proDAO.getAllProductInactive(); // fallback
         }
 
         request.setAttribute("productList", productList);
         request.setAttribute("selectedFilter", filter); // để giữ lại lựa chọn sau reload
         request.getRequestDispatcher("/WEB-INF/View/admin/productManagement/viewProductList/adminProductList.jsp").forward(request, response);
+
     }
 
     /**

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import java.sql.Timestamp;
 
@@ -606,7 +607,7 @@ public class ProductDAO extends DBContext {
         }
         return productDetailList;
     }
-    
+
     public ProductDetail getOneProductDetailById(int productId) {
         ProductDetail productDetail = null;
         String sql = "SELECT p.ProductDetailID, p.ProductID, p.CategoryDetailID, p.AttributeValue, ip.ImageURL1, ip.ImageURL2, ip.ImageURL3, "
@@ -696,22 +697,20 @@ public class ProductDAO extends DBContext {
         String sql3 = "UPDATE ImgProductDetails SET ImageURL1 = ?, ImageURL2 = ?, ImageURL3 = ?, ImageURL4 = ? WHERE ProductID = ?";
 
         try (
-                PreparedStatement pstmt1 = conn.prepareStatement(sql1);  
-                PreparedStatement pstmt2 = conn.prepareStatement(sql2); 
-                PreparedStatement pstmt3 = conn.prepareStatement(sql3)) {
-            
+                 PreparedStatement pstmt1 = conn.prepareStatement(sql1);  PreparedStatement pstmt2 = conn.prepareStatement(sql2);  PreparedStatement pstmt3 = conn.prepareStatement(sql3)) {
+
             // Update mainimage
             pstmt1.setString(1, mainUrl);
             pstmt1.setInt(2, productId);
 
             int rows1 = pstmt1.executeUpdate();
-            
+
             // Update product detail
             pstmt2.setString(1, proDetail);
             pstmt2.setInt(2, productDetailID);
 
             int rows2 = pstmt2.executeUpdate();
-            
+
             // Update img detail
             pstmt3.setString(1, url1);
             pstmt3.setString(2, url2);
@@ -727,6 +726,7 @@ public class ProductDAO extends DBContext {
         }
         return false;
     }
+
     public int getTotalProducts() {
         String sql = "SELECT COUNT(*) FROM Products";
         try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
@@ -737,6 +737,88 @@ public class ProductDAO extends DBContext {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public int insertProduct(String name, String description, int suppliers, int stock, int category, int brand, boolean isFeatured, boolean isBestSeller,
+            boolean isNew, boolean isActive, String url) {
+        boolean rowInserted = false;
+        int productId = 0;
+        String sql = "INSERT INTO Products (ProductName, Description, CategoryID, BrandID, IsFeatured, IsBestSeller, IsNew, isActive, SupplierID ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql2 = "INSERT INTO ProductImages (ProductID, ImageURL) VALUES (?, ?)";
+
+        try ( PreparedStatement stmtProduct = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);  PreparedStatement stmtImage = conn.prepareStatement(sql2)) {
+
+            stmtProduct.setString(1, name);
+            stmtProduct.setString(2, description);
+            stmtProduct.setInt(3, category);
+            stmtProduct.setInt(4, brand);
+            stmtProduct.setBoolean(5, isFeatured);
+            stmtProduct.setBoolean(6, isBestSeller);
+            stmtProduct.setBoolean(7, isNew);
+            stmtProduct.setBoolean(8, isActive);
+            stmtProduct.setInt(9, suppliers);
+            rowInserted = stmtProduct.executeUpdate() > 0;
+
+            if (rowInserted) {
+                try ( ResultSet generatedKeys = stmtProduct.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        productId = generatedKeys.getInt(1);
+
+                        stmtImage.setInt(1, productId);
+                        stmtImage.setString(2, url);
+
+                        stmtImage.executeUpdate();
+
+                        rowInserted = true;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productId;
+    }
+
+    public boolean insertImageProductDetail(String imgaUrl1, String imgaUrl2, String imgaUrl3, String imgaUrl4, int productId) {
+        boolean rowInserted = false;
+        String sql = "INSERT ImgProductDetails (ImageURL1, ImageURL2, ImageURL3, ImageURL4, ProductID ) VALUES (?, ?, ?, ?, ?)";
+        try ( PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, imgaUrl1);
+            stmt.setString(2, imgaUrl2);
+            stmt.setString(3, imgaUrl3);
+            stmt.setString(4, imgaUrl4);
+            stmt.setInt(5, productId);
+            rowInserted = stmt.executeUpdate() > 0;
+            if (rowInserted){
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean insertProductDetail(int productId, int categoryId, String attributeValue) {
+        boolean rowInserted = false;
+        String sql = "INSERT INTO ProductDetails (ProductID, CategoryDetailID, AttributeValue) VALUES (?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, productId);
+            stmt.setInt(2, categoryId);
+            stmt.setString(3, attributeValue);
+           
+            rowInserted = stmt.executeUpdate() > 0;
+
+            if (rowInserted) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 //    <===================================================== GIA KHIÊM ======================================================>

@@ -1,9 +1,6 @@
 
 <html>
-    <head>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css">
-
-    </head>
+    
 
     <body>
 

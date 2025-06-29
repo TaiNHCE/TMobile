@@ -48,6 +48,7 @@ utils\DBContext.class
 controller\CartListServlet.class
 controller\AdminViewProductDetailServlet.class
 controller\CategoryDetailServlet.class
+controller\AdminAddProductServlet.class
 controller\CategoryViewServlet.class
 controller\RevenueStatisticServlet.class
 controller\InventoryStatisticServlet.class
@@ -56,6 +57,7 @@ model\Account.class
 controller\ViewSupplierServlet.class
 controller\BrandViewServlet.class
 controller\LoginServlet.class
+controller\AdminAddProductDetailServlet.class
 controller\AdminDeleteProductServlet.class
 controller\VoucherServlet.class
 dao\InventoryStatisticDAO.class

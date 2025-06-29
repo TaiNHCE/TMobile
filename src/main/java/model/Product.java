@@ -11,8 +11,6 @@ import java.math.BigDecimal;
  * @author HP - Gia Khiêm
  */
 public class Product {
-
-
     private int productId;
     private String productName;
     private String description;
@@ -21,6 +19,7 @@ public class Product {
     private int stock;
     private String status;
     private int supplierId;
+    private String supplierName;
     private int categoryId;
     private String categoryName;
     private int brandId;

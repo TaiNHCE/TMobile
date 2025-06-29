@@ -24,14 +24,16 @@
     </head>
     <body>
         <div class="divAll">
-            <jsp:include page="/WEB-INF/View/staff/productManagement/viewProductDetail/productTitle.jsp" />
-
             <div class="container">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div>
+                        <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductDetail/productTitle.jsp" />
+                    </div>
+
+                    <div class="" style = "width: 40%">
                         <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductDetail/imageProductDetail.jsp" />
                     </div>
-                    <div class="col-md-7">
+                    <div class="" style = "width: 60%">
                         <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductDetail/productDetail.jsp" />
                     </div>
                 </div>

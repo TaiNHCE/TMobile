@@ -46,17 +46,21 @@
                                 </a>
                             </div>
 
-                            <div class="col-md-5 text-center"
-                                 style=" border-radius: 15px; margin-top: 2%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); background-color: #ffffff; max-height: 400px">
+                            <div class="col-md-5 text-center d-flex flex-column"
+                                 style="border-radius: 15px; margin-top: 2%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); background-color: #ffffff; height: 350px; max-height: 400px; padding: 12px;">
+
                                 <label for="fileInput" style="cursor: pointer;">
                                     <img id="previewImage" src="<%= product.getImageUrl()%>"
-                                         style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 465px"
+                                         style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 320px;"
                                          alt="Click to change image"
                                          title="Click to change image">
                                 </label>
-                                <p style="margin-top: 1%; font-size: 14px; color: #888;">Click the image to change the product photo</p>
+
+                                <p style="margin-top: auto; font-size: 14px; color: #888;">Click the image to change the product photo</p>
+
                                 <input type="file" name="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewSelectedImage(event)">
                             </div>
+
 
                             <div class="form-wrapper col-md-6">
                                 <div class="mb-3">
@@ -70,12 +74,16 @@
                                 </div>
 
                                 <%
-                                    BigDecimal price = product.getPrice();
-                                    Locale localeVN = new Locale("vi", "VN");
-                                    NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
-                                    String priceFormatted = currencyVN.format(price);
-                                %>
+                                    String priceFormatted = "";
+                                    if (product.getPrice() != null) {
+                                        BigDecimal price = product.getPrice();
+                                        Locale localeVN = new Locale("vi", "VN");
+                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                                        priceFormatted = currencyVN.format(price);
+                                    }
 
+                                %>
+                                
                                 <div class="mb-3">
                                     <label class="form-label">Price</label>
                                     <input type="text" min="1" class="form-control" name="price" required value="<%= priceFormatted%>"/>
@@ -127,7 +135,7 @@
                                     </div>
                                 </div>
 
-                                <a href="ProductManager" class="btn btn-secondary" style="margin-left: 15%; margin-right: 10px; margin-top: 10px;">Back</a>
+                                <a href="AdminProduct" class="btn btn-secondary" style="margin-left: 15%; margin-right: 10px; margin-top: 10px;">Back</a>
                                 <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Edit</button>
                             </div>
                         </div>
