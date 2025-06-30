@@ -740,53 +740,6 @@ public class ProductDAO extends DBContext {
 
 //    <===================================================== GIA KHIÊM ======================================================>
     
-   // ham loc san pham supplier de import 
-    public List<Product> getProductListBySupplierId(int supplierId) {
-        List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
-                + "p.SupplierID, p.CategoryID, p.BrandID, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.IsActive, "
-                + "pi.ImageURL "
-                + "FROM Products p "
-                + "LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID "
-                + "WHERE p.SupplierID = ? AND p.IsActive = 1";
-        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, supplierId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int productID = rs.getInt("ProductID");
-                String productName = rs.getString("ProductName");
-                String description = rs.getString("Description");
-                BigDecimal price = rs.getBigDecimal("Price");
-                int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
-                int supplierIdFetched = rs.getInt("SupplierID");
-                if (rs.wasNull()) {
-                    supplierIdFetched = 0;
-                }
-                int categoryId = rs.getInt("CategoryID");
-                if (rs.wasNull()) {
-                    categoryId = 0;
-                }
-                int brandId = rs.getInt("BrandID");
-                if (rs.wasNull()) {
-                    brandId = 0;
-                }
-                boolean isFeatured = rs.getBoolean("IsFeatured");
-                boolean isBestSeller = rs.getBoolean("IsBestSeller");
-                boolean isNew = rs.getBoolean("IsNew");
-                int warrantyPeriod = rs.getInt("WarrantyPeriod");
-                boolean isActive = rs.getBoolean("IsActive");
-                String imageUrl = rs.getString("ImageURL");
-
-                list.add(new Product(productID, productName, description, price, discount, stock, status,
-                        supplierIdFetched, categoryId, brandId, isFeatured, isBestSeller, isNew,
-                        warrantyPeriod, isActive, imageUrl));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+  
 
 }

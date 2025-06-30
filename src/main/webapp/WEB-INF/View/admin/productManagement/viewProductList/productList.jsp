@@ -40,7 +40,11 @@
             justify-content: center;
             gap: 8px;
             flex-wrap: wrap;
-        }
+        } form.search-form {
+        margin-bottom: 21px !important;
+    }
+
+        
     </style>
 </head>
 <body>
@@ -78,8 +82,8 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="AdminViewProductDetail?productId=<%= product.getProductId() %>" class="btn btn-warning">Detail</a>
-                            <a href="AdminUpdateInfo?productId=<%= product.getProductId() %>" class="btn btn-primary">Edit</a>
+                            <a href="AdminViewProductDetail?productId=<%= product.getProductId() %>" class="btn btn-primary">Detail</a>
+                            <a href="AdminUpdateInfo?productId=<%= product.getProductId() %>" class="btn btn-warning">Edit</a>
                             <button class="btn btn-danger" onclick="confirmDelete(<%= product.getProductId() %>)">Delete</button>
                         </div>
                     </td>

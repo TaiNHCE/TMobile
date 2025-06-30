@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import dao.ImportStockDAO;
@@ -16,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import model.Account;
@@ -25,10 +22,6 @@ import model.Product;
 import model.Staff;
 import model.Suppliers;
 
-/**
- *
- * @author
- */
 @WebServlet(name = "ImportStockServlet", urlPatterns = {"/ImportStock"})
 public class ImportStockServlet extends HttpServlet {
 
@@ -37,13 +30,38 @@ public class ImportStockServlet extends HttpServlet {
     ImportStockDAO importStockDAO = new ImportStockDAO();
     ImportStockDetailDAO importStockDetailDAO = new ImportStockDetailDAO();
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ImportStatisticServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ImportStatisticServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
         String status = request.getParameter("status");
-        // neu nhan nut cancel
+        // Cancel button: clear session data and redirect
         if (status != null && status.equals("cancel")) {
             session.removeAttribute("selectedProducts");
             session.setAttribute("success", "Stock import completed successfully!");
@@ -51,12 +69,12 @@ public class ImportStockServlet extends HttpServlet {
             return;
         }
 
-        // luon set danh sach nha cung cap cho jsp
+        // Always load supplier list for JSP
         List<Suppliers> suppliers = supplierDAO.getAllSuppliers();
         request.setAttribute("suppliers", suppliers);
         session.setAttribute("suppliers", suppliers);
 
-        // luon set danh sach san pham cho jsp
+        // Always load product list for JSP if not available in session
         ArrayList<Product> products = (ArrayList<Product>) session.getAttribute("products");
         if (products == null) {
             products = (ArrayList<Product>) productDAO.getProductList();
@@ -71,21 +89,20 @@ public class ImportStockServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        // lay danh sach chi tiet san pham duoc chon nhap kho tu session
+        // Get product detail list from session
         ArrayList<ImportStockDetail> detailList = (ArrayList<ImportStockDetail>) session.getAttribute("selectedProducts");
         if (detailList == null) {
             detailList = new ArrayList<>();
         }
 
-        // lay danh sach san pham tu session neu chua co thi lay tu db
+        // Get product list from session or database
         ArrayList<Product> products = (ArrayList<Product>) session.getAttribute("products");
         if (products == null) {
             products = (ArrayList<Product>) productDAO.getProductList();
             session.setAttribute("products", products);
         }
 
-        // xu ly chon nha cung cap
-        // xu ly chon nha cung cap
+        // 1. Handle supplier selection
         String supplierIdRaw = request.getParameter("supplierId");
         if (supplierIdRaw != null && !supplierIdRaw.trim().isEmpty()) {
             try {
@@ -93,11 +110,9 @@ public class ImportStockServlet extends HttpServlet {
                 Suppliers supplier = supplierDAO.getSupplierById(supplierId);
                 session.setAttribute("supplier", supplier);
 
-                // Lay danh sach san pham theo supplierId
-                ArrayList<Product> filteredProducts = (ArrayList<Product>) productDAO.getProductListBySupplierId(supplierId);
-                session.setAttribute("products", filteredProducts); // Cap nhat lai list products
+                ArrayList<Product> allProducts = (ArrayList<Product>) productDAO.getProductList();
+                session.setAttribute("products", allProducts);
 
-                // Xoa selectedProducts khi doi nha cung cap (reset lai de tranh nhap nham)
                 session.setAttribute("selectedProducts", new ArrayList<ImportStockDetail>());
             } catch (NumberFormatException e) {
                 session.setAttribute("error", "Invalid supplier ID.");
@@ -106,7 +121,7 @@ public class ImportStockServlet extends HttpServlet {
             return;
         }
 
-        // xu ly them san pham vao danh sach nhap kho
+        // 2. Handle adding product to import list
         String productIdRaw = request.getParameter("productId");
         String quantityRaw = request.getParameter("importQuantity");
         String priceRaw = request.getParameter("unitPrice");
@@ -119,6 +134,12 @@ public class ImportStockServlet extends HttpServlet {
                 long price = Long.parseLong(priceRaw.trim());
 
                 Product product = productDAO.getProductByID(productId);
+                if (price >= product.getPrice().longValue()) {
+                    session.setAttribute("error", "Import price (" + price + ") must be less than sale price (" 
+                        + product.getPrice().longValue() + ").");
+                    response.sendRedirect("ImportStock");
+                    return;
+                }
                 ImportStockDetail detail = new ImportStockDetail();
                 detail.setProduct(product);
                 detail.setQuantity(quantity);
@@ -126,7 +147,6 @@ public class ImportStockServlet extends HttpServlet {
                 detail.setQuantityLeft(quantity);
 
                 boolean isContained = false;
-                // kiem tra da ton tai chua
                 for (ImportStockDetail proDet : detailList) {
                     if (proDet.getProduct().getProductId() == productId) {
                         isContained = true;
@@ -138,7 +158,6 @@ public class ImportStockServlet extends HttpServlet {
                     detailList.add(detail);
 
                     int deleteIndex = -1;
-                    // xoa khoi list product co san
                     for (int i = 0; i < products.size(); ++i) {
                         if (products.get(i).getProductId() == productId) {
                             deleteIndex = i;
@@ -166,14 +185,14 @@ public class ImportStockServlet extends HttpServlet {
             }
         }
 
-        // xu ly sua hoac xoa san pham trong danh sach nhap kho
+        // 3. Handle edit/delete product in import list
         String action = request.getParameter("action");
         if (action != null) {
             try {
                 int productId = Integer.parseInt(request.getParameter("productEditedId"));
 
                 if ("delete".equals(action)) {
-                    // xoa san pham khoi danh sach
+                    // Remove product from detail list
                     for (int i = 0; i < detailList.size(); i++) {
                         if (detailList.get(i).getProduct().getProductId() == productId) {
                             detailList.remove(i);
@@ -186,7 +205,13 @@ public class ImportStockServlet extends HttpServlet {
                     int quantity = Integer.parseInt(request.getParameter("quantity"));
                     long price = Long.parseLong(request.getParameter("price"));
 
-                    // cap nhat so luong va gia
+                    Product product = productDAO.getProductByID(productId);
+                    if (price >= product.getPrice().longValue()) {
+                        session.setAttribute("error", "Import price (" + price + ") must be less than sale price (" + product.getPrice().longValue() + ").");
+                        response.sendRedirect("ImportStock");
+                        return;
+                    }
+                    // Update product detail
                     for (int i = 0; i < detailList.size(); i++) {
                         if (detailList.get(i).getProduct().getProductId() == productId) {
                             detailList.get(i).setQuantity(quantity);
@@ -197,7 +222,7 @@ public class ImportStockServlet extends HttpServlet {
                     }
                 }
 
-                // sap xep lai danh sach san pham theo id tang dan
+                // Sort products by ID ascending
                 for (int i = 0; i < products.size() - 1; i++) {
                     for (int j = i + 1; j < products.size(); j++) {
                         if (products.get(i).getProductId() > products.get(j).getProductId()) {
@@ -222,7 +247,7 @@ public class ImportStockServlet extends HttpServlet {
             }
         }
 
-        // xu ly submit nhap kho
+        // 4. Handle final import submit
         Suppliers supplier = (Suppliers) session.getAttribute("supplier");
         ArrayList<ImportStockDetail> selectedProducts = (ArrayList<ImportStockDetail>) session.getAttribute("selectedProducts");
 
@@ -234,13 +259,11 @@ public class ImportStockServlet extends HttpServlet {
 
             Account account = (Account) session.getAttribute("staff");
             int staffId = 0;
-            // lay staff id tu account neu co
             if (account != null) {
                 StaffDAO staffDAO = new StaffDAO();
                 staffId = staffDAO.getStaffIdByAccountId(account.getAccountID());
             }
 
-            // tao phieu nhap kho
             ImportStock importStock = new ImportStock(staffId, supplier.getSupplierID(), total);
             int importId = importStockDAO.createImportStock(importStock);
 
@@ -250,25 +273,23 @@ public class ImportStockServlet extends HttpServlet {
                 return;
             }
 
-            // tao chi tiet phieu nhap kho
             for (ImportStockDetail detail : selectedProducts) {
                 detail.setIoid(importId);
                 detail.setQuantityLeft(detail.getQuantity());
                 importStockDetailDAO.createImportStockDetail(detail);
             }
 
-            // cap nhat ton kho san pham
             importStockDAO.importStock(importId);
 
-            // xoa du lieu tren session
             session.removeAttribute("selectedProducts");
             session.removeAttribute("supplier");
             session.removeAttribute("products");
 
             response.sendRedirect("ImportStock?success=imported");
-
+            return;
         } else {
             response.sendRedirect("ImportStock?error=1");
+            return;
         }
     }
 

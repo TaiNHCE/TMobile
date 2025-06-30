@@ -62,6 +62,7 @@ model\Suppliers.class
 model\PurchaseOrder.class
 controller\ManageStatisticServlet.class
 controller\RemoveCartItemServlet.class
+controller\ImportHistoryDetailServlet.class
 controller\UpdateSupplierServlet.class
 controller\ProductListServlet.class
 controller\UpdateStaffServlet.class

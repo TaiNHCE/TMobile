@@ -2,94 +2,90 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Import Stock Detail</title>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-        <style>
-            .main-section {
-                margin: 40px auto;
-                max-width: 1200px;
-            }
-            .info-table th, .info-table td {
-                vertical-align: middle !important;
-            }
-            .details-table th, .details-table td {
-                vertical-align: middle !important;
-            }
-            .section-title {
-                font-size: 1.8rem;
-                font-weight: 500;
-                margin-top: 24px;
-            }
-            .action-btns {
-                text-align: right;
-                margin-bottom: 18px;
-            }
-        </style>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css">
     </head>
     <body>
-        <div class="main-section">
-
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger">${error}</div>
-            </c:if>
-
-            <!-- Thông tin chung -->
-            <table class="table info-table mb-4">
-                <thead>
-                    <tr>
-                        <th>Import ID</th>
-                        <th>Staff ID</th>
-                        <th>Staff Name</th>
-                        <th>Date</th>
-                        <th>Supplier</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${importStock.ioid}</td>
-                        <td>${importStock.staffId}</td>
-                        <td>${importStock.fullName}</td>
-                        <td>
-                            <fmt:formatDate value="${importStock.importDate}" pattern="yyyy-MM-dd HH:mm" />
-                        </td>
-
-                        <td>${importStock.supplier.name}</td>
-                        <td><fmt:formatNumber value="${importStock.totalAmount}" type="currency" currencySymbol="₫"/></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Chi tiết sản phẩm -->
-            <div class="section-title">Details</div>
-            <table class="table table-bordered details-table">
-                <thead>
-                    <tr>
-                        <th>Product ID</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Import Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${details}" var="d">
-                        <tr>
-                            <td>${d.product.productId}</td>
-                            <td>${d.product.productName}</td>
-                            <td>${d.quantity}</td>
-                            <td><fmt:formatNumber value="${d.unitPrice}" type="currency" currencySymbol="₫"/></td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-            <!-- Nút Back và Edit -->
-            <div class="action-btns">
-                <a href="ImportStockHistory" class="btn btn-secondary me-2">Back</a>
+        <div class="container">
+            <jsp:include page="../sideBar.jsp" />
+            <div class="wrapper">
+                <main class="main-content">
+                    <h1 class="mb-4">Import Stock Detail</h1>
+                    <div class="d-flex justify-content-end mb-4 btn-group-custom">
+                        <!-- Không có nút, nhưng vẫn chiếm chỗ -->
+                    </div>
+                    <form class="search-form mb-4" method="get" style="min-height: 52px;">
+                        <!-- Không có filter -->
+                    </form>
+                    <!-- Alert error -->
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger">${error}</div>
+                    </c:if>
+                    <!-- Bảng thông tin chung -->
+                    <div class="table-container mb-4" style="max-width: 1100px; margin: 0 auto;">
+                        <table aria-label="Suppliers table">
+                            <thead>
+                                <tr>
+                                    <th>Import ID</th>
+                                    <th>Staff ID</th>
+                                    <th>Staff Name</th>
+                                    <th>Date</th>
+                                    <th>Supplier</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${importStock.ioid}</td>
+                                    <td>${importStock.staffId}</td>
+                                    <td>${importStock.fullName}</td>
+                                    <td>
+                                        <fmt:formatDate value="${importStock.importDate}" pattern="yyyy-MM-dd HH:mm" />
+                                    </td>
+                                    <td>${importStock.supplier.name}</td>
+                                    <td>
+                                        <fmt:formatNumber value="${importStock.totalAmount}" type="currency" currencySymbol="₫" groupingUsed="true" minFractionDigits="0"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Chi tiết sản phẩm -->
+                    <div class="table-container mb-4" style="max-width: 1100px; margin: 0 auto;">
+                        <h3 style="margin-bottom: 18px;">Details</h3>
+                        <table aria-label="Suppliers table">
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Import Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${details}" var="d">
+                                    <tr>
+                                        <td>${d.product.productId}</td>
+                                        <td>${d.product.productName}</td>
+                                        <td>${d.quantity}</td>
+                                        <td>
+                                            <fmt:formatNumber value="${d.unitPrice}" type="currency" currencySymbol="₫" groupingUsed="true" minFractionDigits="0"/>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Nút Back -->
+                    <div class="text-end" style="max-width: 1100px; margin: 0 auto;">
+                        <a href="ImportStockHistory" class="btn btn-secondary">Back</a>
+                    </div>
+                </main>
             </div>
         </div>
-
-
     </body>
 </html>
