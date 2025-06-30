@@ -402,7 +402,6 @@ public class ProductDAO extends DBContext {
         }
     }
 
-
 //    <===================================================== GIA KHIÊM ======================================================>
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();

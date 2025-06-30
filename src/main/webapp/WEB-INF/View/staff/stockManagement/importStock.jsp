@@ -220,13 +220,8 @@
                                         <td>${d.getProduct().getProductName()}</td>
                                         <td>${d.getQuantity()}</td>
                                         <td>${d.unitPrice}</td>
-<<<<<<< HEAD
                                         <td class="text-center">
                                             <button class="btn btn-warning edit-product"
-=======
-                                        <td>
-                                            <button class="btn-edit edit-product"
->>>>>>> 36acf90ce7660cfc809f245f3cda279840ec6ce5
                                                     data-id="${d.getProduct().getProductId()}"
                                                     data-name="${d.getProduct().getProductName()}"
                                                     data-quantity="${d.getQuantity()}"
@@ -234,10 +229,7 @@
                                                     data-saleprice="${d.getProduct().getPrice()}">
                                                 Edit
                                             </button>
-<<<<<<< HEAD
 
-=======
->>>>>>> 36acf90ce7660cfc809f245f3cda279840ec6ce5
                                         </td>
                                     </tr>
                                     <c:set var="sum" value="${sum + d.getQuantity() * d.getUnitPrice()}" scope="page"/>
@@ -245,11 +237,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td class="text-end fw-bold">Total:</td>
-<<<<<<< HEAD
                                     <td class="fw-bold text-center" id="totalAmount">${sum} VND</td>
-=======
-                                    <td class="fw-bold" id="totalAmount">${sum} VND</td>
->>>>>>> 36acf90ce7660cfc809f245f3cda279840ec6ce5
                                 </tr>
                             </tbody>
                         </table>
@@ -388,11 +376,7 @@
                                 </div>
                                 <div class="mt-2 text-end">
                                     <button type="button" class="create-btn" onclick="redirectToImport()">Import</button>
-<<<<<<< HEAD
                                     <button type="button" class="back-btn" onclick="cancelEditImportStock()" style="margin-left: 10px;">Cancel</button>
-=======
-                                    <button type="button" class="back-btn" onclick="cancelImportStock()" style="margin-left: 10px;">Cancel</button>
->>>>>>> 36acf90ce7660cfc809f245f3cda279840ec6ce5
                                 </div>
                             </div>
                         </div>
@@ -603,12 +587,9 @@
                                         function cancelImportStock() {
                                             window.location.href = 'ImportStatistic';
                                         }
-<<<<<<< HEAD
                                         function cancelEditImportStock() {
                                             window.location.href = 'ImportStock';
                                         }
-=======
->>>>>>> 36acf90ce7660cfc809f245f3cda279840ec6ce5
 
                                         // Import button: submit form
                                         function redirectToImport() {

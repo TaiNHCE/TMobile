@@ -7,3 +7,6 @@ target/
 *.iml
 nbproject/private/
 
+Tomcat.dpf
+src/main/webapp/WEB-INF/classes/
+src/main/webapp/WEB-INF/lib/

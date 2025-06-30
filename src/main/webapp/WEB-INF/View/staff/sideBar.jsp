@@ -48,6 +48,7 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <h4>
+
             TShop
         </h4>
     </div>
@@ -82,7 +83,6 @@
 
         sidebarLinks.forEach(link => {
             const href = link.getAttribute('href').toLowerCase();
-            // So kh?p t??ng ??i cho c? url có slash/thêm params
             if (current.includes(href) && href !== "/") {
                 link.classList.add('active');
                 hasActive = true;
@@ -91,7 +91,6 @@
             }
         });
 
-        // N?u không kh?p url nào thì m?c ??nh active cho Dashboard
         if (!hasActive) {
             sidebarLinks[0].classList.add('active');
         }
