@@ -22,84 +22,87 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
 
-        <link rel="stylesheet" href="Css/productDetail.css">
+        <link rel="stylesheet" href="Css/productDetail1.css">
     </head>
     <body>
-        <div style = "margin-top: 6%;">
-            <div style = "display: flex;">
-                <h3 style = "margin-right: 38%;">Technical Specifications</h3>
-                <a style = "text-align: center; margin-bottom: 1%; border: none; background-color: #00b8d9;" href="AdminUpdateProductDetail?productId=<%= product.getProductId()%>" class="btn btn-primary" ><i class="bi bi-tools"></i> Edit Detail</a>
 
+
+        <div style = "display: flex">
+            <h4>
+                Technical specifications
+            </h4>
+
+            <div style = "text-align: right">
+                <a href="AdminProduct" class="btn-back" style = "text-decoration: none">Back</a>
             </div>
-
-            <div class = "container col-md-12" style = "background-color: #FFFFFF; border-radius: 15px;">
-                <div class = "row">
-                    <div class="col-md-12">
-                        <table class="category-table">
+        </div>
+        <div class = "container col-md-12" style = "background-color: #FFFFFF; border-radius: 15px;">
+            <div class = "row">
+                <div class="col-md-12">
+                    <table class="category-table">
+                        <%
+                            if (categoryDetailGroupList != null) {
+                                int groupIndex = 0;
+                                for (CategoryDetailGroup cateGroup : categoryDetailGroupList) {
+                        %>
+                        <!-- Tên nhóm -->
+                        <tr class="group-header" onclick="toggleDetails(<%= groupIndex%>)">
+                            <td colspan="2" class="group-cell">
+                                <div class="group-header-content">
+                                    <h2 style="max-width: 50%; word-wrap: break-word; overflow-wrap: break-word; margin: 0;"><%= cateGroup.getNameCategoryDetailsGroup()%></h2>
+                                    <span class="arrow-icon" id="arrow<%= groupIndex%>">▼</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tbody id="detailGroup<%= groupIndex%>" class="group-details hidden">
                             <%
-                                if (categoryDetailGroupList != null) {
-                                    int groupIndex = 0;
-                                    for (CategoryDetailGroup cateGroup : categoryDetailGroupList) {
+                                if (categoryDetailList != null && !categoryDetailList.isEmpty()) {
+                                    for (CategoryDetail cateList : categoryDetailList) {
+                                        if (cateList.getCategoryDetailsGroupID() == cateGroup.getCategoryDetailsGroupID()) {
+                                            boolean hasValue = false;
                             %>
-                            <!-- Tên nhóm -->
-                            <tr class="group-header" onclick="toggleDetails(<%= groupIndex%>)">
-                                <td colspan="2" class="group-cell">
-                                    <div class="group-header-content">
-                                        <h2><%= cateGroup.getNameCategoryDetailsGroup()%></h2>
-                                        <span class="arrow-icon" id="arrow<%= groupIndex%>">▼</span>
-                                    </div>
+                            <tr>
+                                <td class="category-name">
+                                    <%= cateList.getCategoryDatailName()%>
                                 </td>
-                            </tr>
-                            <tbody id="detailGroup<%= groupIndex%>" class="group-details hidden">
-                                <%
-                                    if (categoryDetailList != null && !categoryDetailList.isEmpty()) {
-                                        for (CategoryDetail cateList : categoryDetailList) {
-                                            if (cateList.getCategoryDetailsGroupID() == cateGroup.getCategoryDetailsGroupID()) {
-                                                boolean hasValue = false;
-                                %>
-                                <tr>
-                                    <td class="category-name">
-                                        <%= cateList.getCategoryDatailName()%>
-                                    </td>
-                                    <td class="attribute-values">
-                                        <%
-                                            if (productDetailList != null) {
-                                                for (ProductDetail proDetail : productDetailList) {
-                                                    if (proDetail.getCategoryDetailID() == cateList.getCategoryDetailID()) {
-                                                        hasValue = true;
-                                        %>
-                                        <div class="attribute-item"><%= proDetail.getAttributeValue()%></div>
+                                <td class="attribute-values">
+                                    <%
+                                        if (productDetailList != null) {
+                                            for (ProductDetail proDetail : productDetailList) {
+                                                if (proDetail.getCategoryDetailID() == cateList.getCategoryDetailID()) {
+                                                    hasValue = true;
+                                    %>
+                                    <div class="attribute-item"><%= proDetail.getAttributeValue()%></div>
 
-                                        <%
-                                                    }
+                                    <%
                                                 }
                                             }
-                                            if (!hasValue) {
-                                        %>
-                                        <div class="attribute-item">No data</div>
-                                        <%
-                                            }
-                                        %>
-                                    </td>
-                                </tr>
-                                <%
-                                            }
+                                        }
+                                        if (!hasValue) {
+                                    %>
+                                    <div class="attribute-item">No data</div>
+                                    <%
+                                        }
+                                    %>
+                                </td>
+                            </tr>
+                            <%
                                         }
                                     }
-                                %>
-                            </tbody>
+                                }
+                            %>
+                        </tbody>
 
-                            <%
-                                    groupIndex++;
-                                }
-                            } else {
-                            %>
-                            <tr><td colspan="2" class="no-data-message">No data</td></tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                        <%
+                                groupIndex++;
+                            }
+                        } else {
+                        %>
+                        <tr><td colspan="2" class="no-data-message">No data</td></tr>
+                        <%
+                            }
+                        %>
+                    </table>
                 </div>
             </div>
         </div>
@@ -121,3 +124,26 @@
         }
     }
 </script>
+
+<style>
+    .btn-back {
+        color: #fff;
+        background-color: #6c757d;
+        border: 1px solid #6c757d;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #5c636a;
+        border-color: #565e64;
+    }
+
+    .btn-success, .btn-back {
+        padding: 8px 16px;  /* trước là 10px 20px */
+        font-size: 14px;
+    }
+</style>
