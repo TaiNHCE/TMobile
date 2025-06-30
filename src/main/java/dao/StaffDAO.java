@@ -50,30 +50,27 @@ public class StaffDAO extends DBContext {
 
     public Staff getStaffByID(int staffID) {
         Staff sta = null;
-        String sql = "SELECT StaffID, a.Email, FullName, s.PhoneNumber, HiredDate, s.BirthDate, s.Gender "
-                + "FROM Staff s JOIN Accounts a ON s.AccountID = a.AccountID WHERE StaffID = ?";
-
+        String sql = "SELECT StaffID, a.Email, FullName,s.PhoneNumber, HiredDate,Position,s.BirthDate,s.Gender  FROM Staff s JOIN Accounts a ON s.AccountID = a.AccountID Where StaffID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, staffID);
-
             try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int id = rs.getInt("StaffID");
                     String email = rs.getString("Email");
                     String fullName = rs.getString("FullName");
                     String phone = rs.getString("PhoneNumber");
-                    Date hiredDate = rs.getDate("HiredDate");
-                    Date birthday = rs.getDate("BirthDate");
+                    Date hiredDate = rs.getTimestamp("HiredDate");
+                    String formattedDate = new SimpleDateFormat("dd-MM-yyyy").format(hiredDate);
+                    String position = rs.getString("Position");
+                    Date birthday = rs.getTimestamp("BirthDate");
                     String gender = rs.getString("Gender");
-
-                    sta = new Staff(id, email, fullName, phone, hiredDate, birthday, gender);
+                    sta = new Staff(id, email, fullName, phone, hiredDate, position, birthday, gender);
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // hoặc log ra logger nếu dùng log4j, slf4j
         }
-
-        return sta;
+        return sta; // nếu không có bản ghi hoặc có lỗi
     }
 
     public List<Staff> searchStaffByName(String keyword) {
@@ -133,7 +130,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean createStaffWithAccount(Account account, Staff staff) {
-        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive, EmailVerified, ProfileImageURL) VALUES (?, ?, ?, 1, 1, ?)";
+        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive, EmailVerified, ProfileImageURL) VALUES (?, ?, 2, 1, 1, ?)";
         String insertStaffSQL = "INSERT INTO Staff (StaffID, AccountID, FullName, PhoneNumber, BirthDate, Gender, Position, HiredDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -143,8 +140,7 @@ public class StaffDAO extends DBContext {
             PreparedStatement accountStmt = conn.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
             accountStmt.setString(1, account.getEmail());
             accountStmt.setString(2, account.getPasswordHash());
-            accountStmt.setInt(3, account.getRoleID());
-            accountStmt.setString(4, account.getProfileImageURL());
+            accountStmt.setString(3, account.getProfileImageURL());
 
             int affectedRows = accountStmt.executeUpdate();
 
@@ -202,7 +198,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean updateStaffWithAccount(Account account, Staff staff) {
-        String updateAccountSQL = "UPDATE Accounts SET Email = ?, PasswordHash = ?, RoleID = ?, ProfileImageURL = ? WHERE AccountID = ?";
+        String updateAccountSQL = "UPDATE Accounts SET Email = ?, ProfileImageURL = ? WHERE AccountID = ?";
         String updateStaffSQL = "UPDATE Staff SET FullName = ?, PhoneNumber = ?, BirthDate = ?, Gender = ?, Position = ?, HiredDate = ? WHERE StaffID = ?";
 
         try {
@@ -211,10 +207,8 @@ public class StaffDAO extends DBContext {
             // Cập nhật bảng Accounts
             PreparedStatement accountStmt = conn.prepareStatement(updateAccountSQL);
             accountStmt.setString(1, account.getEmail());
-            accountStmt.setString(2, account.getPasswordHash());
-            accountStmt.setInt(3, account.getRoleID());
-            accountStmt.setString(4, account.getProfileImageURL());
-            accountStmt.setInt(5, account.getAccountID());
+            accountStmt.setString(2, account.getProfileImageURL());
+            accountStmt.setInt(3, account.getAccountID());
 
             int affectedAcc = accountStmt.executeUpdate();
             if (affectedAcc == 0) {
@@ -325,6 +319,20 @@ public class StaffDAO extends DBContext {
         }
         return false;
     }
+
+
+    public int getTotalStaff() {
+        String sql = "SELECT COUNT(*) FROM Staff";
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
     public int getStaffIdByAccountId(int accountId) {
         String sql = "SELECT StaffID FROM Staff WHERE AccountID = ?";

@@ -63,7 +63,7 @@ public class DeleteSupplierServlet extends HttpServlet {
 
         if (supplierID == null || supplierID.trim().isEmpty()
                 || taxId == null || taxId.trim().isEmpty()) {
-            response.sendRedirect("ViewSupplier");
+            response.sendRedirect("ViewSupplier?success=delete");
             return;
         }
 
@@ -80,10 +80,10 @@ public class DeleteSupplierServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String sid = request.getParameter("supplierID");
+        // String taxId = request.getParameter("taxId"); // không cần thiết cho backend xóa
 
         if (sid == null || sid.trim().isEmpty()) {
             response.sendRedirect("ViewSupplier");
@@ -96,13 +96,12 @@ public class DeleteSupplierServlet extends HttpServlet {
             boolean result = dao.deleteSupplierByID(supplierID);
 
             if (result) {
-                response.sendRedirect("ViewSupplier?deleteSuccess=true");
+                response.sendRedirect("ViewSupplier?success=delete"); // ĐỒNG BỘ với JSP
             } else {
-                request.setAttribute("errorMsg", "Delete supplier failed!");
-                request.getRequestDispatcher("ViewSupplier").forward(request, response);
+                response.sendRedirect("ViewSupplier?error=1");
             }
         } catch (NumberFormatException e) {
-            response.sendRedirect("ViewSupplier");
+            response.sendRedirect("ViewSupplier?error=1");
         }
     }
 

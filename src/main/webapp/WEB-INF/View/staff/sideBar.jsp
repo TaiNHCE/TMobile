@@ -48,35 +48,52 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <h4>
-            <i class="fas fa-mobile-alt"></i>
-            TMobile
+            TShop
         </h4>
     </div>
-    <div class="sidebar-menu">
-        <a href="StaffDashboard" class="active">
-            <i class="fas fa-tachometer-alt"></i>
-            Dashboard
-        </a>
-        <a href="/orders">
-            <i class="fas fa-shopping-cart"></i>
-            Orders
-        </a>
-        <a href="/products">
-            <i class="fas fa-box"></i>
-            Products
-        </a>
-        <a href="ImportStatistic">
-            <i class="fas fa-warehouse"></i>
-            Stock
-        </a>
-        <a href="/customers">
-            <i class="fas fa-users"></i>
-            Customers
-        </a>
-        <a href="/feedback">
-            <i class="fas fa-comments"></i>
-            Feedback
-        </a>
-    </div>
+   <div class="sidebar-menu">
+    <a href="StaffDashboard" class="sidebar-link">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+    </a>
+    <a href="/orders" class="sidebar-link">
+        <i class="fas fa-shopping-cart"></i> Orders
+    </a>
+    <a href="/products" class="sidebar-link">
+        <i class="fas fa-box"></i> Products
+    </a>
+    <a href="ImportStatistic" class="sidebar-link">
+        <i class="fas fa-warehouse"></i> Stock
+    </a>
+    <a href="/customers" class="sidebar-link">
+        <i class="fas fa-users"></i> Customers
+    </a>
+    <a href="/feedback" class="sidebar-link">
+        <i class="fas fa-comments"></i> Feedback
+    </a>
 </div>
 
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const current = window.location.pathname.toLowerCase();
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        let hasActive = false;
+
+        sidebarLinks.forEach(link => {
+            const href = link.getAttribute('href').toLowerCase();
+            // So kh?p t??ng ??i cho c? url có slash/thêm params
+            if (current.includes(href) && href !== "/") {
+                link.classList.add('active');
+                hasActive = true;
+            } else {
+                link.classList.remove('active');
+            }
+        });
+
+        // N?u không kh?p url nào thì m?c ??nh active cho Dashboard
+        if (!hasActive) {
+            sidebarLinks[0].classList.add('active');
+        }
+    });
+</script>

@@ -81,6 +81,25 @@ button.create-btn:hover {
     background: #1e9c46;
 }
 
+button.back-btn {
+    background: #6b7280; /* Màu xám */
+    color: #fff;         /* Chữ trắng */
+    margin-bottom: 12px;
+    float: right;
+    min-width: 110px;
+    border: 1.5px solid #4b5563;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button.back-btn:hover {
+    background: #4b5563;
+}
+
 /* Table Styles */
 table {
     width: 100%;
@@ -106,7 +125,7 @@ th {
     background: #2563eb;
     color: #fff;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 14px;
 }
 
 tbody tr:nth-child(even) {
@@ -174,37 +193,8 @@ th:last-child {
     transition: all 0.2s ease;
 }
 
-.btn-detail {
-    background: #b8cfe9;
-    color: #1652a3 !important;
-}
 
-.btn-detail:hover {
-    background: #6d8ef3;
-    color: #1652a3 !important;
-    text-decoration: none !important;
-}
 
-.btn-edit {
-    background: #fef9c3 !important;
-    color: #92400e !important;
-}
-
-.btn-edit:hover {
-    background: #fde047 !important;
-    color: #78350f !important;
-    text-decoration: none !important;
-}
-
-.btn-delete {
-    background: #f87171;
-    color: #fff !important;
-}
-
-.btn-delete:hover {
-    background: #e11d48;
-    color: #fff !important;
-}
 
 /* Utility Classes */
 .text-center {
@@ -224,3 +214,4 @@ th:last-child {
     padding: 10px 15px;
     border-radius: 30px;
 }
+

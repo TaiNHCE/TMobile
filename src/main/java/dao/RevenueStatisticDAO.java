@@ -16,7 +16,7 @@ import utils.DBContext;
  */
 public class RevenueStatisticDAO extends DBContext {
 
-     public ArrayList<RevenueStatistic> getRevenueByDay() {
+    public ArrayList<RevenueStatistic> getRevenueByDay() {
         ArrayList<RevenueStatistic> list = new ArrayList<>();
         String sql = "SELECT o.OrderDate, "
                 + "COUNT(DISTINCT o.OrderID) AS TotalOrder, "
@@ -45,8 +45,12 @@ public class RevenueStatisticDAO extends DBContext {
             System.err.println("Error in getRevenueByDay: " + e.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
                 // Không đóng conn
             } catch (Exception e) {
                 e.printStackTrace();
@@ -86,8 +90,12 @@ public class RevenueStatisticDAO extends DBContext {
             System.err.println("Error in getRevenueByMonth: " + e.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -129,8 +137,12 @@ public class RevenueStatisticDAO extends DBContext {
             System.err.println("Error in getRevenueByCategory: " + e.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -167,8 +179,12 @@ public class RevenueStatisticDAO extends DBContext {
             System.err.println("Error in getRevenueByCategoryOnDay: " + e.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -206,13 +222,33 @@ public class RevenueStatisticDAO extends DBContext {
             System.err.println("Error in getRevenueByCategoryOnMonth: " + e.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return list;
+    }
+
+    public long getMonthlyRevenue(int month, int year) {
+        String sql = "SELECT SUM(oi.Quantity * oi.UnitPrice) FROM Orders o JOIN OrderItems oi ON o.OrderID = oi.OrderID WHERE MONTH(o.OrderDate) = ? AND YEAR(o.OrderDate) = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

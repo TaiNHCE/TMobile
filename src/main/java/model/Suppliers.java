@@ -40,6 +40,11 @@ public class Suppliers {
         this.description = description;
     }
 
+    public Suppliers(int supplierID, String name) {
+        this.supplierID = supplierID;
+        this.name = name;
+    }
+    
     // Getters and Setters
     public int getSupplierID() {
         return supplierID;
