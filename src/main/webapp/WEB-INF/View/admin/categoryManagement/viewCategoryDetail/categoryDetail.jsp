@@ -1,8 +1,14 @@
+<%-- 
+    Document   : categoryDetail
+    Created on : Jun 14, 2025, 9:52:22 PM
+    Author     : HP - Gia Khiêm
+--%>
+
 <%@page import="model.CategoryDetailGroup"%>
 <%@page import="model.CategoryDetail"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Category"%>
-<%@page contentType="text/html; charset=UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<CategoryDetail> categoryDetailList = (List<CategoryDetail>) request.getAttribute("categoryDetailList");
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
@@ -10,206 +16,107 @@
     int categoryId = (int) request.getAttribute("categoryId");
 %>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Category Detail</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+        <link rel="stylesheet" href="Css/categoryDetail.css">
 
-        .container {
-            width: 85%;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 3%;
-            margin-bottom: 3%;
-        }
-
-        .header h1 {
-            font-size: 40px;
-            margin: 0;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .category-card {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 3%;
-            overflow-x: auto;
-        }
-
-        .category-card .card {
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 12px;
-            display: inline-block;
-            width: 160px;
-            text-align: center;
-        }
-
-        .category-card .card.active {
-            border: 2px solid #0d6efd;
-        }
-
-        .category-card img {
-            max-width: 100%;
-            height: 100px;
-            object-fit: contain;
-        }
-
-        .category-card h2 {
-            font-size: 18px;
-            margin-top: 10px;
-            color: #333;
-        }
-
-        .technical-specs {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .technical-specs h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .category-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .category-table td,
-        .category-table th {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        .group-header {
-            background-color: #f1f1f1;
-            cursor: pointer;
-        }
-
-        .group-header h2 {
-            margin: 0;
-            color: #333;
-        }
-
-        .arrow-icon {
-            font-size: 18px;
-            margin-left: 10px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .no-data-message {
-            text-align: center;
-            padding: 10px;
-            color: gray;
-        }
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Category Detail</h1>
+    </head>
+    <body>
+        <div style="display: flex; align-items: center; gap: 10px; margin-left: 21.5%; margin-bottom: 3%;  margin-top: 3%">
+            <h1 class = "display-5 fw-bold" style="font-size: 320%; margin: 0;">Category</h1>
+            <span style="font-size: 120%; color: gray; margin-top: 4%;">View Category Detail</span>
         </div>
 
-        <!-- Category Cards -->
-        <div class="category-card">
-            <%
-                if (categoryList != null) {
-                    for (Category cate : categoryList) {
-                        if (cate.getIsActive()) {
-                            boolean check = (cate.getCategoryId() == categoryId);
-            %>
-            <div class="card <%= check ? "active" : "" %>">
-                <img src="<%= cate.getImgUrlLogo() %>" alt="Category Logo">
-                <h2><%= cate.getCategoryName() %></h2>
-            </div>
-            <%      }
-                    }
-                }
-            %>
-        </div>
-
-        <!-- Technical Specifications -->
-        <div class="technical-specs">
-            <h2>Technical Specifications</h2>
-            <table class="category-table">
-                <tbody>
+        <!--            <== Category name==>-->
+        <div style = "margin-left: 21.5%; border-radius: 12px; border: 1px solid #ccc; width: 75%; height: 25%; margin-bottom: 3%; ">
+            <h2 style = "margin-left: 1%;">
+                Category Name
+            </h2>
+            <hr>
+            <div>
                 <%
-                    if (categoryDetailGroup != null) {
-                        int groupIndex = 0;
-                        for (CategoryDetailGroup cateGroup : categoryDetailGroup) {
+                    if (categoryList != null) {
+                        for (Category cate : categoryList) {
+                        if(cate.getIsActive() == true){
+                            boolean check = (cate.getCategoryId() == categoryId     );
+                       
                 %>
-                    <!-- Group Header Row -->
-                    <tr class="group-header" onclick="toggleDetails(<%= groupIndex %>)">
-                        <td colspan="2">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <h2><%= cateGroup.getNameCategoryDetailsGroup() %></h2>
-                                <span class="arrow-icon" id="arrow<%= groupIndex %>">▼</span>
-                            </div>
-                        </td>
-                    </tr>
+                <div class = "divLogo <%= check ? "activeCategory" : ""%>">
+                    <img class = "logoCategory" src = "<%= cate.getImgUrlLogo()%>">
+                    <h2 style = "margin-left: 9%;"><%= cate.getCategoryName()%></h2>
+                </div>
 
-                    <!-- Group Detail Rows -->
-                    <%
-                        if (categoryDetailList != null && !categoryDetailList.isEmpty()) {
-                            for (CategoryDetail cateList : categoryDetailList) {
-                                if (cateList.getCategoryDetailsGroupID() == cateGroup.getCategoryDetailsGroupID()) {
-                    %>
-                    <tr class="hidden group-details detailGroup<%= groupIndex %>">
-                        <td class="category-name"><%= cateList.getCategoryDatailName() %></td>
-                        <td></td>
-                    </tr>
-                    <%
-                                }
+
+
+                <%                    }
+                    }
+}
+                %>
+            </div>
+        </div>
+        <!--            <== Category name==>-->
+
+        <!--            <== Category detail==>-->
+        <!-- Vùng hiển thị tổng -->
+        <div class="category-container">
+            <h2>Technical Specifications</h2>
+            <hr>
+            <%
+                if (categoryDetailGroup != null && !categoryDetailGroup.isEmpty()) {
+                    int groupIndex = 0;
+                    for (CategoryDetailGroup cateGroup : categoryDetailGroup) {
+            %>
+
+            <!-- Nhóm tiêu đề -->
+            <div class="group-header" onclick="toggleDetails(<%= groupIndex%>)">
+                <h2><%= cateGroup.getNameCategoryDetailsGroup()%></h2>
+            </div>
+
+            <!-- Chi tiết, ẩn ban đầu -->
+            <div class="group-details" id="detailGroup<%= groupIndex%>">
+                <%
+                    if (categoryDetailList != null && !categoryDetailList.isEmpty()) {
+                        for (CategoryDetail cateList : categoryDetailList) {
+                            if (cateList.getCategoryDetailsGroupID() == cateGroup.getCategoryDetailsGroupID()) {
+                %>
+                <div class="detail-item">
+                    <%= cateList.getCategoryDatailName()%>
+                </div>
+                <%
                             }
                         }
-                        groupIndex++;
-                    }
-                } else {
-                %>
-                    <tr><td colspan="2" class="no-data-message">No data</td></tr>
-                <%
                     }
                 %>
-                </tbody>
-            </table>
+            </div>
+            <%
+                    groupIndex++;
+                }
+            } else {
+            %>
+            <p class="no-data-message">No data</p>
+            <%
+                }
+
+            %>
         </div>
-    </div>
 
-    <script>
-        function toggleDetails(index) {
-            const rows = document.querySelectorAll('.detailGroup' + index);
-            const arrowIcon = document.getElementById('arrow' + index);
 
-            rows.forEach(row => {
-                row.classList.toggle('hidden');
-            });
 
-            arrowIcon.innerText = arrowIcon.innerText === '▼' ? '▲' : '▼';
-        }
-    </script>
-</body>
+
+        <!--            <== Category detail==>-->
+
+    </body>
 </html>
+
+<script>
+    function toggleDetails(index) {
+        var detailDiv = document.getElementById("detailGroup" + index);
+        if (detailDiv.style.display === "none") {
+            detailDiv.style.display = "block";
+        } else {
+            detailDiv.style.display = "none";
+        }
+    }
+</script>

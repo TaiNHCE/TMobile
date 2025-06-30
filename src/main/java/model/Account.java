@@ -1,89 +1,46 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author pc
- */
-public class Account {
+import java.util.Date;
 
+public class Account {
     private int accountID;
     private String email;
     private String passwordHash;
-
+    private Date createdAt;
     private boolean isActive;
+    private int roleID;
     private boolean emailVerified;
     private String profileImageURL;
 
-    private int roleID;
+    public Account() {}
 
-    public Account() {
-    }
-
-    public Account(int accountID, String email, String passwordHash, int roleID) {
+    public Account(int accountID, String email, String passwordHash, Date createdAt, 
+                   boolean isActive, int roleID, boolean emailVerified, String profileImageURL) {
         this.accountID = accountID;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.roleID = roleID;
-    }
-
-    public boolean isIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
+        this.createdAt = createdAt;
         this.isActive = isActive;
-    }
-
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(boolean emailVerified) {
+        this.roleID = roleID;
         this.emailVerified = emailVerified;
-    }
-
-    public String getProfileImageURL() {
-        return profileImageURL;
-    }
-
-    public void setProfileImageURL(String profileImageURL) {
         this.profileImageURL = profileImageURL;
     }
 
-    public int getAccountID() {
-        return accountID;
-    }
-
-    public void setAccountID(int accountID) {
-        this.accountID = accountID;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public int getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
-    }
-
+    // Getters and Setters
+    public int getAccountID() { return accountID; }
+    public void setAccountID(int accountID) { this.accountID = accountID; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public boolean isIsActive() { return isActive; }
+    public void setIsActive(boolean isActive) { this.isActive = isActive; }
+    public int getRoleID() { return roleID; }
+    public void setRoleID(int roleID) { this.roleID = roleID; }
+    public boolean isEmailVerified() { return emailVerified; }
+    public void setEmailVerified(boolean emailVerified) { this.emailVerified = emailVerified; }
+    public String getProfileImageURL() { return profileImageURL; }
+    public void setProfileImageURL(String profileImageURL) { this.profileImageURL = profileImageURL; }
 }

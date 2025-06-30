@@ -1,5 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
@@ -38,9 +38,9 @@ public class CartDAO extends DBContext {
                 + "LEFT JOIN ProductVariants pv ON ci.VariantID = pv.VariantID "
                 + "WHERE c.AccountID = ?";
 
-        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, accountId);
-            try ( ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     // Tạo đối tượng CartItem
                     CartItem item = new CartItem();
@@ -92,7 +92,7 @@ public class CartDAO extends DBContext {
 
     public boolean deleteCartItem(int cartItemId) {
         String sql = "DELETE FROM CartItems WHERE CartItemID = ?";
-        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, cartItemId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0; // Trả về true nếu xóa thành công
@@ -102,4 +102,33 @@ public class CartDAO extends DBContext {
         }
     }
 
+    public boolean updateCartItemQuantity(int cartItemId, int quantity) {
+        String sql = "UPDATE CartItems SET Quantity = ? WHERE CartItemID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, cartItemId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Trả về false nếu có lỗi
+        }
+    }
+
+    public boolean updateCartItemVariant(int cartItemId, Integer variantId) {
+        String sql = "UPDATE CartItems SET VariantID = ? WHERE CartItemID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            if (variantId == null || variantId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, variantId);
+            }
+            ps.setInt(2, cartItemId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Trả về false nếu có lỗi
+        }
+    }
 }

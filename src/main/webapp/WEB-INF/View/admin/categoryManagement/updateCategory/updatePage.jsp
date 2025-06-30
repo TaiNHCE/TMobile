@@ -22,7 +22,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="Css/categoryDetail.css">
-        <link rel="stylesheet" href="Css/updateCategory2.css">
+        <link rel="stylesheet" href="Css/updateCategory.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>

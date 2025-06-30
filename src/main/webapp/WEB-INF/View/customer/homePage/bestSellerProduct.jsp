@@ -20,201 +20,117 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sản phẩm mới</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/newProduct1.css">
-        <style>
-            #product-scroll-best {
-                display: flex;
-                overflow-x: auto;
-                scroll-behavior: smooth;
-                padding-bottom: 10px;
-                width: 100%;
-                max-width: 100%;
-                scroll-snap-type: x mandatory;
-                gap: 10px;
-            }
+        <title>JSP Page</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/newProduct2.css">
 
-            .product-scroll-wrapper {
-                position: relative;
-                margin-left: 2%;
-                margin-right: 2%;
-                overflow: visible; /* Nếu bạn muốn nút nhô ra ngoài một chút */
-                width: 100%;
-                min-height: 300px; /* hoặc chiều cao vừa đủ chứa sản phẩm + nút */
-            }
-
-            .scroll-btn {
-                background-color: white;
-                border: 1px solid #ccc;
-                padding: 8px;
-                width: 40px;
-                height: 40px;
-                cursor: pointer;
-                border-radius: 50%;
-                font-size: 20px;
-                font-weight: bold;
-                color: #333;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease;
-                position: absolute;
-                top: 40%;
-                z-index: 10;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .scroll-btn:hover {
-                background-color: #f0f0f0;
-                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-                transform: scale(1.1);
-            }
-
-            .scroll-left-best {
-                left: 0;
-            }
-
-            .scroll-right-best {
-                right: 0;
-            }
-
-            #product-scroll-best {
-                display: flex;
-                overflow-x: auto;
-                scroll-behavior: smooth;
-                padding-bottom: 10px;
-            }
-
-            .sanPhamMoi {
-                box-sizing: border-box;
-                margin-left: 6px;
-
-                border-radius: 12px;                 /* bo góc */
-                padding: 10px;
-                background-color: #fff;              /* nền trắng (nếu cần) */
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* đậm hơn */
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-                flex-shrink: 0;
-                scroll-snap-align: start;
-            }
-
-            .sanPhamMoi:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);  /* hiệu ứng khi hover */
-            }
-
-            #product-scroll-best {
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE/Edge */
-            }
-
-            #product-scroll-best::-webkit-scrollbar {
-                display: none; /* Chrome, Safari */
-            }
-
-        </style>
     </head>
     <body>
-        <div class="" style="width: 95%; border-radius: 15px; margin-top: 1%; margin-left: 2.5%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-            <p class="new-product-label">Best Seller product</p>
 
-            <div style="display: flex; border-radius: 10px;">
-                <div class = "col-md-4" style="border-radius: 5px; margin-bottom: 1%">
-                    <img style="width: 100%; height: auto" src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919683/Bestseller_r69lpv.png">
+        <div class = "container" style = "border-radius: 15px; margin-top: 1%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* bóng nhẹ */">
+
+
+            <p class = "new-product-label">Bestselling Products</p>
+
+            <div style = "display: flex; border-radius: 10px;">
+                <div class = "" style = "width: 100%; border-radius: 5px; margin-bottom: 1%">
+                    <img style = "width: 100%; height: 100%" src = "https://olymstore.net/storage/21.11.2023/Olymstore%20001531%20(1).jpg">
                 </div>
 
-                <!-- PHẦN SẢN PHẨM CUỘN NGANG -->
-                <div class="product-scroll-wrapper">
-                    <!-- Nút trái -->
-                    <button style = "margin-right: 2%;" onclick="scrollLeft()" class="scroll-btn scroll-left-best">←</button>
+                <div class="row" style = "margin-left: 2%">
+                    <%
+                        if (productListBestSeller != null) {
+                    %>
 
-                    <!-- Danh sách sản phẩm -->
-                    <div id="product-scroll-best" style = "margin-left: 3%;">
-                        <% if (productListBestSeller != null) {
-                                for (Product pro : productListBestSeller) {
-                                    if (pro.getDiscount() != 0) {
-                                        oldPrice = pro.getPrice();
-                                        BigDecimal price = pro.getPrice();
-                                        int discount = pro.getDiscount();
+                    <%
+                        for (Product pro : productListBestSeller) {
+                            if (pro.getDiscount() != 0) {
+                                oldPrice = pro.getPrice();
 
-                                        BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
-                                        newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
+                                BigDecimal price = pro.getPrice();
+                                int discount = pro.getDiscount();
 
-                                        BigDecimal giaCu = oldPrice;
-                                        BigDecimal giaMoi = newPrice;
-                                        BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
+                                BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
+                                newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
+                    %>
 
-                                        Locale localeVN = new Locale("vi", "VN");
-                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                    <div class = "sanPhamMoi">
+                        <a name="id" href="<%= request.getContextPath()%>/Detail?id=" 
+                           style="text-decoration: none; color: inherit; display: block;">
 
-                                        String giaCuFormatted = currencyVN.format(oldPrice);
-                                        String giaMoiFormatted = currencyVN.format(giaMoi);
-                                        String giamFormatted = currencyVN.format(giaDaGiam);
-                        %>
-                        <div class="sanPhamMoi col-md-3">
-                            <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
-                                <div class="divHinh">
-                                    <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
-                                </div>
-                                <div class="divTraGop">
-                                    <p class="traGop">Trả góp 0%</p>
-                                </div>
-                                <p class="productName"><%= pro.getProductName()%></p>
-                                <p class="giaCu">
-                                    <s><%= giaCuFormatted%></s> 
-                                    <span style="color: red">-<%= discount%>%</span>
-                                </p>
-                                <p class="giaMoi"><%= giaMoiFormatted%> đ</p>
-                                <p class="giam">Giảm <%= giamFormatted%> đ</p>
-                            </a>
-                        </div>
-                        <% } else {
-                            oldPrice = pro.getPrice();
-                            Locale localeVN = new Locale("vi", "VN");
-                            NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
-                            String giaCuFormatted = currencyVN.format(oldPrice);
-                        %>
-                        <div class="sanPhamMoi col-md-2">
-                            <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
-                                <div class="divHinh">
-                                    <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
-                                </div>
-                                <div class="divTraGop">
-                                    <p class="traGop">Trả góp 0%</p>
-                                </div>
-                                <p class="productName"><%= pro.getProductName()%></p>
-                                <p class="giaMoi"><%= giaCuFormatted%> đ</p>
-                            </a>
-                        </div>
-                        <% } // end if discount
-                            } // end for
-                        } else { %>
-                        <p>null</p>
-                        <% }%>
+                            <div class = "divHinh">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                            </div>
+
+                            <div class = "divTraGop">
+                                <p class = "traGop">Trả góp 0%</p>
+                            </div>
+
+
+                            <%
+                                BigDecimal giaCu = oldPrice;
+                                BigDecimal giaMoi = newPrice;
+                                BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
+                            %>
+                            <%
+                                Locale localeVN = new Locale("vi", "VN");
+                                NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+
+                                String giaCuFormatted = currencyVN.format(oldPrice);
+                                String giaMoiFormatted = currencyVN.format(giaMoi);
+                                String giamFormatted = currencyVN.format(giaDaGiam);
+                            %>
+
+                            <p class = "productName"> <%= pro.getProductName()%></p>
+
+                            <p class = "giaCu">
+                                <s><%= giaCuFormatted%></s> 
+                                <span style = "color: red">-<%= (int) discount%>%</span></p>
+                            <p class= "giaMoi"><%= giaMoiFormatted%> đ</p>
+                            <p class = "giam">Giảm <%= giamFormatted%> đ</p>
+                        </a>
                     </div>
 
-                    <!-- Nút phải -->
-                    <button style = "margin-left: 2%;" onclick="scrollRight()" class="scroll-btn scroll-right-best">→</button>
+                    <%
+                    } else {
+                        oldPrice = pro.getPrice();
+                        Locale localeVN = new Locale("vi", "VN");
+                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                        String giaCuFormatted = currencyVN.format(oldPrice);
+                    %>
+                    <div class = "sanPhamMoi">
+                        <a name="id" href="<%= request.getContextPath()%>/Detail?id=" 
+                           style="text-decoration: none; color: inherit; display: block;">
+
+                            <div class = "divHinh">
+                                <img style = "width: 98%" src="<%= pro.getImageUrl()%>"  alt = "anhDienThoai" class = "anhDienThoaiDocQuyen">
+                            </div>
+
+                            <div class = "divTraGop">
+                                <p class = "traGop">Trả góp 0%</p>
+                            </div>
+
+                            <p class = "productName"> <%= pro.getProductName()%></p>
+
+
+                            <p class= "giaMoi"><%= giaCuFormatted%> đ</p>
+                            <p></p>
+                            <p></p>
+
+                        </a>
+                    </div>
+                    <%
+                            }
+                        }
+                    } else {
+
+                    %>
+                    <p>null</p>
+                    <%    }
+                    %>
+
                 </div>
             </div>
         </div>
-
-        <!-- JS scroll ngang -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const container = document.getElementById('product-scroll-best');
-                const scrollAmount = container.clientWidth;
-
-                document.querySelector('.scroll-left-best').addEventListener('click', () => {
-                    container.scrollBy({left: -scrollAmount, behavior: 'smooth'});
-                });
-
-                document.querySelector('.scroll-right-best').addEventListener('click', () => {
-                    container.scrollBy({left: scrollAmount, behavior: 'smooth'});
-                });
-            });
-        </script>
     </body>
 </html>
 

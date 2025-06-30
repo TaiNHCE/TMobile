@@ -1,21 +1,11 @@
 <%@page import="model.Account"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.text.NumberFormat, java.util.Locale"%>
 <% 
     Account acc = (Account) session.getAttribute("admin");
     if (acc == null || acc.getRoleID() != 1) {
         response.sendRedirect("LoginAdmin");
         return;
     }
-    Integer totalStaff = (Integer) request.getAttribute("totalStaff");
-    Integer totalProduct = (Integer) request.getAttribute("totalProduct");
-    Integer totalSupplier = (Integer) request.getAttribute("totalSupplier");
-    Long monthlyRevenue = (Long) request.getAttribute("monthlyRevenue");
-    if (totalStaff == null) totalStaff = 0;
-    if (totalProduct == null) totalProduct = 0;
-    if (totalSupplier == null) totalSupplier = 0;
-    if (monthlyRevenue == null) monthlyRevenue = 0L;
-    NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 %>
 
 <!DOCTYPE html>
@@ -32,66 +22,75 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css">
         <!-- Dashboard CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/adminDashboard.css">
-        <style>
-            .stat-card { min-width: 220px; }
-            .stat-value {
-                font-size: 2rem;
-                font-weight: bold;
-                margin-top: 12px;
-                color: #1c7ed6;
-            }
-        </style>
     </head>
     <body>
         <div class="container">
             <jsp:include page="sideBar.jsp" />
 
             <main class="main-content">
-                <header class="header d-flex justify-content-between align-items-center">
+                <header class="header">
                     <div class="header-left">
                         <h1>Dashboard</h1>
                     </div>
-                    <div class="user-info d-flex align-items-center">
-                        <div class="user-avatar me-3">AD</div>
-                        <div class="user-details me-3">
+                    <div class="user-info">
+                        <div class="user-avatar">AD</div>
+                        <div class="user-details">
                             <h3>Admin User</h3>
                             <p>Administrator</p>
                         </div>
-                        <button class="logout-btn btn btn-danger" onclick="alert('Logged out successfully!'); window.location.href = 'LoginAdmin';">
+
+                        <button class="logout-btn" onclick="alert('Logged out successfully!'); window.location.href = 'LoginAdmin';">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </div>
                 </header>
 
-                <!-- Thống kê 4 chỉ số -->
-                <div class="stats-grid d-flex justify-content-between my-5 gap-4">
-                    <div class="stat-card p-4 shadow rounded bg-white text-center">
-                        <div class="stat-header mb-2">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
                             Total Staff
-                            <span class="stat-icon ms-2"><i class="fas fa-user-tie"></i></span>
+                            <span class="stat-icon"><i class="fas fa-user-tie"></i></span>
                         </div>
-                        <div class="stat-value"><%= totalStaff %></div>
                     </div>
-                    <div class="stat-card p-4 shadow rounded bg-white text-center">
-                        <div class="stat-header mb-2">
+                    <div class="stat-card">
+                        <div class="stat-header">
                             Total Products
-                            <span class="stat-icon ms-2"><i class="fas fa-box"></i></span>
+                            <span class="stat-icon"><i class="fas fa-box"></i></span>
                         </div>
-                        <div class="stat-value"><%= totalProduct %></div>
                     </div>
-                    <div class="stat-card p-4 shadow rounded bg-white text-center">
-                        <div class="stat-header mb-2">
-                            Total Suppliers
-                            <span class="stat-icon ms-2"><i class="fas fa-users"></i></span>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            Total Supplier
+                            <span class="stat-icon"><i class="fas fa-users"></i></span>
                         </div>
-                        <div class="stat-value"><%= totalSupplier %></div>
                     </div>
-                    <div class="stat-card p-4 shadow rounded bg-white text-center">
-                        <div class="stat-header mb-2">
+                    <div class="stat-card">
+                        <div class="stat-header">
                             Monthly Revenue
-                            <span class="stat-icon ms-2"><i class="fas fa-chart-line"></i></span>
+                            <span class="stat-icon"><i class="fas fa-chart-line"></i></span>
                         </div>
-                        <div class="stat-value text-success"><%= nf.format(monthlyRevenue) %> ₫</div>
+                    </div>
+                </div>
+
+                <div class="content-area">
+                    <div class="content-header">
+                        Recent Admin Activities
+                    </div>
+                    <div class="content-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>User</th>
+                                    <th>Module</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic content can be added here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </main>

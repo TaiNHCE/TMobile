@@ -8,8 +8,7 @@
     <title>Supplier Detail</title>
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierLists5.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierLists.css">
 </head>
 <body>
 <div class="container mt-5">
@@ -42,12 +41,16 @@
                         <% } %>
                     </td>
                 </tr>
+
+                <!-- Bổ sung createdDate -->
                 <tr>
                     <th>Created Date:</th>
                     <td>
                         <%= supplier.getCreatedDate() != null ? supplier.getCreatedDate().format(formatter) : "N/A" %>
                     </td>
                 </tr>
+
+                <!-- Bổ sung lastModify -->
                 <tr>
                     <th>Last Modified:</th>
                     <td>
@@ -61,17 +64,11 @@
                     <i class="fa fa-arrow-left"></i> Back to List
                 </a>
                 <div>
-                    <a href="UpdateSupplier?id=<%= supplier.getSupplierID() %>" class="btn btn-warning">Edit</a>
-                    <!-- FORM bọc nút xóa -->
-                    <form class="delete-form" action="DeleteSupplier" method="post" style="display:inline;">
+                    <a href="UpdateSupplier?id=<%= supplier.getSupplierID() %>" class="btn btn-warning">Update</a>
+                    <form action="DeleteSupplier" method="get" style="display:inline;">
                         <input type="hidden" name="supplierID" value="<%= supplier.getSupplierID() %>"/>
                         <input type="hidden" name="taxId" value="<%= supplier.getTaxId() %>"/>
-                        <button type="button" class="btn btn-danger delete-btn"
-                            data-supplier-id="<%= supplier.getSupplierID() %>"
-                            data-tax-id="<%= supplier.getTaxId() %>"
-                            data-supplier-name="<%= supplier.getName() %>">
-                            Delete
-                        </button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 </div>
             </div>
@@ -86,34 +83,5 @@
         </div>
     </div>
 </div>
-<script>
-window.onload = function () {
-    // SweetAlert delete confirm giống Supplier List
-    const deleteBtns = document.querySelectorAll('.delete-btn');
-    deleteBtns.forEach(function(btn) {
-        btn.onclick = function(e) {
-            e.preventDefault();
-            const form = btn.closest('form');
-            const supplierId = btn.getAttribute('data-supplier-id');
-            const taxId = btn.getAttribute('data-tax-id');
-            const supplierName = btn.getAttribute('data-supplier-name');
-            Swal.fire({
-                title: 'Are you sure?',
-                html: `Do you want to delete supplier?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
-    });
-};
-</script>
 </body>
 </html>

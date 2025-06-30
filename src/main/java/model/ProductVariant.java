@@ -14,11 +14,11 @@ public class ProductVariant {
     private String imageUrl;
     private boolean isActive;
 
-    // Default constructor
+    // Constructor mặc định
     public ProductVariant() {
     }
 
-    // Full-argument constructor
+    // Constructor 10 tham số
     public ProductVariant(int variantId, int productId, String color, String storage, int quantity, 
                          BigDecimal price, int discount, String sku, String imageUrl, boolean isActive) {
         this.variantId = variantId;
@@ -33,7 +33,22 @@ public class ProductVariant {
         this.isActive = isActive;
     }
 
-    // Getters and Setters
+    // Constructor 9 tham số (cập nhật)
+    public ProductVariant(int variantId, int productId, String color, String storage, int quantity, 
+                         BigDecimal price, int discount, String imageUrl, boolean isActive) {
+        this.variantId = variantId;
+        this.productId = productId;
+        this.color = color;
+        this.storage = storage;
+        this.quantity = quantity;
+        this.price = price;
+        this.discount = discount;
+        this.sku = null; // Giá trị mặc định cho sku
+        this.imageUrl = imageUrl;
+        this.isActive = isActive;
+    }
+
+    // Getters và Setters
     public int getVariantId() {
         return variantId;
     }
