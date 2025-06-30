@@ -9,6 +9,7 @@ import com.cloudinary.utils.ObjectUtils;
 import dao.BrandDAO;
 import dao.CategoryDAO;
 import dao.ProductDAO;
+import dao.SupplierDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -28,6 +29,7 @@ import java.util.Map;
 import model.Brand;
 import model.Category;
 import model.Product;
+import model.Suppliers;
 
 /**
  *
@@ -100,11 +102,16 @@ public class AdminUpdateInfoServlet extends HttpServlet {
 
             List<Category> categoryList = cateDao.getAllCategory();
             List<Brand> brandList = brandDao.getAllBrand();
-            Product product = proDao.getProductByID(productId);
+            Product product = proDao.getProductById(productId);
 
             request.setAttribute("categoryList", categoryList);
             request.setAttribute("brandList", brandList);
             request.setAttribute("product", product);
+
+            SupplierDAO supDAO = new SupplierDAO();
+            List<Suppliers> supList = supDAO.getAllSuppliers();
+
+            request.setAttribute("supList", supList);
             request.getRequestDispatcher("/WEB-INF/View/admin/productManagement/updateProduct/updateInfo/updateInfo.jsp").forward(request, response);
         }
 
@@ -146,6 +153,7 @@ public class AdminUpdateInfoServlet extends HttpServlet {
 
         int Category = Integer.parseInt(request.getParameter("category"));
         int Brand = Integer.parseInt(request.getParameter("brand"));
+        int supplier = Integer.parseInt(request.getParameter("suppliers"));
 
         boolean isFeatured = request.getParameter("isFeatured") != null;
         boolean isBestSeller = request.getParameter("isBestSeller") != null;
@@ -156,39 +164,38 @@ public class AdminUpdateInfoServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
-            Product product = proDAO.getProductByID(id);
-            Part part = request.getPart("file");
+        Product product = proDAO.getProductByID(id);
+        Part part = request.getPart("file");
 
-            String imageUrl = product.getImageUrl();
-            if (part.getName().equals("file") && part.getSize() > 0) {
+        String imageUrl = product.getImageUrl();
+        if (part.getName().equals("file") && part.getSize() > 0) {
 
-                InputStream is = part.getInputStream();
+            InputStream is = part.getInputStream();
 
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                byte[] data = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = is.read(data, 0, data.length)) != -1) {
-                    buffer.write(data, 0, bytesRead);
-                }
-                byte[] fileBytes = buffer.toByteArray();
-
-                Map uploadResult = cloudinary.uploader().upload(fileBytes,
-                        ObjectUtils.asMap("resource_type", "auto"));
-
-                if (imageUrl != null) {
-                    imageUrl = (String) uploadResult.get("secure_url");
-                }
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] data = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
             }
+            byte[] fileBytes = buffer.toByteArray();
+
+            Map uploadResult = cloudinary.uploader().upload(fileBytes,
+                    ObjectUtils.asMap("resource_type", "auto"));
+
+            if (imageUrl != null) {
+                imageUrl = (String) uploadResult.get("secure_url");
+            }
+        }
 
 //        <====================================== Xử lý anh ===========================================>
-            boolean res = proDAO.updateProductInfo(id, productName, price, stock, Category, Brand, isFeatured, isBestSeller, isNew, isActive, imageUrl);
+        boolean res = proDAO.updateProductInfo(id, productName, price, stock, supplier, Category, Brand, isFeatured, isBestSeller, isNew, isActive, imageUrl);
 
-            if (res) {
-                response.sendRedirect("AdminUpdateInfo?productId=" + id + "&success=1");
-            } else {
-                response.sendRedirect("AdminUpdateInfo?productId=" + id + "&error=1");
-            }
-        
+        if (res) {
+            response.sendRedirect("AdminUpdateInfo?productId=" + id + "&success=1");
+        } else {
+            response.sendRedirect("AdminUpdateInfo?productId=" + id + "&error=1");
+        }
 
     }
 

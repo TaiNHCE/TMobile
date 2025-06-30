@@ -4,6 +4,7 @@
     Author     : HP - Gia Khiêm
 --%>
 
+<%@page import="model.Suppliers"%>
 <%@page import="model.Brand"%>
 <%@page import="model.Category"%>
 <%@page import="java.util.List"%>
@@ -18,6 +19,8 @@
     Product product = (Product) request.getAttribute("product");
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
     List<Brand> brandList = (List<Brand>) request.getAttribute("brandList");
+    List<Suppliers> supList = (List<Suppliers>) request.getAttribute("supList");
+
 %>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!DOCTYPE html>
@@ -87,6 +90,20 @@
                                 <div class="mb-3">
                                     <label class="form-label">Price</label>
                                     <input type="text" min="1" class="form-control" name="price" required value="<%= priceFormatted%>"/>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Supplier</label>
+                                    <select class="form-control" id="suppliers" name="suppliers">
+                                        <option value="">-- Select Supplier --</option>
+                                        <% for (Suppliers sup : supList) {
+                                                boolean isSelected = (sup.getSupplierID() == product.getSupplierId());
+                                        %>
+                                        <option value="<%= sup.getSupplierID()%>" <%= isSelected ? "selected" : ""%>>
+                                            <%= sup.getName()%>
+                                        </option>
+                                        <% }%>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

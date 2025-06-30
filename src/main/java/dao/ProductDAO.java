@@ -558,6 +558,7 @@ public class ProductDAO extends DBContext {
                 int stock = rs.getInt("Stock");
                 String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
+                String supplierName = rs.getString("Name");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
                 int brandId = rs.getInt("BrandID");
@@ -652,10 +653,9 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    public boolean updateProductInfo(int id, String productName, BigDecimal price, int stock,
-            int category, int brand, boolean isFeatured, boolean isBestSeller,
+    public boolean updateProductInfo(int id, String productName, BigDecimal price, int stock, int suppliers, int category, int brand, boolean isFeatured, boolean isBestSeller,
             boolean pnew, boolean isActive, String img) {
-        String sql1 = "UPDATE Products SET ProductName = ?, Price = ?, Stock = ?, CategoryID = ?, "
+        String sql1 = "UPDATE Products SET ProductName = ?, Price = ?, Stock = ?, SupplierID = ?, CategoryID = ?, "
                 + "BrandID = ?, IsFeatured = ?, IsBestSeller = ?, IsNew = ?, IsActive = ? WHERE ProductID = ?";
 
         String sql2 = "UPDATE ProductImages SET ImageURL = ? WHERE ProductID = ?";
@@ -666,13 +666,14 @@ public class ProductDAO extends DBContext {
             pstmt1.setString(1, productName);
             pstmt1.setBigDecimal(2, price);
             pstmt1.setInt(3, stock);
-            pstmt1.setInt(4, category);
-            pstmt1.setInt(5, brand);
-            pstmt1.setBoolean(6, isFeatured);
-            pstmt1.setBoolean(7, isBestSeller);
-            pstmt1.setBoolean(8, pnew);
-            pstmt1.setBoolean(9, isActive);
-            pstmt1.setInt(10, id);
+            pstmt1.setInt(4, suppliers);
+            pstmt1.setInt(5, category);
+            pstmt1.setInt(6, brand);
+            pstmt1.setBoolean(7, isFeatured);
+            pstmt1.setBoolean(8, isBestSeller);
+            pstmt1.setBoolean(9, pnew);
+            pstmt1.setBoolean(10, isActive);
+            pstmt1.setInt(11, id);
 
             int rows1 = pstmt1.executeUpdate();
 

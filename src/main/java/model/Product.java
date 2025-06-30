@@ -70,6 +70,28 @@ public class Product {
         this.isActive = isActive;
         this.imageUrl = imageUrl;
     }
+    
+    public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, String supplierName, int categoryId, String categoryName, int brandId, String brandName, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
+        this.productId = productId;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.discount = discount;
+        this.stock = stock;
+        this.status = status;
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.brandId = brandId;
+        this.brandName = brandName;
+        this.isFeatured = isFeatured;
+        this.isBestSeller = isBestSeller;
+        this.isNew = isNew;
+        this.warrantyPeriod = warrantyPeriod;
+        this.isActive = isActive;
+        this.imageUrl = imageUrl;
+    }
 
     public Product(int productId, String productName, BigDecimal price, int discount, int stock, String status, boolean isActive) {
         this.productId = productId;
@@ -217,6 +239,12 @@ public class Product {
     public String getBrandName() {
         return brandName;
     }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+    
+    
 
     @Override
     public String toString() {
