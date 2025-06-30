@@ -11,6 +11,7 @@ import java.math.BigDecimal;
  * @author HP - Gia Khiêm
  */
 public class Product {
+
     private int productId;
     private String productName;
     private String description;
@@ -31,6 +32,7 @@ public class Product {
     private boolean isActive;
     private String imageUrl;
 
+   
     public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, int categoryId, int brandId, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
         this.productId = productId;
         this.productName = productName;
@@ -93,6 +95,9 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    
+
+
     public Product(int productId, String productName, BigDecimal price, int discount, int stock, String status, boolean isActive) {
         this.productId = productId;
         this.productName = productName;
@@ -103,7 +108,9 @@ public class Product {
         this.isActive = isActive;
     }
 
+
     public Product(){}
+
     public int getProductId() {
         return productId;
     }
@@ -235,6 +242,7 @@ public class Product {
     public String getCategoryName() {
         return categoryName;
     }
+
 
     public String getBrandName() {
         return brandName;

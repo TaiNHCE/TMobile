@@ -320,6 +320,7 @@ public class StaffDAO extends DBContext {
         return false;
     }
 
+
     public int getTotalStaff() {
         String sql = "SELECT COUNT(*) FROM Staff";
         try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
@@ -331,6 +332,7 @@ public class StaffDAO extends DBContext {
         }
         return 0;
     }
+
 
     public int getStaffIdByAccountId(int accountId) {
         String sql = "SELECT StaffID FROM Staff WHERE AccountID = ?";
