@@ -14,8 +14,8 @@
     <body>
 
         <!-- Banner -->
-        <div class="category-banner-full2" style = "margin-top: 1%">
-            <img src="https://file.hstatic.net/1000370129/collection/galaxy_s21_series_-_banner_collection_3795242c4c6d4e0a95b0a1aa2487c6a7.png" alt="Banner" class="img-fluid">
+        <div class="category-banner-full2 col-md-12" style = "margin-top: 1%">
+            <img style = "width: 100%" src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750922275/Banner2Dai_srnutu.png" alt="Banner" class="img-fluid">
         </div>
 
     </body>
@@ -24,20 +24,13 @@
 <style>
     .category-banner-full2 {
         border-radius: 15px;
-        width: 100vw;
-        height: 300px; /* Hoặc chiều cao bạn muốn: 200px, 300px,... */
+        width: 98%;
         overflow: hidden;
         margin: 0;
         padding: 0;
         overflow: hidden;
+        margin-top: 1%;
+        margin-left: 1%;
+        background-color: #ffffff;
     }
-
-    .category-banner-full2 img {
-        width: 99%;
-        height: 100%;
-        object-fit: cover; /* Cắt ảnh để vừa khung mà không méo */
-        display: block;
-         object-fit: cover; /* cắt ảnh, không méo */
-    }
-
 </style>
