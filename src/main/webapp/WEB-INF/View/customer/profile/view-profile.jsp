@@ -16,17 +16,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Staff detail</title>
+        <title>View Profile</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierLists5.css">
     </head>
     <body>
-        <a href="Home"  id="back"><i class="bi bi-arrow-return-left"></i> Home</a>
-        <% if (sta == null) {
-                out.print("<p>There is no customer with that id</p>");
-            } else {
-        %>
-        <div class="container mt-5">
+        <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
+
+        <div class="container-fluid mt-5">
             <div class="card mx-auto shadow" style="max-width: 700px;">        
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">Profile</h4>
@@ -80,8 +76,8 @@
                                     %>
 
                                     <%= (birth == null || birth.isEmpty())
-                ? "<span style='color:red'>Vui lòng nhập ngày tháng năm sinh</span>"
-                : birthFormatted%>
+                                            ? "<span style='color:red'>Vui lòng nhập ngày tháng năm sinh</span>"
+                                            : birthFormatted%>
                                 </td>
                             </tr>
                             <tr>
@@ -108,9 +104,9 @@
 
                             </div>
                         </div>
-                </form>
-                <%
-                    }
-                %>
-                </body>
-                </html>
+                </form> <!-- đóng form đúng chỗ -->
+            </div> <!-- đóng card -->
+        </div> <!-- đóng container -->
+        <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
+    </body>
+</html>
