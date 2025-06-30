@@ -53,30 +53,52 @@
         </h4>
     </div>
     <div class="sidebar-menu">
-        <a href="StaffDashboard" class="active">
-            <i class="fas fa-tachometer-alt"></i>
-            Dashboard
-        </a>
-        <a href="/orders">
-            <i class="fas fa-shopping-cart"></i>
-            Orders
-        </a>
-        <a href="/products">
-            <i class="fas fa-box"></i>
-            Products
-        </a>
-        <a href="ImportStatistic">
-            <i class="fas fa-warehouse"></i>
-            Stock
-        </a>
-        <a href="/customers">
-            <i class="fas fa-users"></i>
-            Customers
-        </a>
-        <a href="/feedback">
-            <i class="fas fa-comments"></i>
-            Feedback
-        </a>
-    </div>
+    <a href="StaffDashboard" class="nav-link">
+        <i class="fas fa-tachometer-alt"></i>
+        Dashboard
+    </a>
+    <a href="/orders" class="nav-link">
+        <i class="fas fa-shopping-cart"></i>
+        Orders
+    </a>
+    <a href="/products" class="nav-link">
+        <i class="fas fa-box"></i>
+        Products
+    </a>
+    <a href="ImportStatistic" class="nav-link">
+        <i class="fas fa-warehouse"></i>
+        Stock
+    </a>
+    <a href="/customers" class="nav-link">
+        <i class="fas fa-users"></i>
+        Customers
+    </a>
+    <a href="/feedback" class="nav-link">
+        <i class="fas fa-comments"></i>
+        Feedback
+    </a>
 </div>
 
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const path = window.location.pathname.toLowerCase();
+    const navLinks = document.querySelectorAll(".nav-link");
+    let found = false;
+    navLinks.forEach(link => {
+        const href = link.getAttribute("href").toLowerCase().replace(/^\//, '');
+        const lastPath = path.split("/").filter(x => x).pop() || '';
+        if (lastPath === href.toLowerCase()) {
+            navLinks.forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+            found = true;
+        }
+    });
+    if (!found && navLinks.length > 0) {
+        navLinks.forEach(l => l.classList.remove("active"));
+        navLinks[0].classList.add("active");
+    }
+});
+
+</script>

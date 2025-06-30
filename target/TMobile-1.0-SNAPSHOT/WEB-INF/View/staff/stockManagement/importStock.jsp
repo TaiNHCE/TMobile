@@ -165,7 +165,7 @@
                     <h1>Import Stock</h1>
 
                     <form class="search-form mb-4" method="get" style="min-height: 45px;">
-                        <!-- Không có filter -->
+                      
                     </form>
                     <!-- Selected Supplier -->
                     <c:set value="${sessionScope.supplier}" var="sup" />
@@ -220,8 +220,8 @@
                                         <td>${d.getProduct().getProductName()}</td>
                                         <td>${d.getQuantity()}</td>
                                         <td>${d.unitPrice}</td>
-                                        <td>
-                                            <button class="btn-edit edit-product"
+                                        <td class="text-center">
+                                            <button class="btn btn-warning edit-product"
                                                     data-id="${d.getProduct().getProductId()}"
                                                     data-name="${d.getProduct().getProductName()}"
                                                     data-quantity="${d.getQuantity()}"
@@ -230,13 +230,14 @@
                                                 Edit
                                             </button>
                                         </td>
+
                                     </tr>
                                     <c:set var="sum" value="${sum + d.getQuantity() * d.getUnitPrice()}" scope="page"/>
                                 </c:forEach>
                                 <tr>
                                     <td colspan="3"></td>
                                     <td class="text-end fw-bold">Total:</td>
-                                    <td class="fw-bold" id="totalAmount">${sum} VND</td>
+                                    <td class="fw-bold text-center" id="totalAmount">${sum} VND</td>
                                 </tr>
                             </tbody>
                         </table>
