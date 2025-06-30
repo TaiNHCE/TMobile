@@ -26,7 +26,7 @@
                 Product Management
             </h1>
         </div>
-        <button class="create-btn" onclick="location.href = 'AdminAddProduct'">Create</button>
+        <a class="create-btn" href="AdminCreateProduct">Create</a>
 
         <form class="search-form" action="AdminProduct" method="get" style="margin-top: 32px;">
             <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
@@ -47,4 +47,29 @@
 
 
     </body>
+
+    <style>
+
+        .create-btn {
+            background: #22c55e;
+            color: #fff;
+            margin-bottom: 12px;
+            float: right;
+            min-width: 110px;
+            border: 1.5px solid #1e9c46;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+            transition: background 0.2s ease;
+        }
+
+        .create-btn:hover {
+            background: #1e9c46;
+            color: #fff;
+        }
+
+    </style>
 </html>

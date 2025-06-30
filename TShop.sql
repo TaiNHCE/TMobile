@@ -143,7 +143,7 @@ CREATE TABLE ImgProductDetails(
 	ImageURL2 NVARCHAR(500),
 	ImageURL3 NVARCHAR(500),
 	ImageURL4 NVARCHAR(500),
-	ProductDetailID INT FOREIGN KEY REFERENCES ProductDetails(ProductDetailID) ON DELETE CASCADE
+	ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE CASCADE
 );         
 
 CREATE TABLE ProductVariants (
@@ -338,11 +338,11 @@ SET IDENTITY_INSERT Accounts ON;
 -- Chèn dữ liệu vào bảng Accounts
 SET IDENTITY_INSERT Accounts ON;
 
-INSERT INTO Accounts (AccountID, Email, PasswordHash, CreatedAt, IsActive, RoleID, EmailVerified, ProfileImageURL)
+INSERT INTO Accounts ( Email, PasswordHash, CreatedAt, IsActive, RoleID, EmailVerified, ProfileImageURL)
 VALUES
-(4, N'tanmnce182352@fpt.edu.vn', N'e10adc3949ba59abbe56e057f20f883e', '2025-06-12T10:30:39.293', 1, 1, 0, NULL),
-(5, N'user1@example.com', N'E10ADC3949BA59ABBE56E057F20F883E', '2025-06-12T13:57:31.773', 1, 2, 0, NULL),
-(6, N'user2@example.com', N'E10ADC3949BA59ABBE56E057F20F883E', '2025-06-12T13:57:31.773', 1, 2, 0, NULL);
+( N'tanmnce182352@fpt.edu.vn', N'e10adc3949ba59abbe56e057f20f883e', '2025-06-12T10:30:39.293', 1, 1, 0, NULL),
+(N'user1@example.com', N'E10ADC3949BA59ABBE56E057F20F883E', '2025-06-12T13:57:31.773', 1, 2, 0, NULL),
+( N'user2@example.com', N'E10ADC3949BA59ABBE56E057F20F883E', '2025-06-12T13:57:31.773', 1, 2, 0, NULL);
 
 SET IDENTITY_INSERT Accounts OFF;
 
@@ -496,7 +496,7 @@ values (1, 'Machine Type', 1),
 	   (3, 'Footless, wall-mounted size', 17),
 	   (3, 'Footless Weight', 17),
 	   (3, 'Firm', 17)
-	   select * from Products
+	   
 -- Data Brands
 INSERT INTO Brands(BrandName, Description, CategoryID, ImgURLLogo) VALUES
 ('Panasonic', '', 1, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFgrxUMQQfftPQY0y_vDvEFs5Athmo8laMLA&s'),
@@ -564,6 +564,7 @@ INSERT INTO Suppliers (
 
 -- XIAOMI
 ('0315464460', 'XIAOMI Vietnam', 'support.vn@xiaomi.com', '1800 400 410', '125 Example St, District 1, HCMC', GETDATE(), GETDATE(), 0, 1, 'Le Quang Huy', 'Consumer Electronics, Home Appliances', N'XIAOMI - Smart devices and innovative electronics.');
+
 insert into Products([ProductName], [Description], [Price], [Discount], [SupplierID], [CategoryID], [BrandID], IsNew, [IsFeatured], [IsBestSeller], [WarrantyPeriod])
 VALUES
 ------- máy lạnh ------->
@@ -669,8 +670,7 @@ VALUES
 		----Toshiba
 		('Toshiba 1.8 Liter Electric Rice Cooker RC-18DR2PV(K)', '', 2690000, 5, 1, 1, 20, 1, 0, 1, 12)
 ----- Noi com---------
-	  update ProductImages set ImageURL = 'https://res.cloudinary.com/dgnyskpc3/image/upload/v1750867614/panasonic-inverter-1-hp-cu-cs-pu9akh-8top-tskt2-700x467_ubai4v.jpg'
-	  where ProductID = 1
+	  
 -- insert data productImage table
 insert into ProductImages(ProductID, ImageURL, AltText)
 VALUES (1, 'https://res.cloudinary.com/dgnyskpc3/image/upload/v1750867614/panasonic-inverter-1-hp-cu-cs-pu9akh-8top-tskt2-700x467_ubai4v.jpg', ''),
@@ -852,8 +852,8 @@ VALUES
 		(1, 39, 'Dimensions: 159.9 x 76.7 x 8.25 mm; Weight: 221 g'),
 		(1, 40, '09/2023'),
 		(1, 41, 'iPhone (Apple).');
-
-insert into ImgProductDetails(ImageURL1, ImageURL2, ImageURL3, ImageURL4, ProductDetailID)
+		
+insert into ImgProductDetails(ImageURL1, ImageURL2, ImageURL3, ImageURL4, ProductID)
 VALUES
 		('https://res.cloudinary.com/dgnyskpc3/image/upload/v1750867699/panasonic-inverter-1-hp-cu-cs-pu9akh-8top-tskt3-700x467_cx5stl.jpg', 
 		'https://res.cloudinary.com/dgnyskpc3/image/upload/v1750867726/panasonic-inverter-1-hp-cu-cs-pu9akh-8top-tskt4-700x467_mli1as.jpg', 
