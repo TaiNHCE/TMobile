@@ -1,132 +1,108 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="model.Order" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Order List</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html>
-    <head>
-        <title>Order List</title>
-        <style>
-            table {
-                border-collapse: collapse;
-                width: 100%;
-            }
+    <!-- Bootstrap & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            th, td {
-                border: 1px solid #ccc;
-                padding: 8px;
-                text-align: left;
-            }
+    <!-- Sidebar & Shared Styles -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
 
-            th {
-                background-color: #f5f5f5;
-            }
+    <%
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    %>
+</head>
+<body>
+    <div class="container">
+        <jsp:include page="../sideBar.jsp" />
+        <div class="wrapper">
+            <main class="main-content">
+                <h1>Orders</h1>
 
-            .btn-view {
-                background-color: #007bff;
-                color: white;
-                padding: 6px 12px;
-                border: none;
-                border-radius: 4px;
-                text-decoration: none;
-            }
+                <!-- Search Form -->
+                <form class="search-form" method="get" action="ViewOrderList">
+                    <input type="text" name="search" placeholder="Search by Name, Phone..." value="${searchQuery}" />
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
 
-            .btn-view:hover {
-                background-color: #0056b3;
-            }
-        </style>
-    </head>
-    <body>
+                <!-- Alert if message exists -->
+                <c:if test="${not empty message}">
+                    <div class="alert alert-danger">${message}</div>
+                </c:if>
 
-        <h2>Order List</h2>
+                <!-- Order Table -->
+                <c:if test="${not empty orderList}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Total Amount</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="order" items="${orderList}">
+                                <tr>
+                                    <td>#${order.orderID}</td>
+                                    <td>${order.fullName}</td>
+                                    <td>${order.phone}</td>
+                                    <td>${order.address}</td>
+                                    <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫" /></td>
+                                    <td>${order.orderDate}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${order.status == 1}">
+                                                <span class="status-inactive">Waiting</span>
+                                            </c:when>
+                                            <c:when test="${order.status == 2}">
+                                                <span class="status-inactive">Packaging</span>
+                                            </c:when>
+                                            <c:when test="${order.status == 3}">
+                                                <span class="status-inactive">Awaiting Delivery</span>
+                                            </c:when>
+                                            <c:when test="${order.status == 4}">
+                                                <span class="status-active">Delivered</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="status-inactive">Cancelled</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <div class="text-center">
+                                        <a href="ViewOrderDetail?orderID=${order.orderID}" class="btn btn-primary">
+                                            Detail
+                                        </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:if>
 
-        <c:if test="${not empty message}">
-            <p style="color: red;">${message}</p>
-        </c:if>
-
-        <c:if test="${not empty orderList}">
-            <form action="${pageContext.request.contextPath}/ViewOrderList" method="GET"
-                  class="search-container">
-                <input type="text" name="search" id="searchInput" value="${searchQuery}" 
-                       placeholder="Search by Name, Phone..." class="search-input">
-                <button type="submit" class="search-button">
-                    🔍
-                </button>
-            </form>
-            <br/>
-
-            <table>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer Name</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Total Amount</th>
-                    <th>Order Date</th>
-                    <th>Status</th>
-                </tr>
-                <c:forEach var="order" items="${orderList}">
-                    <tr>
-                        <td>#${order.orderID}</td>
-                        <td>${order.fullName}</td>
-                        <td>${order.phone}</td>
-                        <td>${order.address}</td>
-                        <td>${order.totalAmount}</td>
-                        <td>${order.orderDate}</td>
-                        <td class="order-status">
-                            <c:choose>
-                                <c:when test="${order.status == 1}">
-                                    <span class="status waiting">
-                                        <i class="fa-solid fa-hourglass-half"></i> Waiting For Acceptance
-                                    </span>
-                                </c:when>
-                                <c:when test="${order.status == 2}">
-                                    <span class="status packaging">
-                                        <i class="fa-solid fa-box"></i> Packaging
-                                    </span>
-                                </c:when>
-                                <c:when test="${order.status == 3}">
-                                    <span class="status waiting-delivery">
-                                        <i class="fa-solid fa-truck"></i> Waiting For Delivery
-                                    </span>
-                                </c:when>
-                                <c:when test="${order.status == 4}">
-                                    <span class="status delivered">
-                                        <i class="fa-solid fa-check-circle"></i> Delivered
-                                    </span>
-                                </c:when>
-                                <c:otherwise>
-                                    <span class="status cancelled">
-                                        <i class="fa-solid fa-times-circle"></i> Cancelled
-                                    </span>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <a href="ViewOrderDetail?orderID=${order.orderID}" class="btn btn-outline-info btn-sm">
-                                    <i class="fa-solid fa-eye"></i> View Details
-                                </a>
-
-                            </div>
-
-                        </td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </c:if>
-
-        <c:if test="${empty orderList}">
-            <form action="${pageContext.request.contextPath}/ViewOrderList" method="GET"
-                  class="search-container">
-                <input type="text" name="search" id="searchInput" value="${searchQuery}" 
-                       placeholder="Search by Name, Phone..." class="search-input">
-                <button type="submit" class="search-button">
-                    🔍
-                </button>
-            </form>
-
-            <p>No orders available.</p>
-        </c:if>
-    </body>
+                <!-- If order list is empty -->
+                <c:if test="${empty orderList}">
+                    <div class="text-center">No orders found!</div>
+                </c:if>
+            </main>
+        </div>
+    </div>
+</body>
 </html>
