@@ -96,39 +96,19 @@ public class UpdateOrderStatusServlet extends HttpServlet {
             OrderDAO oDAO = new OrderDAO();
 
             if (status != null && orderID != null) {
-                int orderIdInt = Integer.parseInt(orderID);
-                int orderStatus = Integer.parseInt(status);
                 int count = oDAO.updateOrder(Integer.parseInt(orderID), Integer.parseInt(status));
-                // Retrieve customer details
-//                Customer customer = oDAO.getCustomerByOrderId(orderIdInt);
-//                if (customer == null || customer.getEmail() == null || customer.getEmail().isEmpty()) {
-//                    System.out.println("ERROR: Customer email is missing!");
-//                    return; // Không gửi email nếu email bị null
-//                }
 
-                // Fetch order details
-                OrderDetailDAO odDAO = new OrderDetailDAO();
-                List<OrderDetail> orderItems = odDAO.getOrderDetail(orderID);
-                if (orderItems == null || orderItems.isEmpty()) {
-                    System.out.println("ERROR: Order items are empty!");
-                    return;
-                }
-
-//                // Send order confirmation email
-//                sendOrderConfirmationEmail(customer, orderID, orderStatus, orderItems);
-                // Redirect to order list view
                 if (count > 0) {
-
-                    response.sendRedirect(request.getContextPath() + "/UpdateOrder?orderID=" + orderID);
-
+                    // ✅ Update thành công → quay về danh sách và show thông báo
+                    response.sendRedirect(request.getContextPath() + "/ViewOrderList?success=update");
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/UpdateOrder?orderID=" + orderID);
-
-
+                    // ❌ Update thất bại → vẫn quay về danh sách nhưng hiện thông báo lỗi
+                    response.sendRedirect(request.getContextPath() + "/ViewOrderList?error=1");
                 }
             } else {
-               response.sendRedirect(request.getContextPath() + "/UpdateOrder?orderID=" + orderID);
+                response.sendRedirect(request.getContextPath() + "/ViewOrderList?error=1");
             }
+
         } catch (NumberFormatException e) {
             System.out.println(e);
         }

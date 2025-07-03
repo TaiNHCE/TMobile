@@ -143,5 +143,32 @@
                 </main>
             </div>
         </div>
+        <%
+            String success = request.getParameter("success");
+            String error = request.getParameter("error");
+        %>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            window.onload = function () {
+            <% if ("update".equals(success)) { %>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật thành công!',
+                    text: 'Trạng thái đơn hàng đã được cập nhật.',
+                    timer: 3000,
+                    confirmButtonText: 'OK'
+                });
+            <% } else if ("1".equals(error)) { %>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Không thể cập nhật trạng thái đơn hàng.',
+                    timer: 3000,
+                    confirmButtonText: 'Thử lại'
+                });
+            <% }%>
+            };
+        </script>
+
     </body>
 </html>
