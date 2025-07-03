@@ -229,6 +229,7 @@
                                                     data-saleprice="${d.getProduct().getPrice()}">
                                                 Edit
                                             </button>
+
                                         </td>
 
                                     </tr>
@@ -376,7 +377,7 @@
                                 </div>
                                 <div class="mt-2 text-end">
                                     <button type="button" class="create-btn" onclick="redirectToImport()">Import</button>
-                                    <button type="button" class="back-btn" onclick="cancelImportStock()" style="margin-left: 10px;">Cancel</button>
+                                    <button type="button" class="back-btn" onclick="cancelEditImportStock()" style="margin-left: 10px;">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -586,6 +587,9 @@
                                         // Cancel button: redirect to import statistics page
                                         function cancelImportStock() {
                                             window.location.href = 'ImportStatistic';
+                                        }
+                                        function cancelEditImportStock() {
+                                            window.location.href = 'ImportStock';
                                         }
 
                                         // Import button: submit form
