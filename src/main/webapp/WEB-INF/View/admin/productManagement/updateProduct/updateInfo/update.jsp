@@ -4,6 +4,7 @@
     Author     : HP - Gia Khiêm
 --%>
 
+<%@page import="model.Suppliers"%>
 <%@page import="model.Brand"%>
 <%@page import="model.Category"%>
 <%@page import="java.util.List"%>
@@ -18,6 +19,8 @@
     Product product = (Product) request.getAttribute("product");
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
     List<Brand> brandList = (List<Brand>) request.getAttribute("brandList");
+    List<Suppliers> supList = (List<Suppliers>) request.getAttribute("supList");
+
 %>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!DOCTYPE html>
@@ -26,37 +29,43 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Update Product</title>
         <link rel="stylesheet" href="Css/staffUpdateProduct1.css">
-        
+
     </head>
     <body>
         <% if (product != null) {%>
         <div class="container">
-            
-            <div style="text-align: right; margin-right: 3.5%;">
-                <a href="..." class="btn btn-primary" style="border: none; background-color: #00b8d9;">
-                    <i class="bi bi-tools"></i> Edit Detail
-                </a>
-            </div>
+
+
 
             <div class="row justify-content-center" style="display: flex">
                 <div class=" col-md-12">
 
-                    <form method="post" action="StaffUpdateInfo" enctype="multipart/form-data">
+                    <form method="post" action="AdminUpdateInfo" enctype="multipart/form-data">
                         <div class="row">
 
-                            <div class="col-md-6 text-center"
-                                 style="margin-top: 2%; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); background-color: #ffffff; max-height: 500px">
+                            <div style="margin-left: 82%">
+                                <a href="AdminUpdateProductDetail?productId=<%= product.getProductId()%>" class="btn btn-primary" style="border: none; background-color: #00b8d9;">
+                                    <i class="bi bi-tools"></i> Edit Detail
+                                </a>
+                            </div>
+
+                            <div class="col-md-5 text-center d-flex flex-column"
+                                 style="border-radius: 15px; margin-top: 2%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); background-color: #ffffff; height: 350px; max-height: 400px; padding: 12px;">
+
                                 <label for="fileInput" style="cursor: pointer;">
                                     <img id="previewImage" src="<%= product.getImageUrl()%>"
-                                         style="width: 100%; margin-top: 2%; object-fit: cover; border-radius: 10px; max-height: 465px"
+                                         style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 320px;"
                                          alt="Click to change image"
                                          title="Click to change image">
                                 </label>
-                                <p style="margin-top: 1%; font-size: 14px; color: #888;">Click the image to change the product photo</p>
+
+                                <p style="margin-top: auto; font-size: 14px; color: #888;">Click the image to change the product photo</p>
+
                                 <input type="file" name="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewSelectedImage(event)">
                             </div>
 
-                            <div class="form-wrapper col-md-5">
+
+                            <div class="form-wrapper col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">ID</label>
                                     <input type="text" class="form-control" name="id" required value="<%= product.getProductId()%>" readonly/>
@@ -68,20 +77,33 @@
                                 </div>
 
                                 <%
-                                    BigDecimal price = product.getPrice();
-                                    Locale localeVN = new Locale("vi", "VN");
-                                    NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
-                                    String priceFormatted = currencyVN.format(price);
-                                %>
+                                    String priceFormatted = "";
+                                    if (product.getPrice() != null) {
+                                        BigDecimal price = product.getPrice();
+                                        Locale localeVN = new Locale("vi", "VN");
+                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                                        priceFormatted = currencyVN.format(price);
+                                    }
 
+                                %>
+                                
                                 <div class="mb-3">
                                     <label class="form-label">Price</label>
                                     <input type="text" min="1" class="form-control" name="price" required value="<%= priceFormatted%>"/>
                                 </div>
-
+                                
                                 <div class="mb-3">
-                                    <label class="form-label">Stock</label>
-                                    <input type="number" min="1" class="form-control" name="stock" required value="<%= product.getStock()%>" readonly/>
+                                    <label class="form-label">Supplier</label>
+                                    <select class="form-control" id="suppliers" name="suppliers">
+                                        <option value="">-- Select Supplier --</option>
+                                        <% for (Suppliers sup : supList) {
+                                                boolean isSelected = (sup.getSupplierID() == product.getSupplierId());
+                                        %>
+                                        <option value="<%= sup.getSupplierID()%>" <%= isSelected ? "selected" : ""%>>
+                                            <%= sup.getName()%>
+                                        </option>
+                                        <% }%>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
@@ -130,7 +152,7 @@
                                     </div>
                                 </div>
 
-                                <a href="ProductManager" class="btn btn-secondary" style="margin-left: 15%; margin-right: 10px; margin-top: 10px;">Back</a>
+                                <a href="AdminProduct" class="btn btn-secondary" style="margin-left: 15%; margin-right: 10px; margin-top: 10px;">Back</a>
                                 <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Edit</button>
                             </div>
                         </div>

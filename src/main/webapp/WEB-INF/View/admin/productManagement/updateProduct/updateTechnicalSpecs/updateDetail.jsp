@@ -1,17 +1,24 @@
 <body>
-    <div class="main-content">
-        <jsp:include page="/WEB-INF/View/staff/productManagement/updateProduct/updateTechnicalSpecs/productTitle.jsp" />
-        <jsp:include page="/WEB-INF/View/staff/productManagement/updateProduct/updateTechnicalSpecs/update.jsp" />
+    <div class = "divAll">
+        <div class="container">
+            <div>
+                <div style = "width: 100%">
+                    <jsp:include page="/WEB-INF/View/admin/productManagement/updateProduct/updateTechnicalSpecs/productTitle.jsp" />
+                </div>
+
+                <div style = "width: 100%;">
+                    <jsp:include page="/WEB-INF/View/admin/productManagement/updateProduct/updateTechnicalSpecs/update.jsp" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <style>
-        .main-content {
-           
-            padding: 30px;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-            overflow-x: hidden;
+        .divAll {
+            background-color: #F2F4F7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* ??m b?o div cao b?ng toàn trang */
         }
-
     </style>
 </body>
