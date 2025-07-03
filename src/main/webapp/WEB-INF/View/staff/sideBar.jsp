@@ -57,7 +57,7 @@
     <a href="StaffDashboard" class="sidebar-link">
         <i class="fas fa-tachometer-alt"></i> Dashboard
     </a>
-    <a href="/orders" class="sidebar-link">
+    <a href="ViewOrderList" class="sidebar-link">
         <i class="fas fa-shopping-cart"></i> Orders
     </a>
     <a href="/products" class="sidebar-link">
