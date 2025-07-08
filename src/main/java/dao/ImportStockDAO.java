@@ -29,15 +29,27 @@ public class ImportStockDAO extends DBContext {
     // Method to fetch import stock by ID
     public ImportStock getImportStockByID(int id) {
         ImportStock io = null;
-        String sql = "SELECT * FROM ImportStocks I JOIN Suppliers S ON I.SupplierID = S.SupplierID WHERE I.ImportID = ?";
+        String sql = "SELECT I.*, F.FullName, S.* "
+                + "FROM ImportStocks I "
+                + "JOIN Staff F ON I.StaffID = F.StaffID "
+                + "JOIN Suppliers S ON I.SupplierID = S.SupplierID "
+                + "WHERE I.ImportID = ?";
 
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                io = new ImportStock(
+                        rs.getInt("ImportID"),
+                        rs.getInt("StaffID"),
+                        rs.getInt("SupplierID"),
+                        rs.getTimestamp("ImportDate"),
+                        rs.getLong("TotalAmount"),
+                        rs.getInt("IsCompleted")
+                );
+                io.setFullName(rs.getString("FullName"));
                 Suppliers s = extractSupplier(rs);
-                io = extractImportStock(rs);
                 io.setSupplier(s);
             }
         } catch (SQLException e) {
@@ -67,10 +79,9 @@ public class ImportStockDAO extends DBContext {
         return list;
     }
 
-    // Fetch import stock details by ID
     public ImportStock getImportStockDetailsByID(int id) {
         ImportStock io = getImportStockByID(id);
-        String query = "SELECT P.ProductID, P.ProductName, D.Quantity, D.UnitPrice "
+        String query = "SELECT D.ImportID, P.ProductID, P.ProductName, D.Quantity, D.UnitPrice, D.QuantityLeft "
                 + "FROM ImportStockDetails D JOIN Products P ON D.ProductID = P.ProductID WHERE D.ImportID = ?";
 
         try ( PreparedStatement ps = conn.prepareStatement(query)) {
@@ -83,8 +94,12 @@ public class ImportStockDAO extends DBContext {
                 p.setProductId(rs.getInt("ProductID"));
                 p.setProductName(rs.getString("ProductName")); // Using productName here
                 ImportStockDetail detail = new ImportStockDetail(
-                        rs.getInt("ImportID"), p, rs.getInt("Quantity"),
-                        rs.getLong("UnitPrice"));
+                        rs.getInt("ImportID"),
+                        p,
+                        rs.getInt("Quantity"),
+                        rs.getLong("UnitPrice"),
+                        rs.getInt("QuantityLeft")
+                );
                 detailsList.add(detail);
             }
             io.setImportStockDetails(detailsList);
@@ -97,24 +112,36 @@ public class ImportStockDAO extends DBContext {
     // Method to create import stock entry
     public int createImportStock(ImportStock io) {
         String query = "INSERT INTO ImportStocks (StaffID, SupplierID, ImportDate, TotalAmount, IsCompleted) VALUES (?, ?, GETDATE(), ?, 1)";
-
         try ( PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, io.getStaffId());
             ps.setInt(2, io.getSupplierId());
             ps.setLong(3, io.getTotalAmount());
 
             int affectedRows = ps.executeUpdate();
+            System.out.println("affectedRows: " + affectedRows);
+
             if (affectedRows > 0) {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
-                    return rs.getInt(1);
+                    int id = rs.getInt(1);
+                    System.out.println("Generated ImportID: " + id);
+                    return id;
                 }
             }
+
+            // Fallback nếu không lấy được bằng getGeneratedKeys
+            Statement st = conn.createStatement();
+            ResultSet rs2 = st.executeQuery("SELECT CAST(SCOPE_IDENTITY() AS INT) AS id");
+            if (rs2.next()) {
+                int id = rs2.getInt("id");
+                System.out.println("SCOPE_IDENTITY fallback ImportID: " + id);
+                return id;
+            }
+
         } catch (SQLException e) {
             System.out.println("createImportStock ERROR: " + e.getMessage());
-            e.printStackTrace(); // In toàn bộ stack trace ra console
+            e.printStackTrace();
         }
-
         return -1;
     }
 
@@ -275,7 +302,7 @@ public class ImportStockDAO extends DBContext {
                 rs.getInt("ImportID"),
                 rs.getInt("StaffID"),
                 rs.getInt("SupplierID"),
-                rs.getDate("ImportDate"),
+                rs.getTimestamp("ImportDate"),
                 rs.getLong("TotalAmount"),
                 rs.getInt("IsCompleted")
         );
@@ -323,7 +350,7 @@ public class ImportStockDAO extends DBContext {
 // Method to create import stock with details
     public int createImportStockWithDetails(ImportStock importStock, List<ImportStockDetail> details) {
         String insertImportStock = "INSERT INTO ImportStocks (StaffID, SupplierID, ImportDate, TotalAmount, IsCompleted) VALUES (?, ?, GETDATE(), ?, 0)";
-        String insertDetails = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice) VALUES (?, ?, ?, ?)";
+        String insertDetails = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice, QuantityLeft) VALUES (?, ?, ?, ?, ?)";
 
         try {
             conn.setAutoCommit(false); // Start transaction
@@ -352,6 +379,7 @@ public class ImportStockDAO extends DBContext {
                         ps.setInt(2, detail.getProduct().getProductId());
                         ps.setInt(3, detail.getQuantity());
                         ps.setLong(4, detail.getUnitPrice());
+                        ps.setInt(5, detail.getQuantityLeft());
                         ps.addBatch();
                     }
                     ps.executeBatch();
@@ -423,4 +451,57 @@ public class ImportStockDAO extends DBContext {
         return list;
 
     }
+
+    public ArrayList<ImportStock> getImportHistoryFiltered(String from, String to, Integer supplierId) {
+        ArrayList<ImportStock> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT i.*, f.FullName, s.* FROM ImportStocks i "
+                + "JOIN Staff f ON i.StaffID = f.StaffID "
+                + "JOIN Suppliers s ON i.SupplierID = s.SupplierID WHERE 1=1"
+        );
+
+        if (from != null && !from.isEmpty()) {
+            sql.append(" AND i.ImportDate >= ?");
+        }
+        if (to != null && !to.isEmpty()) {
+            sql.append(" AND i.ImportDate <= ?");
+        }
+        if (supplierId != null && supplierId > 0) {
+            sql.append(" AND i.SupplierID = ?");
+        }
+        sql.append(" ORDER BY i.ImportDate DESC");
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int idx = 1;
+            if (from != null && !from.isEmpty()) {
+                ps.setString(idx++, from + " 00:00:00");
+            }
+            if (to != null && !to.isEmpty()) {
+                ps.setString(idx++, to + " 23:59:59");
+            }
+            if (supplierId != null && supplierId > 0) {
+                ps.setInt(idx++, supplierId);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ImportStock imp = new ImportStock(
+                        rs.getInt("ImportID"),
+                        rs.getInt("StaffID"),
+                        rs.getInt("SupplierID"),
+                        rs.getTimestamp("ImportDate"),
+                        rs.getLong("TotalAmount"),
+                        rs.getInt("IsCompleted")
+                );
+                imp.setFullName(rs.getString("FullName"));
+                Suppliers sup = extractSupplier(rs);
+                imp.setSupplier(sup);
+                list.add(imp);
+            }
+        } catch (SQLException e) {
+            System.out.println("getImportHistoryFiltered: " + e.getMessage());
+        }
+        return list;
+    }
+
 }
