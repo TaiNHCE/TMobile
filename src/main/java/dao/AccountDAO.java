@@ -7,7 +7,9 @@ package dao;
 import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import model.Account;
+import model.Customer;
 import utils.DBContext;
 
 /**
@@ -52,6 +54,7 @@ public class AccountDAO extends DBContext {
                 acc.setAccountID(rs.getInt("AccountID"));
                 acc.setEmail(rs.getString("Email"));
                 acc.setPasswordHash(rs.getString("PasswordHash"));
+                acc.setIsActive(rs.getBoolean("IsActive"));
                 acc.setRoleID(rs.getInt("RoleID"));
                 return acc;
             }
@@ -74,6 +77,59 @@ public class AccountDAO extends DBContext {
     }
     return false;
 }   
+   public boolean changePassword(int id, String oldPassword, String newPassword) {
+    String sqlCheck = "SELECT Password FROM Accounts WHERE AccountID = ?";
+    String sqlUpdate = "UPDATE Accounts SET Password = ? WHERE AccountID = ?";
+    
+    try (PreparedStatement checkStmt = conn.prepareStatement(sqlCheck)) {
+        checkStmt.setInt(1, id);
+        ResultSet rs = checkStmt.executeQuery();
+        
+        if (rs.next()) {
+            String currentPasswordHash = rs.getString("Password");
+            String oldPasswordHash = hashMD5(oldPassword);
+            
+            // Kiểm tra mật khẩu cũ đúng không
+            if (!currentPasswordHash.equals(oldPasswordHash)) {
+                return false; // Mật khẩu cũ sai
+            }
+        } else {
+            return false; // Không tìm thấy account
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+
+    // Nếu đúng thì update mật khẩu mới
+    try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
+        String newPasswordHash = hashMD5(newPassword);
+        updateStmt.setString(1, newPasswordHash);
+        updateStmt.setInt(2, id);
+        int rowsAffected = updateStmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+ public boolean addNewAccount(Account acc) {
+    String sql = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive) VALUES (?, ?, ?, ?)";
+    try {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, acc.getEmail());
+        ps.setString(2, acc.getPasswordHash()); 
+        ps.setInt(3, 3);
+        ps.setBoolean(4, true); 
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+    return false;
+}
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
