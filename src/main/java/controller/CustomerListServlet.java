@@ -84,7 +84,7 @@ public class CustomerListServlet extends HttpServlet {
                 out.print(e.getMessage());
             }
         }
-        if (action.equalsIgnoreCase("changeStatus")) {
+        if ("changeStatus".equalsIgnoreCase(action)) {
             String idRaw = request.getParameter("id");
             try {
                 int id = Integer.parseInt(idRaw);
@@ -96,7 +96,11 @@ public class CustomerListServlet extends HttpServlet {
                 }
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Invalid ID format.");
+                List<Customer> users = dao.getCustomerList(); // load lại
+                request.setAttribute("userList", users);
+                request.getRequestDispatcher("WEB-INF/View/staff/customerManagement/customerList.jsp").forward(request, response);
             }
+
         }
         if (action.equalsIgnoreCase("search")) {
             String keyword = request.getParameter("keyword");

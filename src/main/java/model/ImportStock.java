@@ -4,7 +4,7 @@
  */
 package model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -12,13 +12,15 @@ import java.util.List;
  * @author HP
  */
 public class ImportStock {
+
     private int ioid;
     private int staffId;
     private int supplierId;
-    private Date importDate;
+    private Timestamp importDate;
     private long totalAmount;
     private int isCompleted;
     private Suppliers supplier;
+    private String fullName;
     private List<ImportStockDetail> importStockDetails;
 
     public ImportStock() {
@@ -35,7 +37,7 @@ public class ImportStock {
         this.totalAmount = totalAmount;
     }
 
-    public ImportStock(int ioid, int staffId, int supplierId, Date importDate, long totalAmount, int isCompleted) {
+    public ImportStock(int ioid, int staffId, int supplierId, Timestamp importDate, long totalAmount, int isCompleted) {
         this.ioid = ioid;
         this.staffId = staffId;
         this.supplierId = supplierId;
@@ -68,11 +70,11 @@ public class ImportStock {
         this.supplierId = supplierId;
     }
 
-    public Date getImportDate() {
+    public Timestamp getImportDate() {
         return importDate;
     }
 
-    public void setImportDate(Date importDate) {
+    public void setImportDate(Timestamp importDate) {
         this.importDate = importDate;
     }
 
@@ -107,5 +109,12 @@ public class ImportStock {
     public void setImportStockDetails(List<ImportStockDetail> importStockDetails) {
         this.importStockDetails = importStockDetails;
     }
-    
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 }
