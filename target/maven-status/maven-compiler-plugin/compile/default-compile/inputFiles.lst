@@ -13,6 +13,7 @@ D:\AS_SWP\TMobile\src\main\java\model\ImportStockDetail.java
 D:\AS_SWP\TMobile\src\main\java\controller\ViewSupplierServlet.java
 D:\AS_SWP\TMobile\src\main\java\model\Staff.java
 D:\AS_SWP\TMobile\src\main\java\controller\LogoutServlet.java
+D:\AS_SWP\TMobile\src\main\java\utils\OTPManager.java
 D:\AS_SWP\TMobile\src\main\java\dao\AccountDAO.java
 D:\AS_SWP\TMobile\src\main\java\model\CategoryDetail.java
 D:\AS_SWP\TMobile\src\main\java\controller\DeleteStaffServlet.java
@@ -21,6 +22,7 @@ D:\AS_SWP\TMobile\src\main\java\controller\UpdateCategoryServlet.java
 D:\AS_SWP\TMobile\src\main\java\dao\AccounttestDAO.java
 D:\AS_SWP\TMobile\src\main\java\controller\LoginAdminServlet.java
 D:\AS_SWP\TMobile\src\main\java\dao\ImportStockDetailDAO.java
+D:\AS_SWP\TMobile\src\main\java\utils\EmailService.java
 D:\AS_SWP\TMobile\src\main\java\controller\VoucherServlet.java
 D:\AS_SWP\TMobile\src\main\java\utils\testDB.java
 D:\AS_SWP\TMobile\src\main\java\controller\BrandViewServlet.java
@@ -48,8 +50,10 @@ D:\AS_SWP\TMobile\src\main\java\dao\ImportStockDAO.java
 D:\AS_SWP\TMobile\src\main\java\controller\CreateSupplierServlet.java
 D:\AS_SWP\TMobile\src\main\java\controller\RevenueStatisticServlet.java
 D:\AS_SWP\TMobile\src\main\java\dao\VoucherDAO.java
+D:\AS_SWP\TMobile\src\main\java\controller\RegisterServlet.java
 D:\AS_SWP\TMobile\src\main\java\controller\CreateStaffServlet.java
 D:\AS_SWP\TMobile\src\main\java\controller\StaffUpdateProductDetailServlet.java
+D:\AS_SWP\TMobile\src\main\java\controller\VerifyOTPServlet.java
 D:\AS_SWP\TMobile\src\main\java\dao\BrandDAO.java
 D:\AS_SWP\TMobile\src\main\java\controller\CheckPhoneServlet.java
 D:\AS_SWP\TMobile\src\main\java\model\Suppliers.java

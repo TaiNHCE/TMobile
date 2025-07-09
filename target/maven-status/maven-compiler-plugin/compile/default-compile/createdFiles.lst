@@ -4,6 +4,7 @@ controller\StaffUpdateProductDetailServlet.class
 controller\CreateCategoryServlet.class
 dao\ProfileDAO.class
 controller\ImportStatisticServlet.class
+utils\OTPManager.class
 dao\SupplierDAO.class
 dao\CustomerDAO.class
 dao\CategoryDAO.class
@@ -24,12 +25,15 @@ controller\ViewProfileServlet.class
 model\Brand.class
 controller\AdminDashboard.class
 controller\CustomerListServlet.class
+utils\EmailService$2.class
 utils\testDB.class
 dao\ImportStockDetailDAO.class
 dao\StaffDAO.class
 controller\CreateStaffServlet.class
+controller\VerifyOTPServlet.class
 dao\ImportStockDAO.class
 dao\RevenueStatisticDAO.class
+utils\EmailService.class
 model\ImportStock.class
 dao\BrandDAO.class
 model\Category.class
@@ -37,6 +41,7 @@ controller\LogoutServlet.class
 controller\DeleteStaffServlet.class
 controller\CheckEmailServlet.class
 model\PurchaseOrderDetail.class
+controller\RegisterServlet.class
 dao\ProductDAO.class
 controller\DeleteCategoryServlet.class
 controller\LoginAdminServlet.class
@@ -51,6 +56,7 @@ controller\StaffDeleteProductServlet.class
 model\Staff.class
 utils\DBContext.class
 controller\CartListServlet.class
+utils\EmailService$1.class
 controller\CategoryDetailServlet.class
 controller\CategoryViewServlet.class
 controller\RevenueStatisticServlet.class

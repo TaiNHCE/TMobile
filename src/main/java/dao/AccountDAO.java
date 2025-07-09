@@ -7,7 +7,9 @@ package dao;
 import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import model.Account;
+import model.Customer;
 import utils.DBContext;
 
 /**
@@ -52,6 +54,7 @@ public class AccountDAO extends DBContext {
                 acc.setAccountID(rs.getInt("AccountID"));
                 acc.setEmail(rs.getString("Email"));
                 acc.setPasswordHash(rs.getString("PasswordHash"));
+                acc.setIsActive(rs.getBoolean("IsActive"));
                 acc.setRoleID(rs.getInt("RoleID"));
                 return acc;
             }
@@ -111,7 +114,22 @@ public class AccountDAO extends DBContext {
 
     return false;
 }
+ public boolean addNewAccount(Account acc) {
+    String sql = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive) VALUES (?, ?, ?, ?)";
+    try {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, acc.getEmail());
+        ps.setString(2, acc.getPasswordHash()); 
+        ps.setInt(3, 3);
+        ps.setBoolean(4, true); 
 
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+    return false;
+}
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
