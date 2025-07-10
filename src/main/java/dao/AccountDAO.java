@@ -63,73 +63,143 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
+
     public boolean checkEmailExisted(String email) {
-    String sql = "SELECT * FROM Accounts WHERE Email = ?";
-    try {
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, email);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return true;
-        }
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
-    }
-    return false;
-}   
-   public boolean changePassword(int id, String oldPassword, String newPassword) {
-    String sqlCheck = "SELECT Password FROM Accounts WHERE AccountID = ?";
-    String sqlUpdate = "UPDATE Accounts SET Password = ? WHERE AccountID = ?";
-    
-    try (PreparedStatement checkStmt = conn.prepareStatement(sqlCheck)) {
-        checkStmt.setInt(1, id);
-        ResultSet rs = checkStmt.executeQuery();
-        
-        if (rs.next()) {
-            String currentPasswordHash = rs.getString("Password");
-            String oldPasswordHash = hashMD5(oldPassword);
-            
-            // Kiểm tra mật khẩu cũ đúng không
-            if (!currentPasswordHash.equals(oldPasswordHash)) {
-                return false; // Mật khẩu cũ sai
+        String sql = "SELECT * FROM Accounts WHERE Email = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
             }
-        } else {
-            return false; // Không tìm thấy account
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-    } catch (Exception e) {
-        e.printStackTrace();
         return false;
     }
 
-    // Nếu đúng thì update mật khẩu mới
-    try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
-        String newPasswordHash = hashMD5(newPassword);
-        updateStmt.setString(1, newPasswordHash);
-        updateStmt.setInt(2, id);
-        int rowsAffected = updateStmt.executeUpdate();
-        return rowsAffected > 0;
-    } catch (Exception e) {
-        e.printStackTrace();
+    public boolean changePassword(int id, String oldPassword, String newPassword) {
+        String sqlCheck = "SELECT Password FROM Accounts WHERE AccountID = ?";
+        String sqlUpdate = "UPDATE Accounts SET Password = ? WHERE AccountID = ?";
+
+        try ( PreparedStatement checkStmt = conn.prepareStatement(sqlCheck)) {
+            checkStmt.setInt(1, id);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                String currentPasswordHash = rs.getString("Password");
+                String oldPasswordHash = hashMD5(oldPassword);
+
+                // Kiểm tra mật khẩu cũ đúng không
+                if (!currentPasswordHash.equals(oldPasswordHash)) {
+                    return false; // Mật khẩu cũ sai
+                }
+            } else {
+                return false; // Không tìm thấy account
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Nếu đúng thì update mật khẩu mới
+        try ( PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
+            String newPasswordHash = hashMD5(newPassword);
+            updateStmt.setString(1, newPasswordHash);
+            updateStmt.setInt(2, id);
+            int rowsAffected = updateStmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
-    return false;
-}
- public boolean addNewAccount(Account acc) {
-    String sql = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive) VALUES (?, ?, ?, ?)";
-    try {
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, acc.getEmail());
-        ps.setString(2, acc.getPasswordHash()); 
-        ps.setInt(3, 3);
-        ps.setBoolean(4, true); 
+    public boolean addNewAccount(String email, String passwordHash, String fullName, String phone) {
+        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive) VALUES (?, ?, ?, ?)";
+        String getNextCustomerIdSQL = "SELECT ISNULL(MAX(CustomerID), 0) + 1 AS NextID FROM Customers";
+        String insertCustomerSQL = "INSERT INTO Customers (CustomerID, AccountID, FullName, PhoneNumber) VALUES (?, ?, ?, ?)";
 
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
+        try {
+            conn.setAutoCommit(false); // bắt đầu transaction
+
+            // Thêm account
+            PreparedStatement psAcc = conn.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
+            psAcc.setString(1, email);
+            psAcc.setString(2, passwordHash);
+            psAcc.setInt(3, 3); // RoleID = 3 (customer)
+            psAcc.setBoolean(4, true);
+            int accInserted = psAcc.executeUpdate();
+
+            if (accInserted == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            // Lấy AccountID vừa tạo
+            ResultSet rsAcc = psAcc.getGeneratedKeys();
+            int accountId;
+            if (rsAcc.next()) {
+                accountId = rsAcc.getInt(1);
+            } else {
+                conn.rollback();
+                return false;
+            }
+
+            // Lấy CustomerID mới
+            PreparedStatement psNextId = conn.prepareStatement(getNextCustomerIdSQL);
+            ResultSet rs = psNextId.executeQuery();
+            int customerId = 1;
+            if (rs.next()) {
+                customerId = rs.getInt("NextID");
+            }
+
+            // Thêm vào bảng Customers
+            PreparedStatement psCus = conn.prepareStatement(insertCustomerSQL);
+            psCus.setInt(1, customerId);
+            psCus.setInt(2, accountId);
+            psCus.setString(3, fullName);
+            psCus.setString(4, phone);
+            int cusInserted = psCus.executeUpdate();
+
+            if (cusInserted == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            System.out.println("❌ DB Error: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
-    return false;
-}
+
+    public boolean updatePassword(String email, String hashedPassword) {
+        String sql = "UPDATE Accounts SET PasswordHash = ? WHERE Email = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, hashedPassword);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();

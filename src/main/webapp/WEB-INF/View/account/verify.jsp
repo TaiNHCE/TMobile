@@ -3,7 +3,7 @@
     Created on : Jun 11, 2025, 4:10:00 PM
     Author     : pc
 --%>
- <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -229,6 +229,14 @@
         </style>
     </head>
     <body>
+        <%
+            String otpPurpose = (String) session.getAttribute("otpPurpose");
+            if (otpPurpose == null) {
+                otpPurpose = "register"; // fallback
+            }
+        %>
+
+
         <div class="login-container">
             <div class="login-card">
                 <div class="verification-icon">
@@ -246,7 +254,7 @@
 
                 <%-- Error message --%>
                 <%
-                    String error = (String)request.getAttribute("error");
+                    String error = (String) request.getAttribute("error");
                     if (error != null) {
                 %>
                 <div class="error-message">
@@ -285,138 +293,147 @@
                         <span>Need help?</span>
                     </div>
 
+                    <% if ("register".equals(otpPurpose)) { %>
                     <a href="Register" class="back-link">
                         <i class="bi bi-arrow-left me-2"></i>
                         Back to Register
                     </a>
+                    <% } else if ("forgot".equals(otpPurpose)) { %>
+                    <a href="ForgotPassword" class="back-link">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Back to Forgot Password
+                    </a>
+                    <% }%>
                 </form>
             </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
- <script>
-    let expiryTime = 300; // 5 phút
-    let expiryInterval;
-    let resendCooldown = 60;
-    let resendInterval;
+        <script>
+            let expiryTime = 300; // 5 phút
+            let expiryInterval;
+            let resendCooldown = 60;
+            let resendInterval;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log("✅ DOMContentLoaded - script is running...");
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log("✅ DOMContentLoaded - script is running...");
 
-        const otpInputs = document.querySelectorAll('.otp-input');
-        const otpValue = document.getElementById('otpValue');
-        const verifyBtn = document.getElementById('verifyBtn');
-        const resendBtn = document.getElementById('resendBtn');
-        const resendText = document.getElementById('resendText');
-        const successMessage = document.getElementById('successMessage');
-        const successText = document.getElementById('successText');
-        const countdown = document.getElementById('countdown');
-        const timer = document.getElementById('timer');
+                const otpInputs = document.querySelectorAll('.otp-input');
+                const otpValue = document.getElementById('otpValue');
+                const verifyBtn = document.getElementById('verifyBtn');
+                const resendBtn = document.getElementById('resendBtn');
+                const resendText = document.getElementById('resendText');
+                const successMessage = document.getElementById('successMessage');
+                const successText = document.getElementById('successText');
+                const countdown = document.getElementById('countdown');
+                const timer = document.getElementById('timer');
 
-        console.log("🕒 Countdown element:", countdown);
-        console.log("⏱️ Timer element:", timer);
+                console.log("🕒 Countdown element:", countdown);
+                console.log("⏱️ Timer element:", timer);
 
-        // Xử lý nhập từng ô
-        otpInputs.forEach((input, index) => {
-            input.addEventListener('input', function (e) {
-                const value = e.target.value;
-                if (value.length === 1 && /^\d$/.test(value)) {
-                    input.classList.add('filled');
-                    if (index < otpInputs.length - 1) otpInputs[index + 1].focus();
-                } else if (value.length === 0) {
-                    input.classList.remove('filled');
+                // Xử lý nhập từng ô
+                otpInputs.forEach((input, index) => {
+                    input.addEventListener('input', function (e) {
+                        const value = e.target.value;
+                        if (value.length === 1 && /^\d$/.test(value)) {
+                            input.classList.add('filled');
+                            if (index < otpInputs.length - 1)
+                                otpInputs[index + 1].focus();
+                        } else if (value.length === 0) {
+                            input.classList.remove('filled');
+                        }
+                        updateOTPValue();
+                    });
+
+                    input.addEventListener('keydown', function (e) {
+                        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+
+                        if (e.key === 'v' && e.ctrlKey) {
+                            e.preventDefault();
+                            navigator.clipboard.readText()
+                                    .then(text => {
+                                        const digits = text.replace(/\D/g, '').slice(0, 6);
+                                        fillOTP(digits);
+                                    })
+                                    .catch(err => {
+                                        console.error("❌ Clipboard read failed:", err);
+                                        alert("Unable to paste OTP. Please enter manually.");
+                                    });
+                        }
+                    });
+
+                    input.addEventListener('keypress', function (e) {
+                        if (!/^\d$/.test(e.key)) {
+                            e.preventDefault();
+                        }
+                    });
+                });
+
+                function updateOTPValue() {
+                    const otp = Array.from(otpInputs).map(input => input.value).join('');
+                    otpValue.value = otp;
+                    verifyBtn.disabled = otp.length !== 6;
                 }
-                updateOTPValue();
-            });
 
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                    otpInputs[index - 1].focus();
+                function fillOTP(digits) {
+                    otpInputs.forEach((input, index) => {
+                        if (digits[index]) {
+                            input.value = digits[index];
+                            input.classList.add('filled');
+                        }
+                    });
+                    updateOTPValue();
                 }
-
-                if (e.key === 'v' && e.ctrlKey) {
-                    e.preventDefault();
-                    navigator.clipboard.readText()
-                        .then(text => {
-                            const digits = text.replace(/\D/g, '').slice(0, 6);
-                            fillOTP(digits);
-                        })
-                        .catch(err => {
-                            console.error("❌ Clipboard read failed:", err);
-                            alert("Unable to paste OTP. Please enter manually.");
-                        });
-                }
-            });
-
-            input.addEventListener('keypress', function (e) {
-                if (!/^\d$/.test(e.key)) {
-                    e.preventDefault();
-                }
-            });
-        });
-
-        function updateOTPValue() {
-            const otp = Array.from(otpInputs).map(input => input.value).join('');
-            otpValue.value = otp;
-            verifyBtn.disabled = otp.length !== 6;
-        }
-
-        function fillOTP(digits) {
-            otpInputs.forEach((input, index) => {
-                if (digits[index]) {
-                    input.value = digits[index];
-                    input.classList.add('filled');
-                }
-            });
-            updateOTPValue();
-        }
-        function startExpiryTimer() {
-            expiryTime = 300;
-            clearInterval(expiryInterval);
-            timer.classList.remove('warning');
-
-            function updateTimer() {
-                const minutes = Math.floor(expiryTime / 60);
-                const seconds = expiryTime % 60;
-                const formatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                countdown.textContent = formatted;
-                console.log("🕓 Countdown cập nhật:", formatted);
-            }
-            updateTimer();
-
-            expiryInterval = setInterval(() => {
-                expiryTime--;
-                updateTimer();
-
-                if (expiryTime <= 60) timer.classList.add('warning');
-
-                if (expiryTime <= 0) {
+                function startExpiryTimer() {
+                    expiryTime = 300;
                     clearInterval(expiryInterval);
-                    countdown.textContent = 'Expired';
-                    verifyBtn.disabled = true;
-                    otpInputs.forEach(input => input.disabled = true);
-                    console.log("⚠️ Countdown hết hạn");
-                }
-            }, 1000);
-        }
+                    timer.classList.remove('warning');
 
-        // Xử lý khi nhấn nút xác thực
-        document.getElementById('verifyForm').addEventListener('submit', function (e) {
-           updateOTPValue();
-            const otp = otpValue.value;
-            if (otp.length !== 6) {
-                e.preventDefault();
-                alert('Please enter a complete 6-digit code');
-                return;
-            }
-            verifyBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Verifying...';
-            verifyBtn.disabled = true;
-        });
+                    function updateTimer() {
+                        const minutes = Math.floor(expiryTime / 60);
+                        const seconds = expiryTime % 60;
+                        const formatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                                        countdown.textContent = formatted;
+                                        console.log("🕓 Countdown cập nhật:", formatted);
+                                    }
+                                    updateTimer();
 
-        // Gọi khi trang tải
-        startExpiryTimer();
-        otpInputs[0].focus();
-    });
-</script>
+                                    expiryInterval = setInterval(() => {
+                                        expiryTime--;
+                                        updateTimer();
+
+                                        if (expiryTime <= 60)
+                                            timer.classList.add('warning');
+
+                                        if (expiryTime <= 0) {
+                                            clearInterval(expiryInterval);
+                                            countdown.textContent = 'Expired';
+                                            verifyBtn.disabled = true;
+                                            otpInputs.forEach(input => input.disabled = true);
+                                            console.log("⚠️ Countdown hết hạn");
+                                        }
+                                    }, 1000);
+                                }
+
+                                // Xử lý khi nhấn nút xác thực
+                                document.getElementById('verifyForm').addEventListener('submit', function (e) {
+                                    updateOTPValue();
+                                    const otp = otpValue.value;
+                                    if (otp.length !== 6) {
+                                        e.preventDefault();
+                                        alert('Please enter a complete 6-digit code');
+                                        return;
+                                    }
+                                    verifyBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Verifying...';
+                                    verifyBtn.disabled = true;
+                                });
+
+                                // Gọi khi trang tải
+                                startExpiryTimer();
+                                otpInputs[0].focus();
+                            });
+        </script>
     </body>
 </html>
