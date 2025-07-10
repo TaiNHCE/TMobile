@@ -80,16 +80,19 @@ public class AccountDAO extends DBContext {
     }
 
     public boolean changePassword(int id, String oldPassword, String newPassword) {
-        String sqlCheck = "SELECT Password FROM Accounts WHERE AccountID = ?";
-        String sqlUpdate = "UPDATE Accounts SET Password = ? WHERE AccountID = ?";
+        String sqlCheck = "SELECT PasswordHash FROM Accounts WHERE AccountID = ?";
+        String sqlUpdate = "UPDATE Accounts SET PasswordHash = ? WHERE AccountID = ?";
 
         try ( PreparedStatement checkStmt = conn.prepareStatement(sqlCheck)) {
             checkStmt.setInt(1, id);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                String currentPasswordHash = rs.getString("Password");
+                String currentPasswordHash = rs.getString("PasswordHash");
                 String oldPasswordHash = hashMD5(oldPassword);
+                System.out.println("🔐 [DEBUG] Mật khẩu hash trong DB:      " + currentPasswordHash);
+                System.out.println("🔐 [DEBUG] Mật khẩu hash người dùng nhập: " + oldPasswordHash);
+                System.out.println("🔐 [DEBUG] Mật khẩu gốc từ form: " + oldPassword);
 
                 // Kiểm tra mật khẩu cũ đúng không
                 if (!currentPasswordHash.equals(oldPasswordHash)) {
