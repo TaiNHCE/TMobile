@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.AccountDAO;
+import dao.ProfileDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,15 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
+import model.Customer;
 
 /**
  *
  * @author pc
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/Login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "UpdateProfileServlet", urlPatterns = {"/UpdateProfile"})
+public class UpdateProfileServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet UpdateProfileServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateProfileServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +59,21 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        ProfileDAO dao = new ProfileDAO();
+        String idRaw = request.getParameter("id");
+        int id = 1;
+        try {
+            id = Integer.parseInt(idRaw);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            // Nếu lỗi thì có thể redirect hoặc báo lỗi
+            response.sendRedirect("error.jsp");
+            return;
+        }
+        Customer cus = dao.getCustomerbyCustomerID(id);
+        request.setAttribute("cus", cus);
+        request.getRequestDispatcher("/WEB-INF/View/customer/profile/update-profile.jsp").forward(request, response);
+
     }
 
     /**
@@ -74,41 +87,36 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String pass = request.getParameter("pass");
-        
-        AccountDAO dao = new AccountDAO();
-        HttpSession session = request.getSession();
-        Account acc = dao.verifyMD5(email, pass);
-        if (dao.checkEmailExisted(email) == false) {
-            request.setAttribute("err", "<p style='color:yellow'>The account you entered is not registered. Please sign up first.</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc == null || acc.getAccountID() == -1) {
-            request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.isIsActive() == false) {
-            request.setAttribute("err", "<p style='color:red'>Your account is blocked</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.getRoleID() != 3) {
-            request.setAttribute("err", "<p style='color:red'>You are not allowed to login with this role</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else {
-            session.setAttribute("accountId", acc.getAccountID());
-            session.setAttribute("user", acc);
-            response.sendRedirect("Home");
+        int id = Integer.parseInt(request.getParameter("id"));
+        String fullName = request.getParameter("fullname");
+        String phone = request.getParameter("phone");
+        String birthDate = request.getParameter("dob");
+        String gender = request.getParameter("gender");
 
+        ProfileDAO dao = new ProfileDAO();
+        boolean success = dao.updateProfileCustomer(id, fullName, phone, birthDate, gender);
+
+        if (success) {
+            int accountId = dao.getAccountIDByCustomerID(id); // truy ngược
+            if (accountId != -1) {
+                response.sendRedirect("ViewProfile?id=" + accountId);
+            } else {
+                request.setAttribute("error", "Update failed!");
+                request.getRequestDispatcher("/WEB-INF/View/customer/profile/update-profile.jsp").forward(request, response);
+            }
         }
-
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }

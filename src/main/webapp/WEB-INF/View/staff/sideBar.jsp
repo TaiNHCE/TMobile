@@ -66,7 +66,7 @@
     <a href="ImportStatistic" class="sidebar-link">
         <i class="fas fa-warehouse"></i> Stock
     </a>
-    <a href="/customers" class="sidebar-link">
+    <a href="CustomerList" class="sidebar-link">
         <i class="fas fa-users"></i> Customers
     </a>
     <a href="ViewListNewFeedback" class="sidebar-link">
@@ -78,6 +78,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+
         const current = window.location.pathname.toLowerCase();
         const sidebarLinks = document.querySelectorAll('.sidebar-link');
         let hasActive = false;

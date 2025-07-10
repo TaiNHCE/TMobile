@@ -13,14 +13,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Account;
+import utils.EmailService;
+import utils.OTPManager;
 
 /**
  *
  * @author pc
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/Login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "ForgotPasswordServlet", urlPatterns = {"/ForgotPassword"})
+public class ForgotPasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet ForgotPasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ForgotPasswordServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +61,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/View/account/forgot-password.jsp").forward(request, response);
     }
 
     /**
@@ -74,31 +75,36 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String pass = request.getParameter("pass");
-        
-        AccountDAO dao = new AccountDAO();
+        String email = request.getParameter("email").trim();
         HttpSession session = request.getSession();
-        Account acc = dao.verifyMD5(email, pass);
-        if (dao.checkEmailExisted(email) == false) {
-            request.setAttribute("err", "<p style='color:yellow'>The account you entered is not registered. Please sign up first.</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc == null || acc.getAccountID() == -1) {
-            request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.isIsActive() == false) {
-            request.setAttribute("err", "<p style='color:red'>Your account is blocked</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.getRoleID() != 3) {
-            request.setAttribute("err", "<p style='color:red'>You are not allowed to login with this role</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else {
-            session.setAttribute("accountId", acc.getAccountID());
-            session.setAttribute("user", acc);
-            response.sendRedirect("Home");
+        AccountDAO dao = new AccountDAO();
 
+        // Kiểm tra email có tồn tại không
+        if (!dao.checkEmailExisted(email)) {
+            request.setAttribute("error", "Email does not exist in the system.");
+            request.getRequestDispatcher("WEB-INF/View/account/forgot-password.jsp").forward(request, response);
+            return;
         }
 
+        // Tạo OTP mới
+        int otpCode = EmailService.generateVerificationCode();
+        OTPManager otpManager = new OTPManager(otpCode, 5); // hết hạn sau 5 phút
+
+        // Gửi OTP qua email
+        boolean emailSent = EmailService.sendOTPEmail(email, otpCode, "RESET_PASSWORD");
+        if (!emailSent) {
+            request.setAttribute("error", "Failed to send OTP email. Please try again later.");
+            request.getRequestDispatcher("WEB-INF/View/account/forgot-password.jsp").forward(request, response);
+            return;
+        }
+
+        // Lưu OTP và mục đích vào session
+        session.setAttribute("otpManager", otpManager);
+        session.setAttribute("otpPurpose", "forgot"); // ⚠️ Đúng là 'forgot' để Verify xử lý đúng!
+        session.setAttribute("resetEmail", email);
+
+        // Điều hướng đến trang xác minh OTP
+        response.sendRedirect("Verify");
     }
 
     /**

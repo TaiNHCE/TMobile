@@ -165,7 +165,7 @@
                     <h1>Import Stock</h1>
 
                     <form class="search-form mb-4" method="get" style="min-height: 45px;">
-                        <!-- Không có filter -->
+                      
                     </form>
                     <!-- Selected Supplier -->
                     <c:set value="${sessionScope.supplier}" var="sup" />
@@ -231,6 +231,7 @@
                                             </button>
 
                                         </td>
+
                                     </tr>
                                     <c:set var="sum" value="${sum + d.getQuantity() * d.getUnitPrice()}" scope="page"/>
                                 </c:forEach>

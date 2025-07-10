@@ -13,14 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Account;
 
 /**
  *
  * @author pc
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/Login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "ChangePasswordServlet", urlPatterns = {"/ChangePassword"})
+public class ChangePasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet ChangePasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangePasswordServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +59,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
     }
 
     /**
@@ -74,31 +73,37 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String pass = request.getParameter("pass");
-        
-        AccountDAO dao = new AccountDAO();
         HttpSession session = request.getSession();
-        Account acc = dao.verifyMD5(email, pass);
-        if (dao.checkEmailExisted(email) == false) {
-            request.setAttribute("err", "<p style='color:yellow'>The account you entered is not registered. Please sign up first.</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc == null || acc.getAccountID() == -1) {
-            request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.isIsActive() == false) {
-            request.setAttribute("err", "<p style='color:red'>Your account is blocked</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.getRoleID() != 3) {
-            request.setAttribute("err", "<p style='color:red'>You are not allowed to login with this role</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else {
-            session.setAttribute("accountId", acc.getAccountID());
-            session.setAttribute("user", acc);
-            response.sendRedirect("Home");
+        Integer accountId = (Integer) session.getAttribute("accountId");
+        System.out.println("✅ AccountID from session: " + accountId);
+        String oldPassword = request.getParameter("oldPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+        System.out.println("🔐 Mật khẩu cũ nhập vào: " + oldPassword);
+        System.out.println("🔐 Mật khẩu mới nhập vào: " + newPassword);
+        System.out.println("🔐 Mật khẩu xác nhận: " + confirmPassword);
 
+        if (accountId == null) {
+            response.sendRedirect("Login");
+            return;
         }
 
+        if (!newPassword.equals(confirmPassword)) {
+            request.setAttribute("error", "New password and confirm password do not match.");
+            request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
+            return;
+        }
+
+        AccountDAO dao = new AccountDAO();
+        boolean success = dao.changePassword(accountId, oldPassword, newPassword);
+
+        if (success) {
+            request.setAttribute("success", "Password changed successfully!");
+        } else {
+            request.setAttribute("error", "Old password is incorrect or update failed.");
+        }
+
+        request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
     }
 
     /**
