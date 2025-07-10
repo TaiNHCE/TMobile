@@ -50,6 +50,7 @@
             <% } %>
         </div>
 </div>
+        <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
     </body>
 </html>
 

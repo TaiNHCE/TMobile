@@ -76,7 +76,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
-
+        
         AccountDAO dao = new AccountDAO();
         HttpSession session = request.getSession();
         Account acc = dao.verifyMD5(email, pass);
@@ -93,6 +93,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("err", "<p style='color:red'>You are not allowed to login with this role</p>");
             request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
         } else {
+            session.setAttribute("accountId", acc.getAccountID());
             session.setAttribute("user", acc);
             response.sendRedirect("Home");
 

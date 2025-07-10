@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Customer;
 
 /**
@@ -60,6 +61,7 @@ public class ViewProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProfileDAO dao = new ProfileDAO();
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
         if (action == null) {
             action = "list";
@@ -69,6 +71,8 @@ public class ViewProfileServlet extends HttpServlet {
             int id = 1;
             id = Integer.parseInt(idRaw);
             Customer cus = dao.getCustomerbyID(id);
+            int accountID = dao.getAccountIDByCustomerID(cus.getId());
+            session.setAttribute("accountId", accountID);
             request.setAttribute("cus", cus);
             request.getRequestDispatcher("/WEB-INF/View/customer/profile/view-profile.jsp").forward(request, response);
         }
