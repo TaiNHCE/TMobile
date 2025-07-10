@@ -9,22 +9,24 @@ public class ImportStockDAO extends DBContext {
 
     // Method to fetch all import stocks
     public ArrayList<ImportStock> getAllImportStocks() {
-        ArrayList<ImportStock> list = new ArrayList<>();
-        String sql = "SELECT * FROM ImportStocks I JOIN Suppliers S ON I.SupplierID = S.SupplierID";
-
-        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Suppliers s = extractSupplier(rs);
-                ImportStock io = extractImportStock(rs);
-                io.setSupplier(s);
-                list.add(io);
-            }
-        } catch (SQLException e) {
-            System.out.println("getAllImportStocks: " + e.getMessage());
+    ArrayList<ImportStock> list = new ArrayList<>();
+    String sql = "SELECT I.*, S.*, F.FullName FROM ImportStocks I " +
+                 "JOIN Suppliers S ON I.SupplierID = S.SupplierID " +
+                 "JOIN Staff F ON I.StaffID = F.StaffID";
+    try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            Suppliers s = extractSupplier(rs);
+            ImportStock io = extractImportStock(rs);
+            io.setSupplier(s);
+            io.setFullName(rs.getString("FullName"));
+            list.add(io);
         }
-        return list;
+    } catch (SQLException e) {
+        System.out.println("getAllImportStocks: " + e.getMessage());
     }
+    return list;
+}
+
 
     // Method to fetch import stock by ID
     public ImportStock getImportStockByID(int id) {
