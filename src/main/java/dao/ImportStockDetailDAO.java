@@ -17,8 +17,8 @@ public class ImportStockDetailDAO extends DBContext {
 
         for (ImportStockDetail d : detailList) {
             // QuantityLeft = Quantity khi nhập mới
-            String value = "(" + d.getIoid() + "," + d.getProduct().getProductId() + "," +
-                           d.getQuantity() + "," + d.getUnitPrice() + "," + d.getQuantityLeft() + ")";
+            String value = "(" + d.getIoid() + "," + d.getProduct().getProductId() + ","
+                    + d.getQuantity() + "," + d.getUnitPrice() + "," + d.getQuantityLeft() + ")";
             values.add(value);
         }
 
@@ -65,22 +65,24 @@ public class ImportStockDetailDAO extends DBContext {
 
     // Lấy list chi tiết theo ImportID (bao gồm cả QuantityLeft)
     public ArrayList<ImportStockDetail> getDetailsById(int detailId) {
-        String query = "SELECT * FROM ImportStockDetails WHERE ImportID = ?";
+        String query = "SELECT d.*, p.ProductName FROM ImportStockDetails d "
+                + "JOIN Products p ON d.ProductID = p.ProductID "
+                + "WHERE d.ImportID = ?";
         ArrayList<ImportStockDetail> list = new ArrayList<>();
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, detailId);
-
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Product p = new Product();
                 p.setProductId(rs.getInt("ProductID"));
+                p.setProductName(rs.getString("ProductName")); // lấy luôn tên
                 list.add(new ImportStockDetail(
-                    rs.getInt("ImportID"),
-                    p,
-                    rs.getInt("Quantity"),
-                    rs.getLong("UnitPrice"),
-                    rs.getInt("QuantityLeft")
+                        rs.getInt("ImportID"),
+                        p,
+                        rs.getInt("Quantity"),
+                        rs.getLong("UnitPrice"),
+                        rs.getInt("QuantityLeft")
                 ));
             }
             return list;
@@ -143,10 +145,10 @@ public class ImportStockDetailDAO extends DBContext {
     public ArrayList<ImportStockDetail> getImportStocksToday() {
         ArrayList<ImportStockDetail> list = new ArrayList<>();
         String query = "SELECT IOD.*, P.ProductID FROM ImportStockDetails IOD "
-                     + "JOIN ImportStocks IO ON IOD.ImportID = IO.ImportID "
-                     + "JOIN Products P ON IOD.ProductID = P.ProductID "
-                     + "WHERE CAST(IO.ImportDate AS DATE) = CAST(GETDATE() AS DATE) "
-                     + "ORDER BY P.ProductID ASC";
+                + "JOIN ImportStocks IO ON IOD.ImportID = IO.ImportID "
+                + "JOIN Products P ON IOD.ProductID = P.ProductID "
+                + "WHERE CAST(IO.ImportDate AS DATE) = CAST(GETDATE() AS DATE) "
+                + "ORDER BY P.ProductID ASC";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -154,11 +156,11 @@ public class ImportStockDetailDAO extends DBContext {
                 Product p = new Product();
                 p.setProductId(rs.getInt("ProductID"));
                 list.add(new ImportStockDetail(
-                    rs.getInt("ImportID"),
-                    p,
-                    rs.getInt("Quantity"),
-                    rs.getLong("UnitPrice"),
-                    rs.getInt("QuantityLeft")
+                        rs.getInt("ImportID"),
+                        p,
+                        rs.getInt("Quantity"),
+                        rs.getLong("UnitPrice"),
+                        rs.getInt("QuantityLeft")
                 ));
             }
             return list;
