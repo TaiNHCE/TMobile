@@ -15,126 +15,134 @@
     Account user = (Account) session.getAttribute("user");
 %>
 <style>
-.user-dropdown {
-    position: relative;
-    display: inline-block;
-}
+    .user-dropdown {
+        position: relative;
+        display: inline-block;
+    }
 
-.user-dropdown .btn {
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    color: #333;
-    transition: all 0.3s ease;
-}
+    .user-dropdown .btn {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        color: #333;
+        transition: all 0.3s ease;
+    }
 
-.user-dropdown .btn:hover {
-    background-color: #e2e6ea;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+    .user-dropdown .btn:hover {
+        background-color: #e2e6ea;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.user-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    padding: 8px 0;
-    z-index: 1000;
-    list-style: none;
-    margin: 0;
-}
-
-.user-dropdown:hover .user-dropdown-menu {
-    display: block;
-}
-
-.user-dropdown-menu li {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.user-dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Khoảng cách giữa icon và text */
-    width: 100%;
-    padding: 12px 16px;
-    color: #333;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-.user-dropdown-item:hover {
-    background-color: #f8f9fa;
-    text-decoration: none;
-    color: #333;
-    padding-left: 20px; /* Hiệu ứng trượt khi hover */
-}
-
-.user-dropdown-item i {
-    font-size: 16px;
-    width: 20px; /* Cố định width cho icon để align đều */
-    text-align: center;
-    flex-shrink: 0; /* Icon không bị co lại */
-}
-
-.user-dropdown-item span {
-    flex: 1; /* Text chiếm hết phần còn lại */
-    white-space: nowrap;
-}
-
-.user-dropdown-item.text-danger {
-    color: #dc3545 !important;
-}
-
-.user-dropdown-item.text-danger:hover {
-    background-color: #dc3545;
-    color: white !important;
-}
-
-.user-dropdown-item.text-danger i {
-    color: inherit;
-}
-
-.user-dropdown-divider {
-    height: 0;
-    margin: 8px 0;
-    border: none;
-    border-top: 1px solid #e9ecef;
-}
-.user-dropdown-item .bi-person-circle{
-    margin-left: 120px;
-}
-.user-dropdown-item .bi-key{
-    margin-left: 100px;
-}
-.user-dropdown-item .bi-box-arrow-right{
-    margin-left: 80px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
     .user-dropdown-menu {
-        min-width: 180px;
-        right: -10px;
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        min-width: 200px;
+        padding: 8px 0;
+        z-index: 1000;
+        list-style: none;
+        margin: 0;
     }
-    
+
+    .user-dropdown:hover .user-dropdown-menu {
+        display: block;
+    }
+
+    .user-dropdown-menu li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
     .user-dropdown-item {
-        padding: 10px 14px;
-        font-size: 13px;
-    }
-    
-    .user-dropdown-item i {
+        display: flex;
+        align-items: center;
+        gap: 12px; /* Khoảng cách giữa icon và text */
+        width: 100%;
+        padding: 12px 16px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s ease;
         font-size: 14px;
+        line-height: 1.4;
     }
-}
+
+    .user-dropdown-item:hover {
+        background-color: #f8f9fa;
+        text-decoration: none;
+        color: #333;
+        padding-left: 20px; /* Hiệu ứng trượt khi hover */
+    }
+
+    .user-dropdown-item i {
+        font-size: 16px;
+        width: 20px; /* Cố định width cho icon để align đều */
+        text-align: center;
+        flex-shrink: 0; /* Icon không bị co lại */
+    }
+
+    .user-dropdown-item span {
+        flex: 1; /* Text chiếm hết phần còn lại */
+        white-space: nowrap;
+    }
+
+    .user-dropdown-item.text-danger {
+        color: #dc3545 !important;
+    }
+
+    .user-dropdown-item.text-danger:hover {
+        background-color: #dc3545;
+        color: white !important;
+    }
+
+    .user-dropdown-item.text-danger i {
+        color: inherit;
+    }
+
+    .user-dropdown-divider {
+        height: 0;
+        margin: 8px 0;
+        border: none;
+        border-top: 1px solid #e9ecef;
+    }
+    .user-dropdown-item .bi-person-circle{
+        margin-left: 50px;
+    }
+    .user-dropdown-item .bi-cart{
+        margin-left: 50px;
+    }
+    .user-dropdown-item .bi-box-arrow-right{
+        margin-left: 60px;
+    }
+     .user-dropdown-item .bi-geo-alt{
+        margin-left: 60px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .user-dropdown-menu {
+            min-width: 180px;
+        }
+
+        .user-dropdown-item {
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+
+        .user-dropdown-item i {
+            font-size: 14px;
+        }
+
+        .user-dropdown .btn {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
 </style>
 <!DOCTYPE html>
 <html>
@@ -244,20 +252,26 @@
                         <li>
                             <a class="user-dropdown-item" href="ViewProfile?id=<%= user.getAccountID()%>">
                                 <i class="bi bi-person-circle"></i>
-                                <span>Thông tin cá nhân</span>
+                                <span>Profile</span>
                             </a>
                         </li>
                         <li>
-                            <a class="user-dropdown-item" href="change-password.jsp">
-                                <i class="bi bi-key"></i>
-                                <span>Đổi mật khẩu</span>
+                            <a class="user-dropdown-item" href="ViewOrder">
+                                <i class="bi bi-cart"></i>
+                                <span>Order</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="user-dropdown-item" href="ViewAdress">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Address</span>
                             </a>
                         </li>
                         <li><hr class="user-dropdown-divider"></li>
                         <li>
                             <a class="user-dropdown-item text-danger" href="Logout">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Đăng xuất</span>
+                                <span>Logout</span>
                             </a>
                         </li>
                     </ul>
