@@ -17,7 +17,7 @@
                 <main class="main-content">
                     <h1>Import Stock History</h1>
                     <button class="create-btn" style="float: right; margin-bottom: 12px;" onclick="location.href = 'ImportStock'">+ New Import</button>
-                    <form class="search-form" method="get" style="clear: both;">
+                    <form class="search-form" method="get" action="">
                         <input
                             type="date"
                             name="from"
@@ -34,8 +34,12 @@
                                 <option value="${s.supplierID}" <c:if test="${supplierId != null && supplierId == s.supplierID}">selected</c:if>>${s.name}</option>
                             </c:forEach>
                         </select>
-                        <button type="submit" class="search-btn">Filter</button>
+                        <button type="submit" class="btn btn-primary fw-bold" name="action" value="filter">Filter</button>
+                        <button type="submit" id="exportExcelBtn" class="btn btn-success fw-bold" name="action" value="export" formaction="ExportToFileExcelServlet" formmethod="post">
+                            <i class="bi bi-file-earmark-excel-fill"></i> Export to Excel
+                        </button>
                     </form>
+
                     <table aria-label="Import Stock History table">
                         <thead>
                             <tr>
@@ -75,4 +79,41 @@
             </div>
         </div>
     </body>
+    <!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+.swal2-confirm-green {
+    background-color: #28a745 !important; /* Bootstrap green */
+    color: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.swal2-confirm-green:focus, .swal2-confirm-green:hover {
+    background-color: #218838 !important;
+}
+</style>
+<script>
+    document.getElementById('exportExcelBtn').onclick = function (e) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'question',
+            title: 'Export Excel',
+            text: 'Do you want to export the import stock history to Excel?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, export',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                confirmButton: 'swal2-confirm-green'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.form.action = 'ExportToFileExcelServlet';
+                this.form.method = 'post';
+                this.form.submit();
+            }
+        });
+        return false;
+    }
+</script>
+
 </html>
