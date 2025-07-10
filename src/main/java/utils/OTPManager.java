@@ -18,7 +18,7 @@ public class OTPManager {
 
     public OTPManager(int otpCode, int expireMinutes) {
         this.otpCode = otpCode;
-        this.expiryTime = LocalDateTime.now().plusSeconds(20);
+        this.expiryTime = LocalDateTime.now().plusMinutes(expireMinutes);
         this.resendCount = 1;
     }
 

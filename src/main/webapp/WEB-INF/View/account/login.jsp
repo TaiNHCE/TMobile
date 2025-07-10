@@ -173,7 +173,7 @@
                     Create Account
                 </a>
 
-                <a href="forgot-password.jsp" class="forgot-password">
+                <a href="ForgotPassword" class="forgot-password">
                     <i class="bi bi-question-circle me-1"></i>
                     Forgot Password ?
                 </a>

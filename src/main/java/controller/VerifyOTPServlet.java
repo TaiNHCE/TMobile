@@ -77,43 +77,83 @@ public class VerifyOTPServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AccountDAO dao = new AccountDAO();
-        int enteredOtp = Integer.parseInt(request.getParameter("otp"));
+        int enteredOtp;
+
+        try {
+            enteredOtp = Integer.parseInt(request.getParameter("otp"));
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid OTP format.");
+            request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
+            return;
+        }
+
         HttpSession session = request.getSession();
         OTPManager otpManager = (OTPManager) session.getAttribute("otpManager");
+        String otpPurpose = (String) session.getAttribute("otpPurpose");
 
-        String email = (String) session.getAttribute("tempEmail");
-        String password = (String) session.getAttribute("tempPassword");
-        String passwordHash = dao.hashMD5(password);
-        if (EmailService.verifyOTP(email, enteredOtp)) {
-            // Tạo tài khoản mới
-            Account acc = new Account();
-            acc.setEmail(email);
-            acc.setPasswordHash(passwordHash); // nhớ mã hóa nếu cần
-            acc.setRoleID(3); // mặc định người dùng thường
-            acc.setIsActive(true); // nếu có cột này
+        String email;
+        String password = null;
 
-            boolean success = dao.addNewAccount(acc);
+        // Xác định email và password theo mục đích OTP
+        if ("register".equals(otpPurpose)) {
+            email = (String) session.getAttribute("tempEmail");
+            password = (String) session.getAttribute("tempPassword");
+        } else if ("forgot".equals(otpPurpose)) {
+            email = (String) session.getAttribute("resetEmail");
+        } else {
+            request.setAttribute("error", "Invalid OTP context.");
+            request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
+            return;
+        }
+
+        // Kiểm tra OTP
+        if (otpManager == null || otpManager.isExpired()) {
+            request.setAttribute("error", "Your OTP has expired. Please try again.");
+            request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
+            return;
+        }
+
+        if (otpManager.getOtpCode() != enteredOtp) {
+            request.setAttribute("error", "Incorrect OTP.");
+            request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
+            return;
+        }
+
+        // ✅ In ra để debug
+        System.out.println("🔍 OTP người dùng nhập: " + enteredOtp);
+        System.out.println("✅ OTP hệ thống lưu: " + otpManager.getOtpCode());
+
+        // Đăng ký
+        if ("register".equals(otpPurpose)) {
+            String passwordHash = dao.hashMD5(password);
+            String fullName = (String) session.getAttribute("tempFullName");
+            String phone = (String) session.getAttribute("tempPhone");
+
+            // ✅ Gọi hàm mới có thêm khách hàng luôn
+            boolean success = dao.addNewAccount(email, passwordHash, fullName, phone);
 
             if (success) {
-                // Xóa session tạm
-                session.removeAttribute("otp");
+                session.removeAttribute("otpManager");
                 session.removeAttribute("tempEmail");
                 session.removeAttribute("tempPassword");
+                session.removeAttribute("tempPhone");
+                session.removeAttribute("tempFullName");
+                session.removeAttribute("otpPurpose");
 
-                // Gửi email thông báo tạo thành công
-                utils.EmailService.sendSuccessEmail(email);
+                EmailService.sendSuccessEmail(email);
                 response.sendRedirect("Login");
             } else {
                 request.setAttribute("error", "Account creation failed.");
                 request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
             }
-        } else if (otpManager == null || otpManager.isExpired()) {
-            request.setAttribute("error", "Your OTP has expired. Please register again.");
-            request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
-            return;
-        } else {
-            request.setAttribute("error", "Incorrect OTP.");
-            request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
+
+        } else if ("forgot".equals(otpPurpose)) {
+            // Chuyển đến trang đặt lại mật khẩu
+            session.setAttribute("resetEmail", email);
+            session.removeAttribute("otpManager");
+            session.removeAttribute("otpPurpose");
+
+            response.sendRedirect("ResetPassword");
         }
     }
 
