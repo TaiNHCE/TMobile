@@ -13,14 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Account;
 
 /**
  *
  * @author pc
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/Login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "ResetPasswordServlet", urlPatterns = {"/ResetPassword"})
+public class ResetPasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet ResetPasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ResetPasswordServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +59,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/View/account/reset-password.jsp").forward(request, response);
     }
 
     /**
@@ -74,31 +73,41 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String pass = request.getParameter("pass");
-        
-        AccountDAO dao = new AccountDAO();
         HttpSession session = request.getSession();
-        Account acc = dao.verifyMD5(email, pass);
-        if (dao.checkEmailExisted(email) == false) {
-            request.setAttribute("err", "<p style='color:yellow'>The account you entered is not registered. Please sign up first.</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc == null || acc.getAccountID() == -1) {
-            request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.isIsActive() == false) {
-            request.setAttribute("err", "<p style='color:red'>Your account is blocked</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else if (acc.getRoleID() != 3) {
-            request.setAttribute("err", "<p style='color:red'>You are not allowed to login with this role</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
-        } else {
-            session.setAttribute("accountId", acc.getAccountID());
-            session.setAttribute("user", acc);
-            response.sendRedirect("Home");
+        String email = (String) session.getAttribute("resetEmail");
 
+        if (email == null) {
+            response.sendRedirect("ForgotPassword");
+            return;
         }
 
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        if (!newPassword.equals(confirmPassword)) {
+            request.setAttribute("error", "Passwords do not match.");
+            request.getRequestDispatcher("WEB-INF/View/account/reset-password.jsp").forward(request, response);
+            return;
+        }
+
+        AccountDAO dao = new AccountDAO();
+        String hashedPassword = dao.hashMD5(newPassword);
+
+        boolean updated = dao.updatePassword(email, hashedPassword);
+
+        if (updated) {
+            // Clear session
+            session.removeAttribute("resetEmail");
+            session.removeAttribute("otpManager");
+            session.removeAttribute("otpPurpose");
+
+            // Chuyển đến trang login với thông báo
+            session.setAttribute("message", "Password reset successfully. Please login.");
+            response.sendRedirect("Login");
+        } else {
+            request.setAttribute("error", "Failed to reset password. Try again later.");
+            request.getRequestDispatcher("WEB-INF/View/account/reset-password.jsp").forward(request, response);
+        }
     }
 
     /**
