@@ -47,6 +47,20 @@ public class StaffDAO extends DBContext {
 
         return list;
     }
+    public int getStaffIDByAccountID(int accountID) {
+        String sql = "SELECT StaffID FROM Staff WHERE AccountID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("StaffID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
     public Staff getStaffByID(int staffID) {
         Staff sta = null;

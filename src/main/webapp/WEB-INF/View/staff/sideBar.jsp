@@ -69,7 +69,7 @@
     <a href="/customers" class="sidebar-link">
         <i class="fas fa-users"></i> Customers
     </a>
-    <a href="/feedback" class="sidebar-link">
+    <a href="ViewListNewFeedback" class="sidebar-link">
         <i class="fas fa-comments"></i> Feedback
     </a>
 </div>

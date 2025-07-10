@@ -95,7 +95,7 @@
                     <input type="text"
                            name="keyword"
                            class="form-control"
-                           
+
                            style="padding-right: 40px;">
                     <button type="submit"
                             class="search-btn btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y">
@@ -106,6 +106,26 @@
 
             <!-- (3) PHẢI: TÀI KHOẢN & GIỎ HÀNG -->
             <div style = "width: 15%; margin-right: 5%" class="header-right d-flex align-items-center">
+                <!-- Chuông thông báo -->
+                <div class="dropdown me-2 position-relative">
+                    <a class="btn btn-outline-dark position-relative" href="#" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 15px;">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="width: 300px;">
+                        <li class="header">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2 text-wrap">-Staff replied to your feedback on <strong>iPhone 14 Pro</strong>.</li>
+                        <li class="px-2 text-wrap">-Your feedback for <strong>Samsung A55</strong> was marked as resolved.</li>
+                        <li class="px-2 text-wrap">-New reply to your comment on <strong>Asus Laptop</strong>.</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">View All</a></li>
+                    </ul>
+                </div>
+
                 <a style = "border-radius: 15px;" href="${pageContext.request.contextPath}/login.jsp" class="btn btn-outline-dark me-2" title="Tài khoản">
                     <i class="bi bi-person"></i>
                 </a>
