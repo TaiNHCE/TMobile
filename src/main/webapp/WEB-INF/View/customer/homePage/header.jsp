@@ -262,7 +262,7 @@ margin-left: 60px;
                             </a>
                         </li>
                         <li>
-                            <a class="user-dropdown-item" href="ViewAdress">
+                            <a class="user-dropdown-item" href="ViewShippingAddress">
                                 <i class="bi bi-geo-alt"></i>
                                 <span>Address</span>
                             </a>
