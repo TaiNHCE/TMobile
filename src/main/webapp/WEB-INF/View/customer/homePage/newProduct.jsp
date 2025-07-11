@@ -152,7 +152,7 @@
                                         String giamFormatted = currencyVN.format(giaDaGiam);
                         %>
                         <div class="sanPhamMoi col-md-3">
-                            <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
+                            <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
                                 </div>
@@ -175,7 +175,7 @@
                             String giaCuFormatted = currencyVN.format(oldPrice);
                         %>
                         <div class="sanPhamMoi col-md-2">
-                            <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
+                            <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
                                 </div>
