@@ -14,75 +14,29 @@ public class Order {
     private int accountID;
     private String fullName;
     private String phone;
-    private String address;
     private long totalAmount;
     private String orderDate;
     private String deliveredDate;
     private int status;
     private int discount;
+    private String addressSnapshot;
+    private int addressID;
+
     public Order() {
     }
 
-    public Order(String fullName, String phone, String address) {
-        this.fullName = fullName;
-        this.phone = phone;
-        this.address = address;
-    }
-
-    public Order(int accountID, String fullName, String phone, String address, long totalAmount) {
-        this.accountID = accountID;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.address = address;
-        this.totalAmount = totalAmount;
-    }
-
-    public Order(int orderID, int accountID, String fullName, String phone, String address, long totalAmount, String orderDate, int status) {
+    public Order(int orderID, int accountID, String fullName, String phone, long totalAmount, String orderDate, String deliveredDate, int status, int discount, String addressSnapshot, int addressID) {
         this.orderID = orderID;
         this.accountID = accountID;
         this.fullName = fullName;
         this.phone = phone;
-        this.address = address;
-        this.totalAmount = totalAmount;
-        this.orderDate = orderDate;
-        this.status = status;
-    }
-
-    public Order(int orderID, int accountID, String fullName, String address, String phone, String orderDate, String deliveredDate, int status, long totalAmount) {
-
-        this.orderID = orderID;
-        this.accountID = accountID;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.address = address;
-        this.totalAmount = totalAmount;
-        this.orderDate = orderDate;
-
-        this.deliveredDate = deliveredDate;
-
-        this.status = status;
-    }
-
-    public Order(int orderID, int accountID, String fullName, String phone, String address, long totalAmount, String orderDate, String deliveredDate, int status, int discount) {
-        this.orderID = orderID;
-        this.accountID = accountID;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.address = address;
         this.totalAmount = totalAmount;
         this.orderDate = orderDate;
         this.deliveredDate = deliveredDate;
         this.status = status;
         this.discount = discount;
-    }
-
-    public Order(int accountID, String fullName, String phone, String address, long totalAmount, int discount) {
-        this.accountID = accountID;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.address = address;
-        this.totalAmount = totalAmount;
-        this.discount = discount;
+        this.addressSnapshot = addressSnapshot;
+        this.addressID = addressID;
     }
 
     public int getOrderID() {
@@ -115,14 +69,6 @@ public class Order {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public long getTotalAmount() {
@@ -164,5 +110,23 @@ public class Order {
     public void setDiscount(int discount) {
         this.discount = discount;
     }
-}
 
+    public String getAddressSnapshot() {
+        return addressSnapshot;
+    }
+
+    public void setAddressSnapshot(String addressSnapshot) {
+        this.addressSnapshot = addressSnapshot;
+    }
+
+    public int getAddressID() {
+        return addressID;
+    }
+
+    public void setAddressID(int addressID) {
+        this.addressID = addressID;
+    }
+
+   
+
+}
