@@ -118,8 +118,8 @@
     .user-dropdown-item .bi-box-arrow-right{
         margin-left: 60px;
     }
-     .user-dropdown-item .bi-geo-alt{
-margin-left: 60px;
+    .user-dropdown-item .bi-geo-alt{
+        margin-left: 60px;
     }
 
     /* Responsive */
@@ -191,7 +191,7 @@ margin-left: 60px;
                                      style="width: 18%; margin-right: 4%;">
                                 <%= cate.getCategoryName()%>
                             </a>
-<ul class="dropdown-menu">
+                            <ul class="dropdown-menu">
                                 <%
                                     if (brandList != null) {
                                         for (Brand brand : brandList) {
@@ -251,7 +251,7 @@ margin-left: 60px;
                     <ul class="user-dropdown-menu" aria-labelledby="userDropdown">
                         <li>
                             <a class="user-dropdown-item" href="ViewProfile?id=<%= user.getAccountID()%>">
-<i class="bi bi-person-circle"></i>
+                                <i class="bi bi-person-circle"></i>
                                 <span>Profile</span>
                             </a>
                         </li>

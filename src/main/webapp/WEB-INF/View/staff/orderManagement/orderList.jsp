@@ -109,7 +109,7 @@
                                         <td>#${order.orderID}</td>
                                         <td>${order.fullName}</td>
                                         <td>${order.phone}</td>
-                                        <td>${order.address}</td>
+                                        <td>${order.addressSnapshot}</td>
                                         <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫" /></td>
                                         <td>${order.orderDate}</td>
                                         <td>
