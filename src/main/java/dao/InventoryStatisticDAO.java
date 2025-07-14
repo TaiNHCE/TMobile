@@ -10,14 +10,14 @@ public class InventoryStatisticDAO extends DBContext {
 
     public ArrayList<InventoryStatistic> getAllInventory() {
         ArrayList<InventoryStatistic> list = new ArrayList<>();
-        String sql =
-                "SELECT "
+        String sql
+                = "SELECT "
                 + "  c.CategoryName, "
                 + "  b.BrandName, "
                 + "  p.ProductName, "
                 + "  ISNULL(SUM(isd.Quantity), 0) AS TotalImported, "
-                + "  ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS TotalSold, "
-                + "  ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS Stock, "
+                + "  ISNULL((SELECT SUM(oi.Quantity) FROM OrderItems oi WHERE oi.ProductID = p.ProductID), 0) AS TotalSold, "
+                + "  ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(oi.Quantity) FROM OrderItems oi WHERE oi.ProductID = p.ProductID), 0) AS Stock, "
                 + "  s.Name AS SupplierName, "
                 + "  (SELECT TOP 1 istk.ImportDate "
                 + "      FROM ImportStocks istk "
@@ -37,8 +37,7 @@ public class InventoryStatisticDAO extends DBContext {
                 + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "GROUP BY c.CategoryName, b.BrandName, p.ProductName, s.Name, p.ProductID, c.CategoryID";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 InventoryStatistic stat = new InventoryStatistic();
                 stat.setCategoryName(rs.getString("CategoryName"));
@@ -62,14 +61,14 @@ public class InventoryStatisticDAO extends DBContext {
 
     public ArrayList<InventoryStatistic> searchInventory(String keyword) {
         ArrayList<InventoryStatistic> list = new ArrayList<>();
-        String sql =
-                "SELECT "
+        String sql
+                = "SELECT "
                 + "  c.CategoryName, "
                 + "  b.BrandName, "
                 + "  p.ProductName, "
                 + "  ISNULL(SUM(isd.Quantity), 0) AS TotalImported, "
-                + "  ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS TotalSold, "
-                + "  ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS Stock, "
+                + "  ISNULL((SELECT SUM(oi.Quantity) FROM OrderItems oi WHERE oi.ProductID = p.ProductID), 0) AS TotalSold, "
+                + "  ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(oi.Quantity) FROM OrderItems oi WHERE oi.ProductID = p.ProductID), 0) AS Stock, "
                 + "  s.Name AS SupplierName, "
                 + "  (SELECT TOP 1 istk.ImportDate "
                 + "      FROM ImportStocks istk "
@@ -89,14 +88,13 @@ public class InventoryStatisticDAO extends DBContext {
                 + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "WHERE p.ProductName LIKE ? OR b.BrandName LIKE ? OR c.CategoryName LIKE ? "
                 + "GROUP BY c.CategoryName, b.BrandName, p.ProductName, s.Name, p.ProductID, c.CategoryID";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             String searchValue = "%" + keyword + "%";
             ps.setString(1, searchValue);
             ps.setString(2, searchValue);
             ps.setString(3, searchValue);
 
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     InventoryStatistic stat = new InventoryStatistic();
                     stat.setCategoryName(rs.getString("CategoryName"));
@@ -121,14 +119,14 @@ public class InventoryStatisticDAO extends DBContext {
 
     public ArrayList<InventoryStatistic> getInventoryByCategory(int categoryId) {
         ArrayList<InventoryStatistic> list = new ArrayList<>();
-        String sql =
-                "SELECT "
+        String sql
+                = "SELECT "
                 + "  c.CategoryName, "
                 + "  b.BrandName, "
                 + "  p.ProductName, "
                 + "  ISNULL(SUM(isd.Quantity), 0) AS TotalImported, "
-                + "  ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS TotalSold, "
-                + "  ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS Stock, "
+                + "  ISNULL((SELECT SUM(oi.Quantity) FROM OrderItems oi WHERE oi.ProductID = p.ProductID), 0) AS TotalSold, "
+                + "  ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(oi.Quantity) FROM OrderItems oi WHERE oi.ProductID = p.ProductID), 0) AS Stock, "
                 + "  s.Name AS SupplierName, "
                 + "  (SELECT TOP 1 istk.ImportDate "
                 + "      FROM ImportStocks istk "
@@ -148,10 +146,9 @@ public class InventoryStatisticDAO extends DBContext {
                 + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "WHERE c.CategoryID = ? "
                 + "GROUP BY c.CategoryName, b.BrandName, p.ProductName, s.Name, p.ProductID, c.CategoryID";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, categoryId);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     InventoryStatistic stat = new InventoryStatistic();
                     stat.setCategoryName(rs.getString("CategoryName"));

@@ -30,10 +30,6 @@ public class Account {
         this.roleID = roleID;
     }
 
-    public Account(String email, String passwordHash, int i, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     public boolean isIsActive() {
         return isActive;
     }

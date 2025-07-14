@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package dao;
 
 import java.sql.PreparedStatement;
@@ -8,22 +12,23 @@ import model.ImportStockDetail;
 import model.Product;
 import utils.DBContext;
 
+/**
+ *
+ * @author HP
+ */
 public class ImportStockDetailDAO extends DBContext {
 
-    // Insert nhiều chi tiết (batch), có QuantityLeft
     public int createImportStockDetails(ArrayList<ImportStockDetail> detailList) {
-        String query = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice, QuantityLeft) VALUES ";
+        String query = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice) VALUES";
         ArrayList<String> values = new ArrayList<>();
 
         for (ImportStockDetail d : detailList) {
-            // QuantityLeft = Quantity khi nhập mới
-            String value = "(" + d.getIoid() + "," + d.getProduct().getProductId() + ","
-                    + d.getQuantity() + "," + d.getUnitPrice() + "," + d.getQuantityLeft() + ")";
+            String value = "(" + d.getIoid() + "," + d.getProduct().getProductId() + "," + d.getQuantity() + "," + d.getUnitPrice() + ")";
             values.add(value);
         }
 
         for (String v : values) {
-            query += v + ",";
+            query += " " + v + ",";
         }
 
         String finalQuery = query.substring(0, query.length() - 1);
@@ -36,15 +41,14 @@ public class ImportStockDetailDAO extends DBContext {
             }
 
         } catch (SQLException e) {
-            System.out.println("createImportStockDetails: " + e.getMessage());
+            System.out.println(e);
         }
 
         return 0;
     }
 
-    // Insert 1 chi tiết
     public int createImportStockDetail(ImportStockDetail detail) {
-        String query = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice, QuantityLeft) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice) VALUES (?, ?, ?, ?)";
 
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -53,135 +57,114 @@ public class ImportStockDetailDAO extends DBContext {
             ps.setInt(2, detail.getProduct().getProductId());
             ps.setInt(3, detail.getQuantity());
             ps.setLong(4, detail.getUnitPrice());
-            ps.setInt(5, detail.getQuantityLeft());
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("createImportStockDetail: " + e.getMessage());
+            System.out.println(e);
         }
 
         return 0;
     }
 
-    // Lấy list chi tiết theo ImportID (bao gồm cả QuantityLeft)
     public ArrayList<ImportStockDetail> getDetailsById(int detailId) {
-        String query = "SELECT d.*, p.ProductName FROM ImportStockDetails d "
-                + "JOIN Products p ON d.ProductID = p.ProductID "
-                + "WHERE d.ImportID = ?";
-        ArrayList<ImportStockDetail> list = new ArrayList<>();
+        String query = "SELECT * FROM ImportStockDetails WHERE ImportID = ?";
+        ArrayList<ImportStockDetail> list = null;
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, detailId);
+
             ResultSet rs = ps.executeQuery();
+            list = new ArrayList<>();
             while (rs.next()) {
                 Product p = new Product();
                 p.setProductId(rs.getInt("ProductID"));
-                p.setProductName(rs.getString("ProductName")); // lấy luôn tên
-                list.add(new ImportStockDetail(
-                        rs.getInt("ImportID"),
-                        p,
-                        rs.getInt("Quantity"),
-                        rs.getLong("UnitPrice"),
-                        rs.getInt("QuantityLeft")
-                ));
+                list.add(new ImportStockDetail(rs.getInt("ImportID"), p, rs.getInt("Quantity"), rs.getLong("UnitPrice")));
             }
             return list;
         } catch (SQLException e) {
-            System.out.println("getDetailsById: " + e.getMessage());
+            System.out.println(e);
         }
+
         return list;
     }
 
-    // Update số lượng, giá (nếu có logic update QuantityLeft thì bổ sung field này)
     public int updateDetailById(ImportStockDetail d) {
-        String query = "UPDATE ImportStockDetails SET Quantity = ?, UnitPrice = ?, QuantityLeft = ? WHERE ProductID = ? AND ImportID = ?";
+        String query = "UPDATE ImportStockDetails SET Quantity = ?, UnitPrice= ? WHERE ProductID = ?";
+
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, d.getQuantity());
             ps.setLong(2, d.getUnitPrice());
-            ps.setInt(3, d.getQuantityLeft());
-            ps.setInt(4, d.getProduct().getProductId());
-            ps.setInt(5, d.getIoid());
+            ps.setInt(3, d.getProduct().getProductId());
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("updateDetailById: " + e.getMessage());
+            System.out.println(e);
         }
+
         return 0;
     }
 
-    // Xóa chi tiết
     public int deleteDetailById(int productId, int importId) {
         String query = "DELETE FROM ImportStockDetails WHERE ProductID = ? AND ImportID = ?";
+
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, productId);
             ps.setInt(2, importId);
+
             return ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("deleteDetailById: " + e.getMessage());
+            System.out.println(e);
         }
+
         return 0;
     }
 
-    // Tính tổng tiền nhập của một phiếu
     public long calculateTotalPrice(int importId) {
-        String query = "SELECT SUM(UnitPrice * Quantity) AS TotalPrice FROM ImportStockDetails WHERE ImportID = ?";
+        String query = "SELECT SUM(UnitPrice) AS TotalPrice FROM ImportStockDetails WHERE ImportID = ?";
+
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, importId);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getLong("TotalPrice");
+                return rs.getInt("TotalPrice");
             }
         } catch (SQLException e) {
-            System.out.println("calculateTotalPrice: " + e.getMessage());
+            System.out.println(e);
         }
+
         return 0;
     }
 
-    // Lấy các chi tiết nhập kho hôm nay
     public ArrayList<ImportStockDetail> getImportStocksToday() {
         ArrayList<ImportStockDetail> list = new ArrayList<>();
-        String query = "SELECT IOD.*, P.ProductID FROM ImportStockDetails IOD "
-                + "JOIN ImportStocks IO ON IOD.ImportID = IO.ImportID "
-                + "JOIN Products P ON IOD.ProductID = P.ProductID "
-                + "WHERE CAST(IO.ImportDate AS DATE) = CAST(GETDATE() AS DATE) "
+
+        String query = "SELECT *\n"
+                + "FROM ImportStockDetails IOD\n"
+                + "JOIN ImportStocks IO ON IOD.ImportID = IO.ImportID\n"
+                + "JOIN Products P ON IOD.ProductID = P.ProductID\n"
+                + "WHERE CAST(IO.ImportDate AS DATE) = CAST(GETDATE() AS DATE)\n"
                 + "ORDER BY P.ProductID ASC";
+
         try {
             PreparedStatement ps = conn.prepareStatement(query);
+
             ResultSet rs = ps.executeQuery();
+            list = new ArrayList<>();
             while (rs.next()) {
                 Product p = new Product();
                 p.setProductId(rs.getInt("ProductID"));
-                list.add(new ImportStockDetail(
-                        rs.getInt("ImportID"),
-                        p,
-                        rs.getInt("Quantity"),
-                        rs.getLong("UnitPrice"),
-                        rs.getInt("QuantityLeft")
-                ));
+                list.add(new ImportStockDetail(rs.getInt("ImportID"), p, rs.getInt("Quantity"), rs.getLong("UnitPrice")));
             }
             return list;
         } catch (SQLException e) {
-            System.out.println("getImportStocksToday: " + e.getMessage());
+            System.out.println(e);
         }
+
         return list;
     }
 
-    // Hàm cập nhật quantityLeft sau khi xuất kho một phần (FIFO)
-    public int updateQuantityLeft(int importId, int productId, int quantityLeft) {
-        String query = "UPDATE ImportStockDetails SET QuantityLeft = ? WHERE ImportID = ? AND ProductID = ?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, quantityLeft);
-            ps.setInt(2, importId);
-            ps.setInt(3, productId);
-            return ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("updateQuantityLeft: " + e.getMessage());
-        }
-        return 0;
-    }
 }

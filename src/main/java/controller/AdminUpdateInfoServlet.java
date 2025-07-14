@@ -135,14 +135,9 @@ public class AdminUpdateInfoServlet extends HttpServlet {
         String productName = request.getParameter("productName");
 
         String priceFormatted = request.getParameter("price");
-        if(priceFormatted != null){
-            priceFormatted = priceFormatted.replace(".", "") // bỏ dấu chấm ngăn cách hàng nghìn
+        priceFormatted = priceFormatted.replace(".", "") // bỏ dấu chấm ngăn cách hàng nghìn
                 .replace("₫", "") // bỏ ký tự tiền
                 .trim();
-        } else {
-            priceFormatted = "0";
-        }
-        
         BigDecimal price = new BigDecimal(priceFormatted);
 
         String stockStr = request.getParameter("stock");

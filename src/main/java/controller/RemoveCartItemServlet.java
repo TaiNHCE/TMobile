@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package controller;
 
 import dao.CartDAO;
@@ -8,9 +12,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
+/**
+ *
+ * @author USER
+ */
 @WebServlet(name = "RemoveCartItemServlet", urlPatterns = {"/RemoveCartItem"})
 public class RemoveCartItemServlet extends HttpServlet {
 
@@ -19,62 +25,33 @@ public class RemoveCartItemServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
-        String accountIdRaw = request.getParameter("accountId");
 
-        if ("deleteMultiple".equals(action)) {
+        if ("remove".equals(action)) {
             try {
-                String selectedItems = request.getParameter("selectedItems");
-                if (selectedItems == null || selectedItems.isEmpty()) {
-                    session.setAttribute("message", "No items selected for deletion.");
-                    response.sendRedirect("CartList?accountId=" + accountIdRaw);
-                    return;
-                }
-
-                List<String> itemIds = Arrays.asList(selectedItems.split(","));
+                int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
                 CartDAO cartDAO = new CartDAO();
-                boolean isSuccess = cartDAO.deleteMultipleCartItems(itemIds);
+                boolean isSuccess = cartDAO.deleteCartItem(cartItemId);
 
                 if (isSuccess) {
-                    response.sendRedirect("CartList?accountId=" + accountIdRaw + "&successdeletem=1");
+                    session.setAttribute("message", "Item removed successfully!");
                 } else {
-                    response.sendRedirect("CartList?accountId=" + accountIdRaw + "&errordeletem=1");
+                    session.setAttribute("message", "Failed to remove item.");
                 }
-            } catch (Exception e) {
-                session.setAttribute("message", "Error deleting cart items.");
-                response.sendRedirect("CartList?accountId=" + accountIdRaw);
+            } catch (NumberFormatException e) {
+                session.setAttribute("message", "Invalid cart item ID.");
             }
+            request.getRequestDispatcher("/WEB-INF/View/customer/cartManagement/deletesuccess.jsp").forward(request, response);
+
         } else {
             session.setAttribute("message", "Invalid action.");
-            response.sendRedirect("CartList?accountId=" + accountIdRaw);
+            response.sendRedirect("ViewCartServlet");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession();
-        String accountIdRaw = request.getParameter("accountId");
-
-        if ("remove".equals(action)) {
-            try {
-                int cartItemId = Integer.parseInt(request.getParameter("id"));
-                CartDAO cartDAO = new CartDAO();
-                boolean isSuccess = cartDAO.deleteCartItem(cartItemId);
-
-                if (isSuccess) {
-                    response.sendRedirect("CartList?accountId=" + accountIdRaw + "&successdeletes=1");
-                } else {
-                    response.sendRedirect("CartList?accountId=" + accountIdRaw + "&errordeletes=1");
-                }
-            } catch (NumberFormatException e) {
-                session.setAttribute("message", "Invalid cart item ID.");
-                response.sendRedirect("CartList?accountId=" + accountIdRaw);
-            }
-        } else {
-            session.setAttribute("message", "Invalid action.");
-            response.sendRedirect("CartList?accountId=" + accountIdRaw);
-        }
+        response.sendRedirect("ViewCartServlet");
     }
 
     @Override

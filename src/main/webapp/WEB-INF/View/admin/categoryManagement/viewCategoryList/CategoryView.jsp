@@ -31,7 +31,7 @@
                 <button class="create-btn" onclick="location.href = 'CreateCategory'">Create</button>
 
 <!-- Tạo khoảng cách như có search form -->
-<div style="height: 111.5px;"></div>
+<div style="height: 110px;"></div>
 
                     <%
                         if (categoryList != null) {

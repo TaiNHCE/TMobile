@@ -5,7 +5,6 @@
 package controller;
 
 import dao.AccountDAO;
-import dao.StaffDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
-import model.Staff;
 
 /**
  *
@@ -74,33 +72,26 @@ public class LoginStaffServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String email = request.getParameter("email");
-    String pass = request.getParameter("pass");
-    AccountDAO dao = new AccountDAO();
-    StaffDAO staffDAO = new StaffDAO();
-    HttpSession session = request.getSession();
-    Account acc = dao.verifyMD5(email, pass);
-    if (acc != null && acc.getAccountID() != -1) {
-        if (acc.getRoleID() == 2) {
-            // Lấy Staff theo AccountID
-            int staffId = staffDAO.getStaffIdByAccountId(acc.getAccountID());
-            Staff staff = staffDAO.getStaffById(staffId);
-
-            session.setAttribute("user", acc);   // Nếu cần dùng thông tin Account
-            session.setAttribute("staff", staff); // Đây là đối tượng Staff thực sự!
-
-            response.sendRedirect("StaffDashboard");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String pass = request.getParameter("pass");
+        AccountDAO dao = new AccountDAO();
+        HttpSession session = request.getSession();
+        Account acc = dao.verifyMD5(email, pass);
+        if (acc != null && acc.getAccountID() != -1) {
+            if (acc.getRoleID() == 2) {
+                session.setAttribute("staff", acc);
+                response.sendRedirect("StaffDashboard");
+            } else {
+                request.setAttribute("err", "<p style='color:red'>You do not have permission to access this page.</p>");
+                request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
+            }
         } else {
-            request.setAttribute("err", "<p style='color:red'>You do not have permission to access this page.</p>");
+            request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
             request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
         }
-    } else {
-        request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-        request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
     }
-}
 
     /**
      * Returns a short description of the servlet.

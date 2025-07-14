@@ -58,17 +58,6 @@ public class Staff {
         this.birthDay = birthDay;
         this.gender = gender;
     }
-    
-     public Staff(int staffID, String email, String fullName, String phone, Date hiredDate,String position, Date birthDay, String gender) {
-        this.staffID = staffID;
-        this.email = email;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.hiredDate = hiredDate;
-        this.position = position;
-        this.birthDay = birthDay;
-        this.gender = gender;
-    }
 
     public int getStaffID() {
         return staffID;
