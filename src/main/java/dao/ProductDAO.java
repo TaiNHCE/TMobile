@@ -15,9 +15,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import model.Brand;
+
+import model.CartItem;
 import model.Category;
 import model.Product;
 import model.ProductDetail;
+import model.ProductVariant;
+
 import model.Suppliers;
 import utils.DBContext;
 
@@ -490,7 +494,9 @@ public class ProductDAO extends DBContext {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
                 + "isd.UnitPrice, isd.Quantity, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL " 
+
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
@@ -543,7 +549,9 @@ public class ProductDAO extends DBContext {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
                 + "isd.UnitPrice, isd.Quantity, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL " 
+
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
@@ -1214,4 +1222,47 @@ public class ProductDAO extends DBContext {
     }
 
 //    <===================================================== GIA KHIÊM ======================================================>
+    public List<ProductVariant> getAllVariantsForCartItems(List<CartItem> cartItems) {
+        List<ProductVariant> list = new ArrayList<>();
+        if (cartItems == null || cartItems.isEmpty()) {
+            return list;
+        }
+
+        StringBuilder sql = new StringBuilder("SELECT VariantID, ProductID, Color, Storage, Quantity, Price, Discount, ImageURL, IsActive ");
+        sql.append("FROM ProductVariants WHERE ProductID IN (");
+        for (int i = 0; i < cartItems.size(); i++) {
+            sql.append("?");
+            if (i < cartItems.size() - 1) {
+                sql.append(",");
+            }
+        }
+        sql.append(")");
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < cartItems.size(); i++) {
+                ps.setInt(i + 1, cartItems.get(i).getProduct().getProductId());
+            }
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int variantId = rs.getInt("VariantID");
+                    int productId = rs.getInt("ProductID");
+                    String color = rs.getString("Color");
+                    String storage = rs.getString("Storage");
+                    int quantity = rs.getInt("Quantity");
+                    BigDecimal price = rs.getBigDecimal("Price");
+                    int discount = rs.getInt("Discount");
+                    String imageUrl = rs.getString("ImageURL");
+                    boolean isActive = rs.getBoolean("IsActive");
+
+                    ProductVariant variant = new ProductVariant(variantId, productId, color, storage, quantity, price, discount, imageUrl, isActive);
+                    list.add(variant);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }
