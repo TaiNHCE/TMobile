@@ -1,10 +1,13 @@
-<%@page import="model.Account"%>
+<%@ page import="model.Account" %>
+<%@ page import="model.Staff" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
-    Account acc = (Account) session.getAttribute("staff");
-    if (acc == null || acc.getRoleID() != 2) {
+    Account acc = (Account) session.getAttribute("user");
+    Staff staff = (Staff) session.getAttribute("staff");
+    if (acc == null || acc.getRoleID() != 2 || staff == null) {
         response.sendRedirect("LoginStaff");
         return;
     }
@@ -13,13 +16,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Staff Dashboard - TMobile Store</title>
+    <title>Staff Dashboard - TShop Store</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FontAwesome -->
+    <!-- FontAwesome + Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Shared CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/Staff.css">
 </head>
 <body>
@@ -31,23 +32,11 @@
     <!-- Wrapper + Main -->
     <div class="wrapper">
         <main class="main-content">
+                <jsp:include page="header.jsp" />
+
             <h1>Staff Dashboard</h1>
 
-            <!-- User Info -->
-            <div class="user-info" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                <div class="user-avatar bg-success text-white" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    ${not empty sessionScope.user.firstName ? sessionScope.user.firstName.charAt(0) : 'S'}${not empty sessionScope.user.lastName ? sessionScope.user.lastName.charAt(0) : 'T'}
-                </div>
-                <div>
-                    <h4>${not empty sessionScope.user ? sessionScope.user.firstName : 'John'} ${not empty sessionScope.user ? sessionScope.user.lastName : 'Smith'}</h4>
-                    <p style="margin: 0;">Sales Staff</p>
-                </div>
-                <form action="${pageContext.request.contextPath}/Logout" method="post" style="margin-left: auto;">
-                    <button type="submit" class="logout-btn btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                </form>
-            </div>
-
-           
+            
 
             <!-- Stats Grid -->
             <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
@@ -116,6 +105,5 @@
         </main>
     </div>
 </div>
-
 </body>
 </html>

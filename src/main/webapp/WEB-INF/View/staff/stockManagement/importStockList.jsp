@@ -1,20 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
+
 <html>
     <head>
         <title>Import Stock History</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <!-- Sidebar CSS (nếu cần) -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList6.css">
     </head>
     <body>
         <div class="container">
             <jsp:include page="/WEB-INF/View/staff/sideBar.jsp" />
-            <div class="wrapper">
+            <div class="wrapper" style="margin-left:7.5px">
                 <main class="main-content">
+                    <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1>Import Stock History</h1>
                     <button class="create-btn" style="float: right; margin-bottom: 12px;" onclick="location.href = 'ImportStock'">+ New Import</button>
                     <form class="search-form" method="get" action="">
@@ -80,40 +84,40 @@
         </div>
     </body>
     <!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-.swal2-confirm-green {
-    background-color: #28a745 !important; /* Bootstrap green */
-    color: #fff !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-.swal2-confirm-green:focus, .swal2-confirm-green:hover {
-    background-color: #218838 !important;
-}
-</style>
-<script>
-    document.getElementById('exportExcelBtn').onclick = function (e) {
-        e.preventDefault();
-        Swal.fire({
-            icon: 'question',
-            title: 'Export Excel',
-            text: 'Do you want to export the import stock history to Excel?',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, export',
-            cancelButtonText: 'Cancel',
-            customClass: {
-                confirmButton: 'swal2-confirm-green'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.form.action = 'ExportToFileExcelServlet';
-                this.form.method = 'post';
-                this.form.submit();
-            }
-        });
-        return false;
-    }
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .swal2-confirm-green {
+            background-color: #28a745 !important; /* Bootstrap green */
+            color: #fff !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .swal2-confirm-green:focus, .swal2-confirm-green:hover {
+            background-color: #218838 !important;
+        }
+    </style>
+    <script>
+                            document.getElementById('exportExcelBtn').onclick = function (e) {
+                                e.preventDefault();
+                                Swal.fire({
+                                    icon: 'question',
+                                    title: 'Export Excel',
+                                    text: 'Do you want to export the import stock history to Excel?',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, export',
+                                    cancelButtonText: 'Cancel',
+                                    customClass: {
+                                        confirmButton: 'swal2-confirm-green'
+                                    }
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        this.form.action = 'ExportToFileExcelServlet';
+                                        this.form.method = 'post';
+                                        this.form.submit();
+                                    }
+                                });
+                                return false;
+                            }
+    </script>
 
 </html>
