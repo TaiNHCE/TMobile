@@ -14,7 +14,6 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
         <!-- Custom Styles -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
         <style>
             body {
@@ -68,7 +67,7 @@
 
         <div class="container mt-5">
             <jsp:include page="../sideBar.jsp" />
-            <div class="card mx-auto shadow" style="max-width: 850px;">
+            <div class="card mx-auto shadow" style="max-width: 700px">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0"></i> Order Detail</h4>
                 </div>

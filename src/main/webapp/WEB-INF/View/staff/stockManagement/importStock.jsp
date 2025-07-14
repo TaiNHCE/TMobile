@@ -3,6 +3,7 @@
 <%@ page import="model.Product" %>
 <%@ page import="model.Suppliers" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -162,10 +163,12 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+                    <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1>Import Stock</h1>
 
                     <form class="search-form mb-4" method="get" style="min-height: 45px;">
-                      
+
                     </form>
                     <!-- Selected Supplier -->
                     <c:set value="${sessionScope.supplier}" var="sup" />

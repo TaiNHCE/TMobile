@@ -104,7 +104,6 @@
 
         <%
             String success = request.getParameter("success");
-            String successpro = request.getParameter("successpro");
             String error = request.getParameter("error");
         %>
 
@@ -126,26 +125,6 @@
                 });
             <% }%>
             };
-             window.onload = function () {
-            <% if ("1".equals(successpro)) { %>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Promotion is done!',
-                    text: 'The product has been hidden.',
-                    timer: 2000
-                });
-            <% } else if ("1".equals(error)) { %>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Failed!',
-                    text: 'Could not hide the product.',
-                    timer: 2000
-                });
-            <% }%>
-            };
-           
-           
-
         </script>
     </body>
 </html>

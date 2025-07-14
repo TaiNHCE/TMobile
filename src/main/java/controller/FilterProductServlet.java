@@ -4,8 +4,8 @@
  */
 package controller;
 
-import dao.AccountDAO;
-import dao.StaffDAO;
+import dao.BrandDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,16 +13,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
-import model.Staff;
+import java.math.BigDecimal;
+import java.util.List;
+import model.Brand;
+import model.Product;
 
 /**
  *
- * @author pc
+ * @author HP - Gia Khiêm
  */
-@WebServlet(name = "LoginStaffServlet", urlPatterns = {"/LoginStaff"})
-public class LoginStaffServlet extends HttpServlet {
+@WebServlet(name = "FilterProductServlet", urlPatterns = {"/FilterProduct"})
+public class FilterProductServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +42,10 @@ public class LoginStaffServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginStaffServlet</title>");
+            out.println("<title>Servlet FilterProductServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginStaffServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet FilterProductServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,7 +63,38 @@ public class LoginStaffServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
+
+        ProductDAO proDao = new ProductDAO();
+        String sort = request.getParameter("sort");
+        List<Product> productList = null;
+        List<Brand> brandList = null;
+        String categoryIdStr = null;
+        String brandIdStr = null;
+
+        categoryIdStr = request.getParameter("categoryId");
+        brandIdStr = request.getParameter("brandId");
+
+        int categoryId = (categoryIdStr != null) ? Integer.parseInt(categoryIdStr) : -1;
+        int brandId = (brandIdStr != null) ? Integer.parseInt(brandIdStr) : -1;
+
+        BrandDAO brandDao = new BrandDAO();
+
+        if (categoryId != -1 && brandId == -1) {
+            productList = proDao.getProductByCategory(categoryId);
+            brandList = brandDao.getBrandByCategoryId(categoryId);
+        }
+
+        if (categoryId != -1 && brandId != -1) {
+            productList = proDao.getProductByBrand(brandId);
+            brandList = brandDao.getBrandByCategoryId(categoryId);
+        }
+
+        request.setAttribute("productList", productList);
+        request.setAttribute("brandList", brandList);
+        request.setAttribute("categoryId", categoryId);
+        request.setAttribute("brandId", brandId);
+        request.getRequestDispatcher("/WEB-INF/View/customer/productManagement/filterProduct/filterProduct.jsp").forward(request, response);
+
     }
 
     /**
@@ -74,33 +106,10 @@ public class LoginStaffServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String email = request.getParameter("email");
-    String pass = request.getParameter("pass");
-    AccountDAO dao = new AccountDAO();
-    StaffDAO staffDAO = new StaffDAO();
-    HttpSession session = request.getSession();
-    Account acc = dao.verifyMD5(email, pass);
-    if (acc != null && acc.getAccountID() != -1) {
-        if (acc.getRoleID() == 2) {
-            // Lấy Staff theo AccountID
-            int staffId = staffDAO.getStaffIdByAccountId(acc.getAccountID());
-            Staff staff = staffDAO.getStaffById(staffId);
-
-            session.setAttribute("user", acc);   // Nếu cần dùng thông tin Account
-            session.setAttribute("staff", staff); // Đây là đối tượng Staff thực sự!
-
-            response.sendRedirect("StaffDashboard");
-        } else {
-            request.setAttribute("err", "<p style='color:red'>You do not have permission to access this page.</p>");
-            request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
-        }
-    } else {
-        request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
-        request.getRequestDispatcher("WEB-INF/View/account/login-staff.jsp").forward(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
-}
 
     /**
      * Returns a short description of the servlet.

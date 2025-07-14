@@ -55,6 +55,7 @@ public class ImportStockServlet extends HttpServlet {
             out.println("</html>");
         }
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -134,12 +135,16 @@ public class ImportStockServlet extends HttpServlet {
                 long price = Long.parseLong(priceRaw.trim());
 
                 Product product = productDAO.getProductByID(productId);
-                if (price >= product.getPrice().longValue()) {
-                    session.setAttribute("error", "Import price (" + price + ") must be less than sale price (" 
-                        + product.getPrice().longValue() + ").");
-                    response.sendRedirect("ImportStock");
-                    return;
+
+                // Chỉ kiểm tra nếu product đã có giá bán > 0 và khác null
+                if (product.getPrice() != null && product.getPrice().longValue() > 0) {
+                    if (price >= product.getPrice().longValue()) {
+                        session.setAttribute("error", "Import price (" + price + ") must be less than sale price (" + product.getPrice().longValue() + ").");
+                        response.sendRedirect("ImportStock");
+                        return;
+                    }
                 }
+
                 ImportStockDetail detail = new ImportStockDetail();
                 detail.setProduct(product);
                 detail.setQuantity(quantity);
@@ -206,11 +211,16 @@ public class ImportStockServlet extends HttpServlet {
                     long price = Long.parseLong(request.getParameter("price"));
 
                     Product product = productDAO.getProductByID(productId);
-                    if (price >= product.getPrice().longValue()) {
-                        session.setAttribute("error", "Import price (" + price + ") must be less than sale price (" + product.getPrice().longValue() + ").");
-                        response.sendRedirect("ImportStock");
-                        return;
+
+                    // Chỉ kiểm tra nếu product đã có giá bán > 0 và khác null
+                    if (product.getPrice() != null && product.getPrice().longValue() > 0) {
+                        if (price >= product.getPrice().longValue()) {
+                            session.setAttribute("error", "Import price (" + price + ") must be less than sale price (" + product.getPrice().longValue() + ").");
+                            response.sendRedirect("ImportStock");
+                            return;
+                        }
                     }
+
                     // Update product detail
                     for (int i = 0; i < detailList.size(); i++) {
                         if (detailList.get(i).getProduct().getProductId() == productId) {
@@ -257,11 +267,10 @@ public class ImportStockServlet extends HttpServlet {
                 total += detail.getQuantity() * detail.getUnitPrice();
             }
 
-            Account account = (Account) session.getAttribute("staff");
+            Staff staff = (Staff) session.getAttribute("staff");
             int staffId = 0;
-            if (account != null) {
-                StaffDAO staffDAO = new StaffDAO();
-                staffId = staffDAO.getStaffIdByAccountId(account.getAccountID());
+            if (staff != null) {
+                staffId = staff.getStaffID();
             }
 
             ImportStock importStock = new ImportStock(staffId, supplier.getSupplierID(), total);

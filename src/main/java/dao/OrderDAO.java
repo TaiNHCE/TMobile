@@ -13,78 +13,8 @@ public class OrderDAO extends DBContext {
 
     public List<Order> getOrderList() {
         List<Order> list = new ArrayList<>();
-        String url = "select * from Orders where Orders.Status != 6 Order BY Orders.Status  ASC";
-        try {
-
-            PreparedStatement pre = conn.prepareStatement(url);
-            ResultSet rs = pre.executeQuery();
-
-            while (rs.next()) {
-                Order o = new Order(rs.getInt("OrderID"),
-                        rs.getInt("CustomerID"),
-                        rs.getString("FullName"),
-                        rs.getString("PhoneNumber"),
-                        rs.getString("Address"),
-                        rs.getInt("TotalAmount"),
-                        rs.getString("OrderedDate"),
-                        rs.getInt("Status"));
-                list.add(o);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return list;
-    }
-
-    public Order getOrderByID(String orderID) {
-        Order o = new Order();
-        String query = "select * from Orders where Orders.OrderID = ?";
-        try {
-            PreparedStatement pre = conn.prepareStatement(query);
-            pre.setString(1, orderID);
-            ResultSet rs = pre.executeQuery();
-            if (rs.next()) {
-                o.setOrderID(rs.getInt("OrderID"));
-                o.setAccountID(rs.getInt("CustomerID"));
-                o.setFullName(rs.getString("FullName"));
-                o.setPhone(rs.getString("PhoneNumber"));
-                o.setAddress(rs.getString("Address"));
-                o.setTotalAmount(rs.getInt("TotalAmount"));
-                o.setOrderDate(rs.getString("OrderedDate"));
-                o.setStatus(rs.getInt("Status"));
-                o.setDiscount(rs.getInt("Discount"));
-            }
-        } catch (Exception e) {
-        }
-        return o;
-    }
-
-    public boolean updateStatus(int orderId, int newStatus) {
-    String query = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
-    try {
-        PreparedStatement pre = conn.prepareStatement(query);
-        pre.setInt(1, newStatus);
-        pre.setInt(2, orderId);
-        return pre.executeUpdate() > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
-
-
-
-    public List<Order> searchOrders(String searchQuery) {
-        List<Order> list = new ArrayList<>();
-        String query = "SELECT * FROM Orders WHERE "
-                + "FullName LIKE ? OR "
-                + "PhoneNumber LIKE ?  Order BY Status ASC";
-        try {
-            PreparedStatement pre = conn.prepareStatement(query);
-
-            pre.setString(1, "%" + searchQuery + "%");
-            pre.setString(2, "%" + searchQuery + "%");
-
+        String sql = "SELECT * FROM Orders WHERE Status != 6 ORDER BY Status ASC";
+        try ( PreparedStatement pre = conn.prepareStatement(sql)) {
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 Order o = new Order(
@@ -92,10 +22,13 @@ public class OrderDAO extends DBContext {
                         rs.getInt("CustomerID"),
                         rs.getString("FullName"),
                         rs.getString("PhoneNumber"),
-                        rs.getString("Address"),
-                        rs.getInt("TotalAmount"),
+                        rs.getLong("TotalAmount"),
                         rs.getString("OrderedDate"),
-                        rs.getInt("Status")
+                        rs.getString("DeliveredDate"),
+                        rs.getInt("Status"),
+                        rs.getInt("Discount"),
+                        rs.getString("AddressSnapshot"),
+                        rs.getInt("AddressID")
                 );
                 list.add(o);
             }
@@ -104,27 +37,97 @@ public class OrderDAO extends DBContext {
         }
         return list;
     }
-        public int updateOrder(int orderID, int status) {
+
+    public Order getOrderByID(String orderID) {
+        Order o = null;
+        String query = "SELECT * FROM Orders WHERE OrderID = ?";
+        try ( PreparedStatement pre = conn.prepareStatement(query)) {
+            pre.setString(1, orderID);
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                o = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getString("FullName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getLong("TotalAmount"),
+                        rs.getString("OrderedDate"),
+                        rs.getString("DeliveredDate"),
+                        rs.getInt("Status"),
+                        rs.getInt("Discount"),
+                        rs.getString("AddressSnapshot"),
+                        rs.getInt("AddressID")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
+
+    public boolean updateStatus(int orderId, int newStatus) {
+        String query = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
+        try {
+            PreparedStatement pre = conn.prepareStatement(query);
+            pre.setInt(1, newStatus);
+            pre.setInt(2, orderId);
+            return pre.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Order> searchOrders(String searchQuery) {
+        List<Order> list = new ArrayList<>();
+        String query = "SELECT * FROM Orders WHERE FullName LIKE ? OR PhoneNumber LIKE ? ORDER BY Status ASC";
+        try ( PreparedStatement pre = conn.prepareStatement(query)) {
+            pre.setString(1, "%" + searchQuery + "%");
+            pre.setString(2, "%" + searchQuery + "%");
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Order o = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getString("FullName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getLong("TotalAmount"),
+                        rs.getString("OrderedDate"),
+                        rs.getString("DeliveredDate"),
+                        rs.getInt("Status"),
+                        rs.getInt("Discount"),
+                        rs.getString("AddressSnapshot"),
+                        rs.getInt("AddressID")
+                );
+                list.add(o);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int updateOrder(int orderID, int status) {
         int count = 0;
         String query = "Update Orders SET Orders.Status= ? WHERE Orders.OrderID=?";
-          String query2 = "UPDATE Orders\n"
+        String query2 = "UPDATE Orders\n"
                 + "SET Status = ?,\n"
                 + "    DeliveredDate = DATEADD(HOUR, 7, GETUTCDATE())\n"
                 + "WHERE OrderID = ?;";
         try {
-            if(status == 4){
-             PreparedStatement pre = conn.prepareStatement(query2);
-            pre.setInt(1, status);
-            pre.setInt(2, orderID);
-                    
-             count = pre.executeUpdate();
-            }else{
-            PreparedStatement pre = conn.prepareStatement(query);
-            pre.setInt(1, status);
-            pre.setInt(2, orderID);
-                    
-             count = pre.executeUpdate();
-                    }
+            if (status == 4) {
+                PreparedStatement pre = conn.prepareStatement(query2);
+                pre.setInt(1, status);
+                pre.setInt(2, orderID);
+
+                count = pre.executeUpdate();
+            } else {
+                PreparedStatement pre = conn.prepareStatement(query);
+                pre.setInt(1, status);
+                pre.setInt(2, orderID);
+
+                count = pre.executeUpdate();
+            }
         } catch (Exception e) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
         }

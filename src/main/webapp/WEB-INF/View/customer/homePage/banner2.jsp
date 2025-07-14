@@ -14,7 +14,7 @@
     <body>
 
         <!-- Banner -->
-        <div class="category-banner-full2 col-md-12" style = "margin-top: 1%">
+        <div class="category-banner-full2" style = "margin-top: 1%">
             <img style = "width: 100%" src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750922275/Banner2Dai_srnutu.png" alt="Banner" class="img-fluid">
         </div>
 
@@ -24,13 +24,12 @@
 <style>
     .category-banner-full2 {
         border-radius: 15px;
-        width: 98%;
+        width: 100%;
         overflow: hidden;
         margin: 0;
         padding: 0;
         overflow: hidden;
         margin-top: 1%;
-        margin-left: 1%;
         background-color: #ffffff;
     }
 </style>
