@@ -323,4 +323,30 @@ public class StaffDAO extends DBContext {
         return false;
     }
 
+    public int getTotalStaff() {
+        String sql = "SELECT COUNT(*) FROM Staff";
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getStaffIdByAccountId(int accountId) {
+        String sql = "SELECT StaffID FROM Staff WHERE AccountID = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("StaffID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

@@ -27,6 +27,12 @@ public class Category {
         this.isActive = isActive;
     }
 
+    public Category(int categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
+    
+
     public Category() {
     }
 
@@ -89,6 +95,13 @@ public class Category {
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" + "categoryId=" + categoryId + ", categoryName=" + categoryName + ", descriptionCategory=" + descriptionCategory + ", createdAt=" + createdAt + ", imgUrlLogo=" + imgUrlLogo + ", isActive=" + isActive + '}';
+    }
+    
+    
 
     
 }

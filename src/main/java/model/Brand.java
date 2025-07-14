@@ -26,6 +26,11 @@ public class Brand {
         this.imgUrlLogo = imgUrlLogo;
     }
 
+    public Brand(int brandId, String brandName) {
+        this.brandId = brandId;
+        this.brandName = brandName;
+    }
+    
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
     }

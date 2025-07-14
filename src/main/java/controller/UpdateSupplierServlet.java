@@ -157,7 +157,7 @@ public class UpdateSupplierServlet extends HttpServlet {
 
             boolean success = dao.updateSupplier(supplier);
             if (success) {
-                response.sendRedirect("ViewSupplier");
+                response.sendRedirect("ViewSupplier?success=update");
             } else {
                 request.setAttribute("errorMessage", "Failed to update supplier. Please try again.");
                 request.setAttribute("supplier", supplier);

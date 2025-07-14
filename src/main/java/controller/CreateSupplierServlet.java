@@ -141,7 +141,7 @@ public class CreateSupplierServlet extends HttpServlet {
         int result = dao.createSupplier(supplier);
 
         if (result > 0) {
-            response.sendRedirect("ViewSupplier");
+            response.sendRedirect("ViewSupplier?success=create");
         } else {
             request.setAttribute("errorMsg", "Failed to add supplier!");
             request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);

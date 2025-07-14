@@ -63,7 +63,7 @@
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <h2><i class="fas fa-store"></i> <span>TMobile</span></h2>
+        <h2><i class="fas fa-store"></i> <span>TShop</span></h2>
     </div>
     <ul class="nav-menu">
         <li class="nav-item">
@@ -77,7 +77,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="ProductList" class="nav-link">
+            <a href="AdminProduct" class="nav-link">
                 <i class="fas fa-box"></i> <span>Product Management</span>
             </a>
         </li>

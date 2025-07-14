@@ -65,7 +65,7 @@ public class VoucherServlet extends HttpServlet {
                 }
                 int delId = Integer.parseInt(idRaw);
                 voucherDAO.deleteVoucher(delId);
-                response.sendRedirect("Voucher");
+                response.sendRedirect("Voucher?success=delete");
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("Voucher?error=DeleteFailed");
@@ -83,7 +83,7 @@ public class VoucherServlet extends HttpServlet {
                 }
 
                 request.setAttribute("voucherList", list);
-                request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherList.jsp").forward(request, response);
+request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherList.jsp").forward(request, response);
                 break;
         }
     }
@@ -141,13 +141,12 @@ public class VoucherServlet extends HttpServlet {
             // Insert or update
             if (id == 0) {
                 voucherDAO.addVoucher(v);
+                response.sendRedirect("Voucher?success=create");
             } else {
                 voucherDAO.updateVoucher(v);
+                response.sendRedirect("Voucher?success=update");
             }
-
-            response.sendRedirect("Voucher");
-
-        } catch (Exception e) {
+} catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error occurred: " + e.getMessage());
 
