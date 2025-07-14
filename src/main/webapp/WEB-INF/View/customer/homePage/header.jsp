@@ -118,31 +118,13 @@
     .user-dropdown-item .bi-box-arrow-right{
         margin-left: 60px;
     }
-     .user-dropdown-item .bi-geo-alt{
-margin-left: 60px;
+    .user-dropdown-item .bi-geo-alt{
+        margin-left: 60px;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .user-dropdown-menu {
-            min-width: 180px;
-        }
-
-        .user-dropdown-item {
-            padding: 10px 14px;
-            font-size: 13px;
-        }
-
-        .user-dropdown-item i {
-            font-size: 14px;
-        }
-
-        .user-dropdown .btn {
-            width: 40px;
-            height: 40px;
-            font-size: 16px;
-        }
+.user-dropdown-item .bi-ticket-perforated{
+        margin-left: 60px;
     }
+    
 </style>
 <!DOCTYPE html>
 <html>
@@ -161,7 +143,7 @@ margin-left: 60px;
             <!-- (1) TRÁI: LOGO & NÚT DANH MỤC -->
             <div class="d-flex align-items-center">
                 <!-- Logo -->
-                <a style = "margin-left: 25%" href="${pageContext.request.contextPath}/TMobile" class="me-3">
+                <a style = "margin-left: 25%" href="${pageContext.request.contextPath}/Home" class="me-3">
                     <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919684/Logo_nl7ahl.png" 
 
                          class="header-logo" 
@@ -169,7 +151,7 @@ margin-left: 60px;
                 </a>
 
                 <!-- Danh mục: Dropdown -->
-                <div class="dropdown" style = "margin-left: 20%">
+                <div class="dropdown" style="margin-left: 20%;">
                     <button class="category-btn"
                             type="button"
                             id="dropdownMenuButton"
@@ -179,51 +161,28 @@ margin-left: 60px;
                     </button>
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <%
-                            if (categoryList != null) {
+
+                        <% if (categoryList != null) {
                                 for (Category cate : categoryList) {
                                     if (cate.getIsActive()) {
                         %>
-                        <li class="dropdown-submenu position-relative">
-                            <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/Brand?name=">
-                                <img src="<%= cate.getImgUrlLogo()%>" 
-                                     style="width: 18%; margin-right: 4%;">
-                                <%= cate.getCategoryName()%>
+                        <li style="flex: 0 0 20%; text-align: center; list-style: none;">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/FilterProduct?categoryId=<%= cate.getCategoryId()%>">
+                                <img src="<%= cate.getImgUrlLogo()%>" style="width: 50px; height: 50px; object-fit: contain;">
+                                <p><%= cate.getCategoryName()%></p>
                             </a>
-<ul class="dropdown-menu">
-                                <%
-                                    if (brandList != null) {
-                                        for (Brand brand : brandList) {
-                                            if (brand.getCategoryID() == cate.getCategoryId()) {
-                                %>
-                                <li>
-                                    <a class="dropdown-item"
-                                       href="${pageContext.request.contextPath}/Brand?name=<%= brand.getBrandName()%>">
-                                        <img src="<%= brand.getImgUrlLogo()%>"
-                                             style="width: 18%; margin-right: 4%;">
-                                        <%= brand.getBrandName()%>
-                                    </a>
-                                </li>
-                                <%
-                                            }
-                                        }
-                                    }
-                                %>
-                            </ul>
                         </li>
-                        <%
-                                    }
+                        <% }
                                 }
-                            }
-                        %>
+                            } %>
                     </ul>
                 </div>
+
             </div>
 
             <!-- (2) GIỮA: THANH TÌM KIẾM -->
             <div class="search-wrapper mx-3 position-relative" style="flex: 0 0 30%;">
-                <form action="Search" method="get" class="search-bar position-relative">
+                <form action="SearchProduct" method="get" class="search-bar position-relative">
                     <input type="text"
                            name="keyword"
                            class="form-control"
@@ -251,7 +210,7 @@ margin-left: 60px;
                     <ul class="user-dropdown-menu" aria-labelledby="userDropdown">
                         <li>
                             <a class="user-dropdown-item" href="ViewProfile?id=<%= user.getAccountID()%>">
-<i class="bi bi-person-circle"></i>
+                                <i class="bi bi-person-circle"></i>
                                 <span>Profile</span>
                             </a>
                         </li>
@@ -267,6 +226,13 @@ margin-left: 60px;
                                 <span>Address</span>
                             </a>
                         </li>
+                        <li>
+                            <a class="user-dropdown-item" href="ViewCustomerVoucher">
+                                <i class="bi bi-ticket-perforated"></i>
+                                <span>Voucher</span>
+                            </a>
+                        </li>
+
                         <li><hr class="user-dropdown-divider"></li>
                         <li>
                             <a class="user-dropdown-item text-danger" href="Logout">

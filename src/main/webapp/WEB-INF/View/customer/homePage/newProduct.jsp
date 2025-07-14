@@ -115,7 +115,7 @@
         </style>
     </head>
     <body>
-        <div class="" style="width: 95%; border-radius: 15px; margin-top: 1%; margin-left: 2.5%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+        <div class="" style="width: 100%; border-radius: 15px; margin-top: 1%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
             <p class="new-product-label">New product</p>
 
             <div style="display: flex; border-radius: 10px;">
@@ -126,10 +126,10 @@
                 <!-- PHẦN SẢN PHẨM CUỘN NGANG -->
                 <div class="product-scroll-wrapper">
                     <!-- Nút trái -->
-                    <button style = "margin-right: 2%;" onclick="scrollLeft()" class="scroll-btn scroll-left-new">←</button>
+                    <button style = "" onclick="scrollLeft()" class="scroll-btn scroll-left-new">←</button>
 
                     <!-- Danh sách sản phẩm -->
-                    <div id="product-scroll-new" style = "margin-left: 3%;">
+                    <div id="product-scroll-new" style = "gap: 0.25%">
                         <% if (productList != null) {
                                 for (Product pro : productList) {
                                     if (pro.getDiscount() != 0) {
@@ -151,7 +151,7 @@
                                         String giaMoiFormatted = currencyVN.format(giaMoi);
                                         String giamFormatted = currencyVN.format(giaDaGiam);
                         %>
-                        <div class="sanPhamMoi col-md-3">
+                        <div class="sanPhamMoi">
                             <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
@@ -174,7 +174,7 @@
                             NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
                             String giaCuFormatted = currencyVN.format(oldPrice);
                         %>
-                        <div class="sanPhamMoi col-md-2">
+                        <div class="sanPhamMoi">
                             <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
