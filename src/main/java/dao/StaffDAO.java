@@ -47,33 +47,44 @@ public class StaffDAO extends DBContext {
 
         return list;
     }
+    public int getStaffIDByAccountID(int accountID) {
+        String sql = "SELECT StaffID FROM Staff WHERE AccountID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("StaffID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
     public Staff getStaffByID(int staffID) {
         Staff sta = null;
-        String sql = "SELECT StaffID, a.Email, FullName, s.PhoneNumber, HiredDate, s.BirthDate, s.Gender "
-                + "FROM Staff s JOIN Accounts a ON s.AccountID = a.AccountID WHERE StaffID = ?";
-
+        String sql = "SELECT StaffID, a.Email, FullName,s.PhoneNumber, HiredDate,Position,s.BirthDate,s.Gender  FROM Staff s JOIN Accounts a ON s.AccountID = a.AccountID Where StaffID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, staffID);
-
             try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int id = rs.getInt("StaffID");
                     String email = rs.getString("Email");
                     String fullName = rs.getString("FullName");
                     String phone = rs.getString("PhoneNumber");
-                    Date hiredDate = rs.getDate("HiredDate");
-                    Date birthday = rs.getDate("BirthDate");
+                    Date hiredDate = rs.getTimestamp("HiredDate");
+                    String formattedDate = new SimpleDateFormat("dd-MM-yyyy").format(hiredDate);
+                    String position = rs.getString("Position");
+                    Date birthday = rs.getTimestamp("BirthDate");
                     String gender = rs.getString("Gender");
-
-                    sta = new Staff(id, email, fullName, phone, hiredDate, birthday, gender);
+                    sta = new Staff(id, email, fullName, phone, hiredDate, position, birthday, gender);
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // hoặc log ra logger nếu dùng log4j, slf4j
         }
-
-        return sta;
+        return sta; // nếu không có bản ghi hoặc có lỗi
     }
 
     public List<Staff> searchStaffByName(String keyword) {
@@ -323,6 +334,7 @@ public class StaffDAO extends DBContext {
         return false;
     }
 
+
     public int getTotalStaff() {
         String sql = "SELECT COUNT(*) FROM Staff";
         try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
@@ -334,6 +346,7 @@ public class StaffDAO extends DBContext {
         }
         return 0;
     }
+
 
     public int getStaffIdByAccountId(int accountId) {
         String sql = "SELECT StaffID FROM Staff WHERE AccountID = ?";

@@ -43,34 +43,34 @@ public class VoucherServlet extends HttpServlet {
 
             case "edit":
                 try {
-                String idRaw = request.getParameter("id");
-                if (idRaw == null || idRaw.isEmpty()) {
-                    throw new IllegalArgumentException("Missing voucher ID.");
+                    String idRaw = request.getParameter("id");
+                    if (idRaw == null || idRaw.isEmpty()) {
+                        throw new IllegalArgumentException("Missing voucher ID.");
+                    }
+                    int id = Integer.parseInt(idRaw);
+                    Voucher voucher = voucherDAO.getVoucherById(id);
+                    request.setAttribute("voucher", voucher);
+                    request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherForm.jsp").forward(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendRedirect("Voucher?error=InvalidID");
                 }
-                int id = Integer.parseInt(idRaw);
-                Voucher voucher = voucherDAO.getVoucherById(id);
-                request.setAttribute("voucher", voucher);
-                request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherForm.jsp").forward(request, response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("Voucher?error=InvalidID");
-            }
-            break;
+                break;
 
             case "delete":
                 try {
-                String idRaw = request.getParameter("id");
-                if (idRaw == null || idRaw.isEmpty()) {
-                    throw new IllegalArgumentException("Missing voucher ID.");
+                    String idRaw = request.getParameter("id");
+                    if (idRaw == null || idRaw.isEmpty()) {
+                        throw new IllegalArgumentException("Missing voucher ID.");
+                    }
+                    int delId = Integer.parseInt(idRaw);
+                    voucherDAO.deleteVoucher(delId);
+                    response.sendRedirect("Voucher?success=delete");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendRedirect("Voucher?error=DeleteFailed");
                 }
-                int delId = Integer.parseInt(idRaw);
-                voucherDAO.deleteVoucher(delId);
-                response.sendRedirect("Voucher?success=delete");
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("Voucher?error=DeleteFailed");
-            }
-            break;
+                break;
 
             default:
                 String keyword = request.getParameter("searchCode");
@@ -83,99 +83,102 @@ public class VoucherServlet extends HttpServlet {
                 }
 
                 request.setAttribute("voucherList", list);
-request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherList.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherList.jsp").forward(request, response);
                 break;
         }
     }
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        throws ServletException, IOException {
+    request.setCharacterEncoding("UTF-8");
+    try {
+        int id = request.getParameter("id") != null && !request.getParameter("id").isEmpty()
+                ? Integer.parseInt(request.getParameter("id")) : 0;
 
+        String code = request.getParameter("code");
+        if (code == null || code.trim().isEmpty()) {
+            throw new IllegalArgumentException("Voucher code cannot be empty.");
+        }
+
+        int discount = Integer.parseInt(request.getParameter("discountPercent"));
+        Date expiry = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("expiryDate"));
+        double minAmount = Double.parseDouble(request.getParameter("minOrderAmount"));
+        double maxDiscount = Double.parseDouble(request.getParameter("maxDiscountAmount"));
+        int usageLimit = Integer.parseInt(request.getParameter("usageLimit"));
+        boolean isActive = request.getParameter("isActive") != null;
+        Date createdAt = new Date();
+        String description = request.getParameter("description");
+        boolean isGlobal = "1".equals(request.getParameter("isGlobal"));
+
+        int usedCount = 0; // Default when creating new
+        if (id != 0) {
+            // If editing, get current usedCount from DB
+            Voucher old = voucherDAO.getVoucherById(id);
+            usedCount = old != null ? old.getUsedCount() : 0;
+        }
+
+        // Validation như cũ...
+        if (voucherDAO.isCodeDuplicate(code, id)) {
+            throw new IllegalArgumentException("Voucher code already exists. Please choose another.");
+        }
+        if (discount < 1 || discount > 100) {
+            throw new IllegalArgumentException("Discount percent must be between 1 and 100.");
+        }
+        if (minAmount < 0 || maxDiscount < 0) {
+            throw new IllegalArgumentException("Amounts cannot be negative.");
+        }
+        if (usageLimit < 1) {
+            throw new IllegalArgumentException("Usage limit must be at least 1.");
+        }
+        if (usedCount < 0 || usedCount > usageLimit) {
+            throw new IllegalArgumentException("Used count is not valid.");
+        }
+        if (expiry.before(new Date())) {
+            throw new IllegalArgumentException("Expiry date must be today or later.");
+        }
+
+        Voucher v = new Voucher(id, code, discount, expiry, minAmount, maxDiscount,
+                usageLimit, usedCount, isActive, createdAt, description, isGlobal);
+
+        if (id == 0) {
+            voucherDAO.addVoucher(v);
+            response.sendRedirect("Voucher?success=create");
+        } else {
+            voucherDAO.updateVoucher(v);
+            response.sendRedirect("Voucher?success=update");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("error", "Error occurred: " + e.getMessage());
+        // Re-populate, set usedCount = 0 (or from DB if isEdit)
         try {
-            // Parse data
             int id = request.getParameter("id") != null && !request.getParameter("id").isEmpty()
                     ? Integer.parseInt(request.getParameter("id")) : 0;
-
             String code = request.getParameter("code");
-            if (code == null || code.trim().isEmpty()) {
-                throw new IllegalArgumentException("Voucher code cannot be empty.");
-            }
-
             int discount = Integer.parseInt(request.getParameter("discountPercent"));
             Date expiry = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("expiryDate"));
             double minAmount = Double.parseDouble(request.getParameter("minOrderAmount"));
             double maxDiscount = Double.parseDouble(request.getParameter("maxDiscountAmount"));
             int usageLimit = Integer.parseInt(request.getParameter("usageLimit"));
-            int usedCount = Integer.parseInt(request.getParameter("usedCount"));
             boolean isActive = request.getParameter("isActive") != null;
             Date createdAt = new Date();
             String description = request.getParameter("description");
-
-            // Validation
-            if (voucherDAO.isCodeDuplicate(code, id)) {
-                throw new IllegalArgumentException("Voucher code already exists. Please choose another.");
+            boolean isGlobal = "1".equals(request.getParameter("isGlobal"));
+            int usedCount = 0;
+            if (id != 0) {
+                Voucher old = voucherDAO.getVoucherById(id);
+                usedCount = old != null ? old.getUsedCount() : 0;
             }
-
-            if (discount < 1 || discount > 100) {
-                throw new IllegalArgumentException("Discount percent must be between 1 and 100.");
-            }
-            if (minAmount < 0 || maxDiscount < 0) {
-                throw new IllegalArgumentException("Amounts cannot be negative.");
-            }
-            if (usageLimit < 1) {
-                throw new IllegalArgumentException("Usage limit must be at least 1.");
-            }
-            if (usedCount < 0 || usedCount > usageLimit) {
-                throw new IllegalArgumentException("Used count is not valid.");
-            }
-            if (expiry.before(new Date())) {
-                throw new IllegalArgumentException("Expiry date must be today or later.");
-            }
-
-            // Create Voucher object
-            Voucher v = new Voucher(id, code, discount, expiry, minAmount, maxDiscount,
-                    usageLimit, usedCount, isActive, createdAt, description);
-
-            // Insert or update
-            if (id == 0) {
-                voucherDAO.addVoucher(v);
-                response.sendRedirect("Voucher?success=create");
-            } else {
-                voucherDAO.updateVoucher(v);
-                response.sendRedirect("Voucher?success=update");
-            }
-} catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Error occurred: " + e.getMessage());
-
-            try {
-                // Re-populate form fields
-                int id = request.getParameter("id") != null && !request.getParameter("id").isEmpty()
-                        ? Integer.parseInt(request.getParameter("id")) : 0;
-                String code = request.getParameter("code");
-                int discount = Integer.parseInt(request.getParameter("discountPercent"));
-                Date expiry = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("expiryDate"));
-                double minAmount = Double.parseDouble(request.getParameter("minOrderAmount"));
-                double maxDiscount = Double.parseDouble(request.getParameter("maxDiscountAmount"));
-                int usageLimit = Integer.parseInt(request.getParameter("usageLimit"));
-                int usedCount = Integer.parseInt(request.getParameter("usedCount"));
-                boolean isActive = request.getParameter("isActive") != null;
-                Date createdAt = new Date();
-                String description = request.getParameter("description");
-
-                Voucher retryVoucher = new Voucher(id, code, discount, expiry, minAmount,
-                        maxDiscount, usageLimit, usedCount, isActive, createdAt, description);
-
-                request.setAttribute("voucher", retryVoucher);
-            } catch (Exception ex) {
-                request.setAttribute("voucher", null);
-            }
-
-            request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherForm.jsp").forward(request, response);
+            Voucher retryVoucher = new Voucher(id, code, discount, expiry, minAmount,
+                    maxDiscount, usageLimit, usedCount, isActive, createdAt, description, isGlobal);
+            request.setAttribute("voucher", retryVoucher);
+        } catch (Exception ex) {
+            request.setAttribute("voucher", null);
         }
+        request.getRequestDispatcher("/WEB-INF/View/admin/voucherManagement/voucherForm.jsp").forward(request, response);
     }
+}
+
 
     private void showVoucherDetail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

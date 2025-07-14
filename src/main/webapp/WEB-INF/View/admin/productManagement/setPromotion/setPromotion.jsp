@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Category" %>
@@ -31,7 +32,7 @@
             border: none;
             max-width: 800px;
             margin: 0 auto;
-            min-height: 70vh;
+            min-height: 70vh; /* Đảm bảo card có chiều cao tối thiểu */
         }
 
         .card-header {
@@ -45,7 +46,7 @@
 
         .form-section {
             margin-bottom: 2rem;
-            min-height: 60vh;
+            min-height: 60vh; /* Tăng chiều cao tối thiểu của form section */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -83,28 +84,28 @@
         }
 
         .btn-primary {
-            background-color: #28a745;
+            background-color: #28a745; /* Nền xanh lá cố định */
             border: none;
-            color: white;
+            color: white; /* Chữ trắng */
         }
 
         .btn-primary:focus,
         .btn-primary:active,
         .btn-primary:hover {
-            background-color: #28a745 !important;
+            background-color: #28a745 !important; /* Giữ nguyên màu xanh lá */
             border: none !important;
             color: white !important;
-            box-shadow: none !important;
+            box-shadow: none !important; /* Loại bỏ bóng mặc định của Bootstrap */
         }
 
         .btn-secondary {
-            background-color: #ced4da;
+            background-color: #ced4da; /* Nền xám đậm */
             border-color: #ced4da;
-            color: white;
+            color: white; /* Chữ trắng */
         }
 
         .btn-secondary:hover {
-            background-color: #adb5bd;
+            background-color: #adb5bd; /* Xám đậm hơn khi hover */
             color: white;
         }
 
@@ -116,9 +117,10 @@
             border-radius: 5px;
         }
 
+        /* Thêm khoảng trống giả lập để kéo dài form */
         .spacer {
             flex-grow: 1;
-            height: 20vh;
+            height: 20vh; /* Khoảng trống giả lập */
         }
     </style>
 </head>
@@ -142,7 +144,7 @@
                 <% } %>
 
                 <!-- Form -->
-                <form id="promotionForm" action="AddPromotionServlet" method="POST" class="row g-3 needs-validation" novalidate>
+                <form id="promotionForm" action="AddPromotionServlet" method="POST" class="row g-3">
                     <div class="col-12 form-section">
                         <h5 class="section-title"><i class="fas fa-tags me-2"></i>Promotion Details</h5>
                         <div class="row">
@@ -196,7 +198,7 @@
 
                     <div class="col-12 mt-4 text-end">
                         <button type="submit" class="btn btn-primary me-2">Add Promotion</button>
-                        <a href="AdminProduct" class="btn btn-secondary" onclick="window.history.back(); return false;">Cancel</a>
+                        <a href="#" class="btn btn-secondary" onclick="window.history.back(); return false;">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -212,7 +214,7 @@
             const forms = document.querySelectorAll('.needs-validation');
             Array.prototype.slice.call(forms).forEach(function (form) {
                 form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity() || !validateForm()) {
+                    if (!form.checkValidity()) {
                         event.preventDefault();
                         event.stopPropagation();
                     }
@@ -254,8 +256,9 @@
             const startDateFeedback = document.getElementById('startDateFeedback');
             const endDateFeedback = document.getElementById('endDateFeedback');
             const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0); // Reset time to start of day (09:17 PM +07, 30/06/2025)
 
+            // Validate startDate
             const startDate = new Date(startDateInput.value);
             if (startDate < today) {
                 startDateInput.classList.add('is-invalid');
@@ -265,6 +268,7 @@
                 startDateInput.classList.remove('is-invalid');
             }
 
+            // Validate endDate
             const endDate = new Date(endDateInput.value);
             if (endDate <= startDate) {
                 endDateInput.classList.add('is-invalid');
@@ -277,56 +281,6 @@
             return true;
         }
 
-        // Custom form validation
-        function validateForm() {
-            let isValid = true;
-
-            // Check if targetType is selected
-            const targetType = document.getElementById('targetType');
-            if (targetType.value === '') {
-                targetType.classList.add('is-invalid');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Please select a target type!',
-                });
-                isValid = false;
-            } else {
-                targetType.classList.remove('is-invalid');
-            }
-
-            // Check if targetId is selected
-            const targetId = document.getElementById('targetId');
-            if (targetId.value === '') {
-                targetId.classList.add('is-invalid');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Please select a target!',
-                });
-                isValid = false;
-            } else {
-                targetId.classList.remove('is-invalid');
-            }
-
-            // Check if discount is between 1 and 100
-            const discount = document.getElementById('discount');
-            const discountValue = parseInt(discount.value);
-            if (isNaN(discountValue) || discountValue < 1 || discountValue > 100) {
-                discount.classList.add('is-invalid');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Discount percentage must be between 1 and 100!',
-                });
-                isValid = false;
-            } else {
-                discount.classList.remove('is-invalid');
-            }
-
-            return isValid;
-        }
-
         // Real-time validation on input change
         document.getElementById('startDate').addEventListener('change', function () {
             validateDates();
@@ -334,30 +288,16 @@
         document.getElementById('endDate').addEventListener('change', function () {
             validateDates();
         });
-        document.getElementById('targetType').addEventListener('change', function () {
-            this.classList.remove('is-invalid');
-        });
-        document.getElementById('targetId').addEventListener('change', function () {
-            this.classList.remove('is-invalid');
-        });
-        document.getElementById('discount').addEventListener('change', function () {
-            const discountValue = parseInt(this.value);
-            if (isNaN(discountValue) || discountValue < 1 || discountValue > 100) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
 
         // Form submission with SweetAlert2
         document.getElementById('promotionForm').addEventListener('submit', function (event) {
-            if (!validateDates() || !validateForm()) {
+            if (!validateDates()) {
                 event.preventDefault();
                 event.stopPropagation();
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Please fix the errors before submitting!',
+                    text: 'Please check the start and end dates!',
                 });
             } else if (!this.checkValidity()) {
                 event.preventDefault();

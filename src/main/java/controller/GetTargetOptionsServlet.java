@@ -45,7 +45,7 @@ public class GetTargetOptionsServlet extends HttpServlet {
                 }
             } else if ("CATEGORY".equals(targetType)) {
                 CategoryDAO categoryDAO = new CategoryDAO();
-                List<Category> categories = categoryDAO.getAllCategories();
+                List<Category> categories = categoryDAO.getAllCategory();
                 for (Category category : categories) {
                     html.append("<option value=\"").append(category.getCategoryId()).append("\">")
                             .append(category.getCategoryName()).append("</option>");

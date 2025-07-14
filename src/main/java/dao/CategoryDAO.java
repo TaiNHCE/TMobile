@@ -175,7 +175,7 @@ public class CategoryDAO extends DBContext {
         }
         return false;
     }
-
+    
     public boolean deleteCategory(int categoryId) {
         String sql = "UPDATE Categories SET isActive = 0 WHERE CategoryID = ?";
 
@@ -191,7 +191,7 @@ public class CategoryDAO extends DBContext {
             return false;
         }
     }
-
+    
     public int addCategory(String categoryName, String descriptionCategory) {
         int categoryId = -1;
         String sql = "INSERT INTO Categories (CategoryName, Description) VALUES (?, ?)";
@@ -260,23 +260,5 @@ public class CategoryDAO extends DBContext {
             e.printStackTrace();
         }
         return categoryDetailID; // Trả về -1 nếu lỗi
-    }
-
-    public List<Category> getAllCategories() {
-        List<Category> list = new ArrayList<>();
-        String sql = "SELECT CategoryID, CategoryName FROM Categories";
-
-        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Category c = new Category();
-                c.setCategoryId(rs.getInt("CategoryID"));
-                c.setCategoryName(rs.getString("CategoryName"));
-                list.add(c);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
     }
 }

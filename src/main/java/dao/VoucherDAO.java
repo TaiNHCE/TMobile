@@ -20,9 +20,7 @@ public class VoucherDAO extends DBContext {
     public List<Voucher> getAllVouchers() {
         List<Voucher> list = new ArrayList<>();
         String sql = "SELECT * FROM Vouchers";
-
         try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
                 Voucher v = mapResultSetToVoucher(rs);
                 list.add(v);
@@ -33,12 +31,10 @@ public class VoucherDAO extends DBContext {
         return list;
     }
 
-    // Láº¥y voucher theo ID
     public Voucher getVoucherById(int id) {
         String sql = "SELECT * FROM Vouchers WHERE VoucherID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
-
             try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return mapResultSetToVoucher(rs);
@@ -65,12 +61,10 @@ public class VoucherDAO extends DBContext {
         return false;
     }
 
-    // ThÃªm voucher
     public boolean addVoucher(Voucher v) {
         String sql = "INSERT INTO Vouchers (Code, DiscountPercent, ExpiryDate, MinOrderAmount, "
-                + "MaxDiscountAmount, UsageLimit, UsedCount, IsActive, CreatedAt, Description) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+                + "MaxDiscountAmount, UsageLimit, UsedCount, IsActive, CreatedAt, Description, IsGlobal) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, v.getCode());
             ps.setInt(2, v.getDiscountPercent());
@@ -82,7 +76,7 @@ public class VoucherDAO extends DBContext {
             ps.setBoolean(8, v.isActive());
             ps.setDate(9, new java.sql.Date(v.getCreatedAt().getTime()));
             ps.setString(10, v.getDescription());
-
+            ps.setBoolean(11, v.isIsGlobal());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,12 +84,10 @@ public class VoucherDAO extends DBContext {
         return false;
     }
 
-    // Cáº­p nháº­t voucher
     public boolean updateVoucher(Voucher v) {
         String sql = "UPDATE Vouchers SET Code=?, DiscountPercent=?, ExpiryDate=?, MinOrderAmount=?, "
-                + "MaxDiscountAmount=?, UsageLimit=?, UsedCount=?, IsActive=?, Description=? "
+                + "MaxDiscountAmount=?, UsageLimit=?, UsedCount=?, IsActive=?, Description=?, IsGlobal=? "
                 + "WHERE VoucherID = ?";
-
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, v.getCode());
             ps.setInt(2, v.getDiscountPercent());
@@ -106,8 +98,8 @@ public class VoucherDAO extends DBContext {
             ps.setInt(7, v.getUsedCount());
             ps.setBoolean(8, v.isActive());
             ps.setString(9, v.getDescription());
-            ps.setInt(10, v.getVoucherID());
-
+            ps.setBoolean(10, v.isIsGlobal());
+            ps.setInt(11, v.getVoucherID());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,10 +107,8 @@ public class VoucherDAO extends DBContext {
         return false;
     }
 
-    // XÃ³a voucher
     public boolean deleteVoucher(int id) {
         String sql = "DELETE FROM Vouchers WHERE VoucherID = ?";
-
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -131,42 +121,19 @@ public class VoucherDAO extends DBContext {
     public List<Voucher> searchByCode(String keyword) {
         List<Voucher> result = new ArrayList<>();
         String sql = "SELECT * FROM Vouchers WHERE Code LIKE ?";
-
-        try (
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try ( PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + keyword + "%");
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
-                result.add(extractVoucher(rs));
+                result.add(mapResultSetToVoucher(rs));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return result;
     }
 
-    private Voucher extractVoucher(ResultSet rs) throws SQLException {
-        int id = rs.getInt("VoucherID");
-        String code = rs.getString("Code");
-        int discountPercent = rs.getInt("DiscountPercent");
-        Date expiryDate = rs.getDate("ExpiryDate");
-        double minOrderAmount = rs.getDouble("MinOrderAmount");
-        double maxDiscountAmount = rs.getDouble("MaxDiscountAmount");
-        int usageLimit = rs.getInt("UsageLimit");
-        int usedCount = rs.getInt("UsedCount");
-        boolean isActive = rs.getBoolean("IsActive");
-        Timestamp createdAt = rs.getTimestamp("CreatedAt"); // hoáº·c getDate náº¿u kiá»ƒu lÃ  DATE
-        String description = rs.getString("Description");
-
-        return new Voucher(id, code, discountPercent, expiryDate, minOrderAmount,
-                maxDiscountAmount, usageLimit, usedCount, isActive, createdAt, description);
-    }
-
-    // Helper - chuyá»ƒn tá»« ResultSet thÃ nh Object
+    // Tạo voucher từ ResultSet (chuẩn với model)
     private Voucher mapResultSetToVoucher(ResultSet rs) throws SQLException {
         Voucher v = new Voucher();
         v.setVoucherID(rs.getInt("VoucherID"));
@@ -180,6 +147,22 @@ public class VoucherDAO extends DBContext {
         v.setActive(rs.getBoolean("IsActive"));
         v.setCreatedAt(rs.getDate("CreatedAt"));
         v.setDescription(rs.getString("Description"));
+        v.setIsGlobal(rs.getBoolean("IsGlobal"));
         return v;
     }
+
+    public List<Voucher> getPersonalVouchersAvailable() {
+        List<Voucher> list = new ArrayList<>();
+        // Lấy các voucher cá nhân, đang còn hạn, đang active
+        String sql = "SELECT * FROM Vouchers WHERE IsGlobal = 0 AND IsActive = 1 AND ExpiryDate >= GETDATE()";
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(mapResultSetToVoucher(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

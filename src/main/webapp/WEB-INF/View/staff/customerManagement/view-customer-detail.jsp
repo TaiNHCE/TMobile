@@ -17,41 +17,64 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer detail</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
     </head>
     <body>
         <% if (custo == null) {
                 out.print("<p>There is no customer with that id</p>");
             } else {
         %>
-        <form method="post" action="CustomerList?action=detail">
-            <div class="mb-3">
-                <label class="form-label">Full Name: </label>
-                <input type="text" class="form-control" name="fullname" id="fullname" required value="<%= custo.getFullName()%>" readonly />
+        <jsp:include page="../sideBar.jsp" />
+        <div class="container mt-5">
+            <div class="card mx-auto shadow" style="max-width: 700px; margin-left: 50px">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Customer Detail</h4>
+                </div>
+                <form method="post" action="CustomerList?action=detail">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th>Customer ID:</th>
+                                    <td><%= custo.getId()%></td>
+                                </tr>
+                                <tr>
+                                    <th>Full Name:</th>
+                                    <td><%= custo.getFullName()%></td>
+                                </tr>
+                                <tr>
+                                    <th>Phone Number:</th>
+                                    <td><%= custo.getPhone()%></td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td><%= custo.getEmail()%></td>
+                                </tr>
+                                <tr>
+                                    <th>Status:</th>
+                                     <td><%= custo.isActive() ? "Active" : "Block"%></td>
+                                </tr>
+                                <tr>
+                                    <th>Date of Birth:</th>
+                                    <td><%= custo.getBirthDay()%></td>
+                                </tr>
+                                <tr>
+                                    <th>Sex:</th>
+                                    <td>
+                                        <input type="radio" class="form-check-input" name="sex" value="male"
+                                               <%= ("male".equalsIgnoreCase(custo.getGender()) ? "checked" : "")%> disabled /> Male
+                                        <input type="radio" class="form-check-input ms-3" name="sex" value="female"
+                                               <%= ("female".equalsIgnoreCase(custo.getGender()) ? "checked" : "")%> disabled /> Female
+                                    </td>
+                                </tr>
+                            </table>
+                            <a href="CustomerList" class="btn btn-primary" id="back"><i class="bi bi-arrow-return-left"></i>Back to list</a>
+                        </div>
+                </form>
+                <%
+                    }
+                %>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Phone Number:</label>
-                <input type="number" class="form-control" name="phone" id="phone" required value="<%= custo.getPhone()%>" readonly />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="text" class="form-control" name="email" id="email" required value="<%= custo.getEmail()%>" readonly />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Date of Birth:</label>
-                <input type="date"class="form-control" name="dob" id="dob" required value="<%= custo.getBirthDay()%>"readonly  />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Sex</label><br/>
-                <input type="radio" class="form-check-input" name="sex" value="male"
-                       <%= ("male".equalsIgnoreCase(custo.getGender()) ? "checked" : "")%> disabled/> Male
-                <input type="radio" class="form-check-input" name="sex" value="female"
-                       <%= ("female".equalsIgnoreCase(custo.getGender()) ? "checked" : "")%> disabled/> Female
-            </div>
-            <a href="CustomerList" class="btn btn-secondary" id="back"><i class="bi bi-arrow-return-left"></i>Back</a>
-        </form>
-        <%
-            }
-        %>
+        </div>
     </body>
 </html>
