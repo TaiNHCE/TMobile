@@ -15,11 +15,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import model.Brand;
+
 import model.CartItem;
 import model.Category;
 import model.Product;
 import model.ProductDetail;
 import model.ProductVariant;
+
 import model.Suppliers;
 import utils.DBContext;
 
@@ -492,7 +494,9 @@ public class ProductDAO extends DBContext {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
                 + "isd.UnitPrice, isd.Quantity, "
+
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
@@ -545,7 +549,9 @@ public class ProductDAO extends DBContext {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
                 + "isd.UnitPrice, isd.Quantity, "
+
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
@@ -1258,4 +1264,5 @@ public class ProductDAO extends DBContext {
 
         return list;
     }
+
 }
