@@ -20,8 +20,11 @@ public class Product {
     private int stock;
     private String status;
     private int supplierId;
+    private String supplierName;
     private int categoryId;
+    private String categoryName;
     private int brandId;
+    private String brandName;
     private boolean isFeatured;
     private boolean isBestSeller;
     private boolean isNew;
@@ -29,6 +32,7 @@ public class Product {
     private boolean isActive;
     private String imageUrl;
 
+   
     public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, int categoryId, int brandId, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
         this.productId = productId;
         this.productName = productName;
@@ -48,6 +52,52 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, int categoryId, String categoryName, int brandId, String brandName, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
+        this.productId = productId;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.discount = discount;
+        this.stock = stock;
+        this.status = status;
+        this.supplierId = supplierId;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.brandId = brandId;
+        this.brandName = brandName;
+        this.isFeatured = isFeatured;
+        this.isBestSeller = isBestSeller;
+        this.isNew = isNew;
+        this.warrantyPeriod = warrantyPeriod;
+        this.isActive = isActive;
+        this.imageUrl = imageUrl;
+    }
+    
+    public Product(int productId, String productName, String description, BigDecimal price, int discount, int stock, String status, int supplierId, String supplierName, int categoryId, String categoryName, int brandId, String brandName, boolean isFeatured, boolean isBestSeller, boolean isNew, int warrantyPeriod, boolean isActive, String imageUrl) {
+        this.productId = productId;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.discount = discount;
+        this.stock = stock;
+        this.status = status;
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.brandId = brandId;
+        this.brandName = brandName;
+        this.isFeatured = isFeatured;
+        this.isBestSeller = isBestSeller;
+        this.isNew = isNew;
+        this.warrantyPeriod = warrantyPeriod;
+        this.isActive = isActive;
+        this.imageUrl = imageUrl;
+    }
+
+    
+
+
     public Product(int productId, String productName, BigDecimal price, int discount, int stock, String status, boolean isActive) {
         this.productId = productId;
         this.productName = productName;
@@ -58,7 +108,8 @@ public class Product {
         this.isActive = isActive;
     }
 
-   
+
+    public Product(){}
 
     public int getProductId() {
         return productId;
@@ -188,4 +239,25 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+    
+    
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", productName=" + productName + ", description=" + description + ", price=" + price + ", discount=" + discount + ", stock=" + stock + ", status=" + status + ", supplierId=" + supplierId + ", categoryId=" + categoryId + ", categoryName=" + categoryName + ", brandId=" + brandId + ", brandName=" + brandName + ", isFeatured=" + isFeatured + ", isBestSeller=" + isBestSeller + ", isNew=" + isNew + ", warrantyPeriod=" + warrantyPeriod + ", isActive=" + isActive + ", imageUrl=" + imageUrl + '}';
+    }
+
+    
 }

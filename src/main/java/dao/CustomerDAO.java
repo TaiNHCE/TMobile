@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import model.Customer;
-import sun.applet.Main;
 import utils.DBContext;
 
 /**
@@ -113,6 +112,32 @@ public class CustomerDAO extends DBContext {
 
         return list;
     }
+    
+    public Customer getCustomerByAccountId(int accountId) {
+    Customer cus = null;
+    String sql = "SELECT CustomerID, a.Email, FullName, PhoneNumber, a.IsActive, BirthDate, Gender " +
+                 "FROM Customers c JOIN Accounts a ON c.AccountID = a.AccountID " +
+                 "WHERE c.AccountID = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, accountId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int id = rs.getInt("CustomerID");
+                String email = rs.getString("Email");
+                String fullName = rs.getString("FullName");
+                String phone = rs.getString("PhoneNumber");
+                boolean isActive = rs.getBoolean("IsActive");
+                String birthday = rs.getString("BirthDate");
+                String gender = rs.getString("Gender");
+                cus = new Customer(id, email, fullName, phone, isActive, birthday, gender);
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return cus;
+}
+
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO(); // giả sử bạn đã có class này

@@ -27,7 +27,6 @@ public class CreateStaffServlet extends HttpServlet {
             // Lấy dữ liệu từ form
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            int roleID = Integer.parseInt(request.getParameter("roleID"));
             String ProfileImageURL = request.getParameter("profileImageURL");
             String fullName = request.getParameter("fullName");
             String phone = request.getParameter("phoneNumber");
@@ -50,7 +49,7 @@ public class CreateStaffServlet extends HttpServlet {
             Account account = new Account();
             account.setEmail(email);
             account.setPasswordHash(password); // Hash password nếu cần
-            account.setRoleID(roleID);
+//            account.setRoleID(roleID);
             account.setProfileImageURL(ProfileImageURL);
 
             // Tạo đối tượng Staff
@@ -67,15 +66,11 @@ public class CreateStaffServlet extends HttpServlet {
             boolean success = dao.createStaffWithAccount(account, staff);
 
             if (success) {
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/createStaffSuccess.jsp").forward(request, response);
-
+                response.sendRedirect("StaffList?successcreate=1");
             } else {
-                // Thất bại → quay lại form và báo lỗi
-                request.setAttribute("errorMessage", "Failed to create staff.");
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/createStaff.jsp").forward(request, response);
+                response.sendRedirect("StaffList?errorcreate=1");
             }
-
-        } catch (Exception e) {
+} catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/createStaff.jsp").forward(request, response);

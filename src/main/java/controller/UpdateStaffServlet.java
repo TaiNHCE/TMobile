@@ -41,8 +41,6 @@ public class UpdateStaffServlet extends HttpServlet {
             int staffID = Integer.parseInt(request.getParameter("staffID"));
 
             String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            int roleID = Integer.parseInt(request.getParameter("roleID"));
             String profileImageURL = request.getParameter("profileImageURL");
 
             String fullName = request.getParameter("fullName");
@@ -62,8 +60,6 @@ public class UpdateStaffServlet extends HttpServlet {
             Account account = new Account();
             account.setAccountID(accountID);
             account.setEmail(email);
-            account.setPasswordHash(password); // nên hash nếu cần
-            account.setRoleID(roleID);
             account.setProfileImageURL(profileImageURL);
 
             // Tạo đối tượng Staff
@@ -77,17 +73,13 @@ public class UpdateStaffServlet extends HttpServlet {
             staff.setHiredDate(hiredDate);
 
             // Gọi DAO cập nhật
-            StaffDAO dao = new StaffDAO();
+StaffDAO dao = new StaffDAO();
             boolean success = dao.updateStaffWithAccount(account, staff);
 
             if (success) {
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/updateSuccess.jsp").forward(request, response);
-
+                response.sendRedirect("StaffList?successedit=1");
             } else {
-                request.setAttribute("errorMessage", "Failed to update staff.");
-                request.setAttribute("staff", staff);
-                request.setAttribute("account", account);
-                request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/updateStaff.jsp").forward(request, response);
+                response.sendRedirect("StaffList?erroredit=1");
             }
 
         } catch (Exception e) {

@@ -1,4 +1,3 @@
-<%@page import="java.math.BigDecimal"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.List"%>
@@ -9,6 +8,7 @@
 %>
 <!DOCTYPE html>
 <html>
+
     <head>
         <meta charset="UTF-8">
         <title>Product List</title>
@@ -49,15 +49,15 @@
         <div class="wrapper">
             <div style="overflow-x: auto; width: 100%;">
                 <% if (productList != null) { %>
-                <table class="product-table" style = "max-width: 100%; width: 100%;">
+                <table class="product-table">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Product Name</th>
-                            <th>Original Price</th>
-                            <th>Current Price</th>
+                            <th>Price</th>
                             <th>Category</th>
                             <th>Brand</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -68,25 +68,19 @@
                             for (Product product : productList) {
                                 if (product != null) {
                                     String giaFormatted = "______";
-                                    String giaMoiFormatted = "______";
-                                    int discount = 0;
                                     if (product.getPrice() != null) {
                                         giaFormatted = currencyVN.format(product.getPrice());
-                                        discount = product.getDiscount();
-                                        BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
-                                        BigDecimal newPrice;
-                                        newPrice = product.getPrice().multiply(BigDecimal.ONE.subtract(discountRate));
-                                        giaMoiFormatted = currencyVN.format(newPrice);
                                     }
                         %>
                         <tr>
                             <td><%= product.getProductId()%></td>
                             <td><%= product.getProductName()%></td>
                             <td><%= giaFormatted%></td>
-                            <td><%= giaMoiFormatted%></td>
                             <td><%= product.getCategoryName()%></td>
                             <td><%= product.getBrandName()%></td>
-
+                            <td>
+                                <img src="<%= (product.getImageUrl() != null) ? product.getImageUrl() : ""%>" alt="Product Image">
+                            </td>
                             <td>
                                 <div class="action-buttons">
                                     <a href="AdminViewProductDetail?productId=<%= product.getProductId()%>" class="btn btn-warning">Detail</a>
@@ -103,14 +97,13 @@
                 </table>
                 <% } else { %>
                 <div style="padding: 16px; text-align: center;">No Data!</div>
+
                 <% } %>
             </div>
         </div>
 
         <%
             String success = request.getParameter("success");
-            String successpro = request.getParameter("successpro");
-
             String error = request.getParameter("error");
         %>
 
@@ -132,15 +125,6 @@
                 });
             <% }%>
             };
-            window.onload = function () {
-            <% if ("1".equals(successpro)) { %>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Successful!',
-                    text: 'Set promotion successful.',
-                    timer: 2000
-                });
-            <% }%>
         </script>
     </body>
 </html>
