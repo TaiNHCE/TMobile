@@ -17,7 +17,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer detail</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
     </head>
     <body>
@@ -27,7 +26,7 @@
         %>
         <jsp:include page="../sideBar.jsp" />
         <div class="container mt-5">
-            <div class="card mx-auto shadow" style="max-width: 700px;">
+            <div class="card mx-auto shadow" style="max-width: 700px; margin-left: 50px">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">Customer Detail</h4>
                 </div>

@@ -441,15 +441,23 @@ public class ProductDAO extends DBContext {
 //    <===================================================== GIA KHIÊM ======================================================>
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
-                + "isd.UnitPrice, isd.Quantity, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
-                + "FROM Products p "
-                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
-                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
-                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
-                + "JOIN Brands br on br.BrandID = p.BrandID "
-                + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID ";
+        String sql = 
+    "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, " +
+    "       isd.UnitPrice, isd.Quantity, " +
+    "       p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, " +
+    "       br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, " +
+    "       p.WarrantyPeriod, p.isActive, pro.ImageURL " +
+    "FROM Products p " +
+    "JOIN ProductImages pro ON p.ProductID = pro.ProductID " +
+    "JOIN Categories cate ON cate.CategoryID = p.CategoryID " +
+    "JOIN Brands br on br.BrandID = p.BrandID " +
+    "JOIN Suppliers sup on sup.SupplierID = p.SupplierID " +
+    "OUTER APPLY ( " +
+    "    SELECT TOP 1 isd.UnitPrice, isd.Quantity " +
+    "    FROM ImportStockDetails isd " +
+    "    WHERE isd.ProductID = p.ProductID " +
+    "    ORDER BY isd.ImportID DESC " +
+    ") isd";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);

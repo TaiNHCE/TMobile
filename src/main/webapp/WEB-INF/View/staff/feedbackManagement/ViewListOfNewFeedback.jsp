@@ -8,9 +8,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-        <!-- Sidebar & Shared CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
-
         <style>
             body {
                 background: #f4f6fb;
@@ -127,6 +124,8 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+                <jsp:include page="../header.jsp" />
+
                     <h1>Customer Feedback</h1>
 
                     <c:if test="${empty ProductRating}">

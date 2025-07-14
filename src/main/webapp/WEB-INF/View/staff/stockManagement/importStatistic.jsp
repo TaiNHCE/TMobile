@@ -11,7 +11,6 @@
 
         <style>
 
-
             .charts-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -57,8 +56,10 @@
     <body>
         <div class="container">
             <jsp:include page="/WEB-INF/View/staff/sideBar.jsp" />
-            <div class="wrapper">
+            <div class="wrapper" style="margin-left:7.5px">
                 <main class="main-content">
+                                        <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1>Import Statistic</h1>
                     <div class="d-flex justify-content-end mb-4 btn-group-custom">
                         <button class="back-btn ms-2" onclick="location.href = 'ImportStockHistory'">Import History</button>
