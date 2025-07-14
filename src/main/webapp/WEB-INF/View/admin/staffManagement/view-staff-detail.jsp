@@ -49,18 +49,10 @@
                                     <%= sta.getPhone()%>
                                 </td>
                             </tr>
-                            
                             <tr>
                                 <th>Email:</th>
                                 <td>
                                     <%= sta.getEmail()%>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>Position:</th>
-                                <td>
-                                    <%= sta.getPosition()%>
                                 </td>
                             </tr>
                             <tr>
@@ -70,30 +62,23 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Hired Date:</th>
-                                <td>
-                                    <%= sta.getHiredDate()%>
-                                </td>
-                            </tr>
-
-                            <tr>
                                 <th>Sex:</th>
                                 <td>
                                     <input type="radio" class="form-check-input" name="sex" value="male"
                                            <%= ("male".equalsIgnoreCase(sta.getGender()) ? "checked" : "")%> disabled /> Male
-                                    <input type="radio" class="form-check-input ms-3" name="sex" value="female"
+<input type="radio" class="form-check-input ms-3" name="sex" value="female"
                                            <%= ("female".equalsIgnoreCase(sta.getGender()) ? "checked" : "")%> disabled /> Female
                                 </td>
                             </tr>
                         </table>
                         <div class="d-flex justify-content-between mt-4">
                             <div>
-                                <a href="ChangePassword" class="btn btn-secondary" ><i class="bi bi-tools"></i> Change Password</a>
-                                <a href="StaffList" class="btn btn-outline-primary" id="back"><i class="bi bi-arrow-return-left"></i> Back to list</a>
+                            <a href="ChangePassword" class="btn btn-secondary" ><i class="bi bi-tools"></i> Change Password</a>
+                            <a href="StaffList" class="btn btn-outline-primary" id="back"><i class="bi bi-arrow-return-left"></i> Back to list</a>
                             </div>
                             <div>      
-                                <a href="UpdateStaffServlet?action=update&id=<%= sta.getStaffID()%>" class="btn btn-warning">Update</a>
-                                <a href="DeleteStaffServlet?action=delete&id=<%= sta.getStaffID()%>" class="btn btn-danger">Delete</a>
+                            <a href="UpdateStaffServlet?action=update&id=<%= sta.getStaffID()%>" class="btn btn-warning">Update</a>
+                            <a href="DeleteStaffServlet?action=delete&id=<%= sta.getStaffID()%>" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                 </form>

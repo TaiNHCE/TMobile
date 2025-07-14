@@ -83,12 +83,11 @@
                 overflow-x: auto;
                 scroll-behavior: smooth;
                 padding-bottom: 10px;
-                gap: 0.25% !important;
             }
-
 
             .sanPhamMoi {
                 box-sizing: border-box;
+                margin-left: 6px;
 
                 border-radius: 12px;                 /* bo góc */
                 padding: 10px;
@@ -117,7 +116,7 @@
         </style>
     </head>
     <body>
-        <div class="" style="width: 100%; border-radius: 15px; margin-top: 1%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+        <div class="" style="width: 95%; border-radius: 15px; margin-top: 1%; margin-left: 2.5%; background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
             <p class="new-product-label">Best Seller product</p>
 
             <div style="display: flex; border-radius: 10px;">
@@ -128,32 +127,32 @@
                 <!-- PHẦN SẢN PHẨM CUỘN NGANG -->
                 <div class="product-scroll-wrapper">
                     <!-- Nút trái -->
-                    <button style = "" onclick="scrollLeft()" class="scroll-btn scroll-left-best">←</button>
+                    <button style = "margin-right: 2%;" onclick="scrollLeft()" class="scroll-btn scroll-left-best">←</button>
 
                     <!-- Danh sách sản phẩm -->
-                    <div id="product-scroll-best" style = "">
+                    <div id="product-scroll-best" style = "margin-left: 3%;">
                         <% if (productListBestSeller != null) {
                                 for (Product pro : productListBestSeller) {
                                     if (pro.getDiscount() != 0) {
-                                            oldPrice = pro.getPrice();
-                                            BigDecimal price = pro.getPrice();
-                                            int discount = pro.getDiscount();
+                                        oldPrice = pro.getPrice();
+                                        BigDecimal price = pro.getPrice();
+                                        int discount = pro.getDiscount();
 
-                                            BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
-                                            newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
+                                        BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
+                                        newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
 
-                                            BigDecimal giaCu = oldPrice;
-                                            BigDecimal giaMoi = newPrice;
-                                            BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
+                                        BigDecimal giaCu = oldPrice;
+                                        BigDecimal giaMoi = newPrice;
+                                        BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
 
-                                            Locale localeVN = new Locale("vi", "VN");
-                                            NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                                        Locale localeVN = new Locale("vi", "VN");
+                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
 
-                                            String giaCuFormatted = currencyVN.format(oldPrice);
-                                            String giaMoiFormatted = currencyVN.format(giaMoi);
-                                            String giamFormatted = currencyVN.format(giaDaGiam);
+                                        String giaCuFormatted = currencyVN.format(oldPrice);
+                                        String giaMoiFormatted = currencyVN.format(giaMoi);
+                                        String giamFormatted = currencyVN.format(giaDaGiam);
                         %>
-                        <div class="sanPhamMoi">
+                        <div class="sanPhamMoi col-md-3">
                             <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
@@ -170,14 +169,13 @@
                                 <p class="giam">Giảm <%= giamFormatted%> đ</p>
                             </a>
                         </div>
-                        <% 
-                        } else {
-                                oldPrice = pro.getPrice();
-                                Locale localeVN = new Locale("vi", "VN");
-                                NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
-                                String giaCuFormatted = currencyVN.format(oldPrice);
+                        <% } else {
+                            oldPrice = pro.getPrice();
+                            Locale localeVN = new Locale("vi", "VN");
+                            NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                            String giaCuFormatted = currencyVN.format(oldPrice);
                         %>
-                        <div class="sanPhamMoi">
+                        <div class="sanPhamMoi col-md-2">
                             <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
@@ -189,8 +187,7 @@
                                 <p class="giaMoi"><%= giaCuFormatted%> đ</p>
                             </a>
                         </div>
-                        <% 
-                                } // end if discount
+                        <% } // end if discount
                             } // end for
                         } else { %>
                         <p>null</p>

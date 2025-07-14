@@ -4,14 +4,11 @@
     border-collapse: separate;           /* để dùng border-spacing */
     background-color: transparent;
     font-family: 'Segoe UI', sans-serif;
-    padding: 7px;
-    border-collapse: separate;    /* 👈 phải có dòng này để border-spacing hoạt động */
-    border-spacing: 0 10px;       /* 👈 khoảng cách giữa các hàng */
 }
 
 /* CÁC Ô BẢNG */
 .category-table th, .category-table td {
-    padding: 4px 16px;
+    padding: 12px 16px;
     text-align: left;
     vertical-align: top;
     word-wrap: break-word;
@@ -40,7 +37,7 @@
 .group-header td {
     background-color: #f0f0f0;
     border-radius: 12px;
-    padding: 6px 14px;
+    padding: 16px 24px;
     font-weight: 600;
     font-size: 18px;
     color: #333;
@@ -62,8 +59,8 @@
 .category-name {
     font-weight: 500;
     color: #444;
-    width: 30%; /* 👈 giảm chiều dài */
-    font-size: 13px; /* 👈 giảm kích thước chữ */
+    width: 50%; /* ĐÃ GIẢM TỪ 30% XUỐNG 25% */
+    
     padding-top: 16px;
 }
 
@@ -84,11 +81,10 @@
     border: none;
     border-radius: 8px;
     padding: 6px 12px;
-    font-size: 13px; /* 👈 nhỏ hơn */
-    padding: 4px 10px; /* 👈 bớt dày */
-
+    font-size: 14px;
+    
     max-width: 100%;
-
+    
     box-sizing: border-box;
     cursor: default;
     line-height: 1.4;
@@ -134,6 +130,33 @@
 
 .group-details.hidden {
     display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .category-table {
+        font-size: 14px;
+    }
+
+    .group-header h2 {
+        font-size: 16px;
+    }
+
+    .attribute-item {
+        font-size: 13px;
+    }
+
+    .category-name {
+        width: 100%;
+    }
+
+    .attribute-values {
+        flex-direction: column;
+    }
+
+    .group-header td {
+        padding: 12px 16px;
+    }
 }
 
 .group-cell {

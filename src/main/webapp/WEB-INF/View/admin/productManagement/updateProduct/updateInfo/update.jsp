@@ -86,33 +86,12 @@
                                     }
 
                                 %>
-
-                                <%                               
-                                        String unitPriceFormatted = "";
-                                        if (product.getImportPrice() != null && product.getStock() > 0) {
-                                        BigDecimal Unitprice = product.getImportPrice();
-                                        Locale localeVN = new Locale("vi", "VN");
-                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
-                                        unitPriceFormatted = currencyVN.format(Unitprice);
-                                %>
-                                <div class="mb-3">
-                                    <label class="form-label">Unit Price</label>
-                                    <input type="text" min="1" class="form-control" name="unitprice" required value="<%= unitPriceFormatted%>" readonly/>
-                                </div><!-- comment -->
-
-                                <div class="mb-3">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="text" min="1" class="form-control" name="quantity" required value="<%= product.getStock()%>" readonly=""/>
-                                </div>
+                                
                                 <div class="mb-3">
                                     <label class="form-label">Price</label>
                                     <input type="text" min="1" class="form-control" name="price" required value="<%= priceFormatted%>"/>
                                 </div>
-                                <%
-                                    }
-                                %>
-
-
+                                
                                 <div class="mb-3">
                                     <label class="form-label">Supplier</label>
                                     <select class="form-control" id="suppliers" name="suppliers">
