@@ -5,6 +5,7 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.CustomerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
+import model.Customer;
 
 /**
  *
@@ -80,12 +82,25 @@ public class LoginServlet extends HttpServlet {
         AccountDAO dao = new AccountDAO();
         HttpSession session = request.getSession();
         Account acc = dao.verifyMD5(email, pass);
-        if (acc == null || acc.getAccountID() == -1) {
+        if (dao.checkEmailExisted(email) == false) {
+            request.setAttribute("err", "<p style='color:yellow'>The account you entered is not registered. Please sign up first.</p>");
+            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        } else if (acc == null || acc.getAccountID() == -1) {
             request.setAttribute("err", "<p style='color:red'>Email or password invalid</p>");
             request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        } else if (acc.isIsActive() == false) {
+            request.setAttribute("err", "<p style='color:red'>Your account is blocked</p>");
+            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
+        } else if (acc.getRoleID() != 3) {
+            request.setAttribute("err", "<p style='color:red'>You are not allowed to login with this role</p>");
+            request.getRequestDispatcher("WEB-INF/View/account/login.jsp").forward(request, response);
         } else {
+            CustomerDAO customerDao = new CustomerDAO();
+            Customer cus = customerDao.getCustomerByAccountId(acc.getAccountID());
+            session.setAttribute("cus", cus);
+            session.setAttribute("accountId", acc.getAccountID());
             session.setAttribute("user", acc);
-            request.getRequestDispatcher("WEB-INF/View/account/login.jsp");
+            response.sendRedirect("Home");
         }
 
     }
