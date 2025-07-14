@@ -30,11 +30,13 @@ public class ProductDAO extends DBContext {
     public List<Product> getProductIsNew() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where p.IsNew = ?";
 
@@ -64,7 +66,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -76,11 +84,13 @@ public class ProductDAO extends DBContext {
     public List<Product> getProductIsFeatured() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where p.IsFeatured = ?";
 
@@ -110,7 +120,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -122,11 +138,13 @@ public class ProductDAO extends DBContext {
     public List<Product> getProductIsBestSeller() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where p.IsBestSeller = ?";
 
@@ -156,7 +174,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -168,11 +192,13 @@ public class ProductDAO extends DBContext {
     public List<Product> getDiscountedProducts() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where p.Discount > 0";
 
@@ -200,7 +226,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -406,10 +438,12 @@ public class ProductDAO extends DBContext {
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID ";
 
@@ -437,7 +471,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -449,11 +489,13 @@ public class ProductDAO extends DBContext {
     public List<Product> getAllProductInactive() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "isd.UnitPrice, isd.Quantity, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL " 
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where p.isActive = ?";
 
@@ -482,7 +524,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -494,12 +542,14 @@ public class ProductDAO extends DBContext {
     public List<Product> getAllProductActive() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "isd.UnitPrice, isd.Quantity, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL " 
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "where p.isActive = ?";
 
         try {
@@ -527,7 +577,13 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
             }
             return list;
         } catch (Exception e) {
@@ -539,11 +595,13 @@ public class ProductDAO extends DBContext {
     public Product getProductById(int productId) {
         Product product = null;
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where p.ProductID = ?";
         try {
@@ -571,7 +629,10 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("isActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                product = new Product(productId, productName, description, price, discount, stock, status, supplierId, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl);
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -791,7 +852,7 @@ public class ProductDAO extends DBContext {
             stmt.setString(4, imgaUrl4);
             stmt.setInt(5, productId);
             rowInserted = stmt.executeUpdate() > 0;
-            if (rowInserted){
+            if (rowInserted) {
                 return true;
             }
 
@@ -805,12 +866,12 @@ public class ProductDAO extends DBContext {
         boolean rowInserted = false;
         String sql = "INSERT INTO ProductDetails (ProductID, CategoryDetailID, AttributeValue) VALUES (?, ?, ?)";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try ( PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, productId);
             stmt.setInt(2, categoryId);
             stmt.setString(3, attributeValue);
-           
+
             rowInserted = stmt.executeUpdate() > 0;
 
             if (rowInserted) {
@@ -822,8 +883,335 @@ public class ProductDAO extends DBContext {
         return false;
     }
 
-//    <===================================================== GIA KHIÊM ======================================================>
-    
-  
+    public List<Product> getProductByBrandAndPrice(int brandId, BigDecimal min, BigDecimal max) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, "
+                + "p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
+                + "isd.UnitPrice, isd.Quantity "
+                + "FROM Products p "
+                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
+                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "JOIN Brands br ON br.BrandID = p.BrandID "
+                + "JOIN Suppliers sup ON sup.SupplierID = p.SupplierID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "WHERE br.BrandID = ? AND p.Price >= ? AND p.Price <= ?";
 
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, brandId);
+            ps.setBigDecimal(2, min);
+            ps.setBigDecimal(3, max);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                BigDecimal price = rs.getBigDecimal("Price");
+                int discount = rs.getInt("Discount");
+                int stock = rs.getInt("Stock");
+                String status = rs.getString("Status");
+                int supplierId = rs.getInt("SupplierID");
+                int categoryId = rs.getInt("CategoryID");
+                String categoryName = rs.getString("CategoryName");
+                int brandIdDB = brandId;
+                String brandName = rs.getString("BrandName");
+
+                boolean isFeatured = rs.getBoolean("IsFeatured");
+                boolean isBestSeller = rs.getBoolean("IsBestSeller");
+                boolean isNew = rs.getBoolean("IsNew");
+                int warrantyPeriod = rs.getInt("WarrantyPeriod");
+                boolean isActive = rs.getBoolean("isActive");
+                String imageUrl = rs.getString("ImageURL");
+
+                String supplierName = rs.getString("Name");
+
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandIdDB, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getProductByKeyword: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Product> getProductByCategoryAndPrice(int categoryId, BigDecimal min, BigDecimal max) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, "
+                + "p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
+                + "isd.UnitPrice, isd.Quantity "
+                + "FROM Products p "
+                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
+                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "JOIN Brands br ON br.BrandID = p.BrandID "
+                + "JOIN Suppliers sup ON sup.SupplierID = p.SupplierID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "WHERE cate.CategoryID = ? AND p.Price >= ? AND p.Price <= ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ps.setBigDecimal(2, min);
+            ps.setBigDecimal(3, max);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                BigDecimal price = rs.getBigDecimal("Price");
+                int discount = rs.getInt("Discount");
+                int stock = rs.getInt("Stock");
+                String status = rs.getString("Status");
+                int supplierId = rs.getInt("SupplierID");
+                int categoryIdDB = categoryId;
+                String categoryName = rs.getString("CategoryName");
+                int brandId = rs.getInt("BrandID");
+                String brandName = rs.getString("BrandName");
+
+                boolean isFeatured = rs.getBoolean("IsFeatured");
+                boolean isBestSeller = rs.getBoolean("IsBestSeller");
+                boolean isNew = rs.getBoolean("IsNew");
+                int warrantyPeriod = rs.getInt("WarrantyPeriod");
+                boolean isActive = rs.getBoolean("isActive");
+                String imageUrl = rs.getString("ImageURL");
+
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryIdDB, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getProductByKeyword: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Product> getProductByKeyword(String keyword) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, "
+                + "p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
+                + "isd.UnitPrice, isd.Quantity "
+                + "FROM Products p "
+                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
+                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "JOIN Brands br ON br.BrandID = p.BrandID "
+                + "JOIN Suppliers sup ON sup.SupplierID = p.SupplierID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "WHERE LOWER(p.ProductName) LIKE ? "
+                + "OR LOWER(br.BrandName) LIKE ? "
+                + "OR LOWER(cate.CategoryName) LIKE ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            String keywordPattern = "%" + keyword.toLowerCase() + "%";
+            ps.setString(1, keywordPattern);
+            ps.setString(2, keywordPattern);
+            ps.setString(3, keywordPattern);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                BigDecimal price = rs.getBigDecimal("Price");
+                int discount = rs.getInt("Discount");
+                int stock = rs.getInt("Stock");
+                String status = rs.getString("Status");
+                int supplierId = rs.getInt("SupplierID");
+                int categoryId = rs.getInt("CategoryID");
+                String categoryName = rs.getString("CategoryName");
+                int brandId = rs.getInt("BrandID");
+                String brandName = rs.getString("BrandName");
+
+                boolean isFeatured = rs.getBoolean("IsFeatured");
+                boolean isBestSeller = rs.getBoolean("IsBestSeller");
+                boolean isNew = rs.getBoolean("IsNew");
+                int warrantyPeriod = rs.getInt("WarrantyPeriod");
+                boolean isActive = rs.getBoolean("isActive");
+                String imageUrl = rs.getString("ImageURL");
+                String supplierName = rs.getString("Name");
+
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getProductByKeyword: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Product> getProductByBrand(int brandId) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
+                + "p.SupplierID, sup.Name, "
+                + "cate.CategoryID, cate.CategoryName, "
+                + "br.BrandID, br.BrandName, "
+                + "p.IsFeatured, p.IsBestSeller, p.IsNew, "
+                + "p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "FROM Products p "
+                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
+                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "JOIN Brands br ON br.BrandID = p.BrandID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "JOIN Suppliers sup ON sup.SupplierID = p.SupplierID "
+                + "WHERE br.BrandID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, brandId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                BigDecimal price = rs.getBigDecimal("Price");
+                int discount = rs.getInt("Discount");
+                int stock = rs.getInt("Stock");
+                String status = rs.getString("Status");
+                int supplierId = rs.getInt("SupplierID");
+                int categoryId = rs.getInt("CategoryID");
+                String categoryName = rs.getString("CategoryName");
+                int brandIdDB = rs.getInt("BrandID");
+                String brandName = rs.getString("BrandName");
+
+                boolean isFeatured = rs.getBoolean("IsFeatured");
+                boolean isBestSeller = rs.getBoolean("IsBestSeller");
+                boolean isNew = rs.getBoolean("IsNew");
+                int warrantyPeriod = rs.getInt("WarrantyPeriod");
+                boolean isActive = rs.getBoolean("isActive");
+                String imageUrl = rs.getString("ImageURL");
+
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandIdDB, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
+            }
+            return list;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Product> getProductByCategory(int categoryId) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "isd.UnitPrice, isd.Quantity, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "FROM Products p "
+                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
+                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "LEFT JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
+                + "where cate.CategoryID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                BigDecimal price = rs.getBigDecimal("Price");
+                int discount = rs.getInt("Discount");
+                int stock = rs.getInt("Stock");
+                String status = rs.getString("Status");
+                int supplierId = rs.getInt("SupplierID");
+                int categoryIdDB = rs.getInt("CategoryID");
+                String categoryName = rs.getString("CategoryName");
+                int brandId = rs.getInt("BrandID");
+                String brandName = rs.getString("BrandName");
+
+                boolean isFeatured = rs.getBoolean("IsFeatured");
+                boolean isBestSeller = rs.getBoolean("IsBestSeller");
+                boolean isNew = rs.getBoolean("IsNew");
+                int warrantyPeriod = rs.getInt("WarrantyPeriod");
+                boolean isActive = rs.getBoolean("isActive");
+                String imageUrl = rs.getString("ImageURL");
+
+                String supplierName = rs.getString("Name");
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+
+                list.add(product);
+            }
+            return list;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public Product getProductByIdHasImportPrice(int productId) {
+        Product product = null;
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "isd.UnitPrice, isd.Quantity "
+                + "FROM Products p "
+                + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
+                + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
+                + "JOIN Brands br on br.BrandID = p.BrandID "
+                + "JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "where p.ProductID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                BigDecimal price = rs.getBigDecimal("Price");
+                int discount = rs.getInt("Discount");
+                int stock = rs.getInt("Stock");
+                String status = rs.getString("Status");
+                int supplierId = rs.getInt("SupplierID");
+                String supplierName = rs.getString("Name");
+                int categoryId = rs.getInt("CategoryID");
+                String categoryName = rs.getString("CategoryName");
+                int brandId = rs.getInt("BrandID");
+                String brandName = rs.getString("BrandName");
+
+                boolean isFeatured = rs.getBoolean("IsFeatured");
+                boolean isBestSeller = rs.getBoolean("IsBestSeller");
+                boolean isNew = rs.getBoolean("IsNew");
+                int warrantyPeriod = rs.getInt("WarrantyPeriod");
+                boolean isActive = rs.getBoolean("isActive");
+                String imageUrl = rs.getString("ImageURL");
+
+                BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
+                int quatity = rs.getInt("Quantity");
+
+                product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
+//    <===================================================== GIA KHIÊM ======================================================>
 }
