@@ -364,6 +364,7 @@
                                     <form id="editProductForm" method="POST" action="ImportStock">
                                         <input type="hidden" id="editProductId" name="productEditedId">
                                         <input type="hidden" id="editProductSalePrice" name="salePrice">
+                                        <input type="hidden" name="action" value="save">
                                         <div class="mb-3">
                                             <label class="form-label">Product Name:</label>
                                             <input type="text" class="form-control" id="editProductName" readonly>
@@ -376,12 +377,13 @@
                                             <label class="form-label">Import Price:</label>
                                             <input type="number" class="form-control" id="editProductPrice" name="price" min="1000" step="1">
                                         </div>
+                                        <div class="mt-2 text-end">
+                                            <button type="submit" class="create-btn">Save</button>
+                                            <button type="button" class="back-btn" onclick="cancelEditImportStock()" style="margin-left: 10px;">Cancel</button>
+                                        </div>
                                     </form>
                                 </div>
-                                <div class="mt-2 text-end">
-                                    <button type="submit" class="create-btn" id="saveEditProductBtn">Save</button>
-                                    <button type="button" class="back-btn" onclick="cancelEditImportStock()" style="margin-left: 10px;">Cancel</button>
-                                </div>
+                                
 
                             </div>
                         </div>
@@ -395,8 +397,8 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+                                        // Format total amount as VND
                                         document.addEventListener("DOMContentLoaded", function () {
-                                            // Format total amount as VND
                                             let totalAmountElement = document.getElementById("totalAmount");
                                             if (totalAmountElement) {
                                                 let amount = parseFloat(totalAmountElement.innerText.replace(/[^\d.-]/g, ''));
@@ -404,224 +406,237 @@
                                                     totalAmountElement.innerText = amount.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
                                                 }
                                             }
-
-                                            // Open supplier modal
-                                            document.getElementById("openModalBtn").addEventListener("click", function () {
-                                                var myModal = new bootstrap.Modal(document.getElementById("createImportStock"));
-                                                myModal.show();
-                                            });
-
-                                            // Open product modal
-                                            document.getElementById("openProductModalBtn").addEventListener("click", function () {
-                                                let productModal = new bootstrap.Modal(document.getElementById("selectProductModal"));
-                                                productModal.show();
-                                            });
-
-                                            // Select supplier inside modal
-                                            (function () {
-                                                const confirmBtn = document.getElementById("confirmSelection");
-                                                const supplierIDInput = document.getElementById("selectedSupplierID");
-                                                document.querySelectorAll(".select-supplier").forEach(button => {
-                                                    button.addEventListener("click", function () {
-                                                        const supplierID = this.dataset.id;
-                                                        const selectedRow = this.closest("tr");
-                                                        supplierIDInput.value = supplierID;
-                                                        document.querySelectorAll("#supplierListTable tbody tr").forEach(row => {
-                                                            row.classList.remove("table-success");
-                                                        });
-                                                        selectedRow.classList.add("table-success");
-                                                        confirmBtn.disabled = false;
-                                                    });
-                                                });
-                                            })();
-
-                                            // Select product and input quantity, price
-                                            (function () {
-                                                const confirmProductBtn = document.getElementById("confirmProductSelection");
-                                                const productIdInput = document.getElementById("selectedProductId");
-                                                const productQuantityInput = document.getElementById("selectedProductQuantity");
-                                                const productPriceInput = document.getElementById("selectedProductPrice");
-
-                                                function showInputError(input, message) {
-                                                    input.classList.add('is-invalid');
-                                                    const existingError = input.parentNode.querySelector('.invalid-feedback');
-                                                    if (existingError)
-                                                        existingError.remove();
-                                                    const errorDiv = document.createElement('div');
-                                                    errorDiv.className = 'invalid-feedback';
-                                                    errorDiv.textContent = message;
-                                                    input.parentNode.appendChild(errorDiv);
-                                                }
-                                                function clearInputError(input) {
-                                                    input.classList.remove('is-invalid');
-                                                    const errorDiv = input.parentNode.querySelector('.invalid-feedback');
-                                                    if (errorDiv)
-                                                        errorDiv.remove();
-                                                }
-                                                document.querySelectorAll('.product-quantity, .product-price').forEach(input => {
-                                                    input.addEventListener('input', function () {
-                                                        clearInputError(this);
-                                                    });
-                                                });
-                                                document.querySelectorAll(".select-product").forEach(button => {
-                                                    button.addEventListener("click", function () {
-                                                        const productId = this.dataset.id;
-                                                        const selectedRow = this.closest("tr");
-                                                        const quantityInput = selectedRow.querySelector(".product-quantity");
-                                                        const priceInput = selectedRow.querySelector(".product-price");
-                                                        const salePrice = parseFloat(priceInput.getAttribute("data-saleprice"));
-                                                        const productQuantity = parseInt(quantityInput.value);
-                                                        const productPrice = parseFloat(priceInput.value);
-
-                                                        clearInputError(quantityInput);
-                                                        clearInputError(priceInput);
-                                                        let hasError = false;
-                                                        if (isNaN(productQuantity) || productQuantity < 1) {
-                                                            showInputError(quantityInput, 'Please enter a valid quantity (minimum: 1)');
-                                                            quantityInput.focus();
-                                                            hasError = true;
-                                                        }
-                                                        if (isNaN(productPrice) || productPrice < 1000) {
-                                                            showInputError(priceInput, 'Please enter a valid price (minimum: 1,000)');
-                                                            if (!hasError)
-                                                                priceInput.focus();
-                                                            hasError = true;
-                                                        }
-                                                        if (!isNaN(productPrice) && !isNaN(salePrice) && productPrice >= salePrice) {
-                                                            showInputError(priceInput, 'Import price must be less than sale price (' + salePrice.toLocaleString('vi-VN') + ' VND)');
-                                                            priceInput.focus();
-                                                            hasError = true;
-                                                        }
-                                                        if (hasError) {
-                                                            selectedRow.classList.remove("table-success");
-                                                            confirmProductBtn.disabled = true;
-                                                            return;
-                                                        }
-                                                        productQuantityInput.value = productQuantity;
-                                                        productPriceInput.value = productPrice;
-                                                        productIdInput.value = productId;
-                                                        document.querySelectorAll("#productListTable tbody tr").forEach(row => {
-                                                            row.classList.remove("table-success");
-                                                        });
-                                                        selectedRow.classList.add("table-success");
-                                                        confirmProductBtn.disabled = false;
-                                                    });
-                                                });
-                                            })();
-
-                                            // Edit product (modal)
-                                            (function () {
-                                                const editModal = new bootstrap.Modal(document.getElementById("editProductModal"));
-                                                document.querySelectorAll(".edit-product").forEach(button => {
-                                                    button.addEventListener("click", function () {
-                                                        const productId = this.dataset.id;
-                                                        const productName = this.dataset.name;
-                                                        const quantity = this.dataset.quantity;
-                                                        const price = this.dataset.price;
-                                                        const salePrice = this.dataset.saleprice;
-                                                        document.getElementById("editProductId").value = productId;
-                                                        document.getElementById("editProductName").value = productName;
-                                                        document.getElementById("editProductQuantity").value = quantity;
-                                                        document.getElementById("editProductPrice").value = price;
-                                                        document.getElementById("editProductSalePrice").value = salePrice;
-                                                        // Xóa lỗi trước đó
-                                                        document.getElementById("editProductPrice").classList.remove("is-invalid");
-                                                        let errorDiv = document.getElementById("editProductPrice").parentNode.querySelector('.invalid-feedback');
-                                                        if (errorDiv)
-                                                            errorDiv.textContent = "";
-                                                        // Enable nút save
-                                                        document.getElementById("saveEditProductBtn").disabled = false;
-                                                        editModal.show();
-                                                    });
-                                                });
-                                                // Validate nhập giá nhập nhỏ hơn giá bán
-                                                document.getElementById("editProductPrice").addEventListener("input", function () {
-                                                    const importPrice = parseFloat(this.value);
-                                                    const salePrice = parseFloat(document.getElementById("editProductSalePrice").value);
-                                                    const submitBtn = document.getElementById("saveEditProductBtn");
-                                                    let errorDiv = this.parentNode.querySelector('.invalid-feedback');
-                                                    if (!errorDiv) {
-                                                        errorDiv = document.createElement('div');
-                                                        errorDiv.className = 'invalid-feedback';
-                                                        this.parentNode.appendChild(errorDiv);
-                                                    }
-                                                    if (!isNaN(importPrice) && !isNaN(salePrice) && importPrice >= salePrice) {
-                                                        this.classList.add('is-invalid');
-                                                        errorDiv.textContent = 'Import price must be less than sale price (' + salePrice.toLocaleString('vi-VN') + ' VND)';
-                                                        submitBtn.disabled = true;
-                                                    } else {
-                                                        this.classList.remove('is-invalid');
-                                                        errorDiv.textContent = '';
-                                                        submitBtn.disabled = false;
-                                                    }
-                                                });
-
-                                                // Save button: submit form với action=save
-                                                document.getElementById("saveEditProductBtn").addEventListener("click", function () {
-                                                    // Thêm input action=save nếu chưa có
-                                                    let editForm = document.getElementById("editProductForm");
-                                                    let actionInput = editForm.querySelector("input[name='action']");
-                                                    if (!actionInput) {
-                                                        actionInput = document.createElement("input");
-                                                        actionInput.type = "hidden";
-                                                        actionInput.name = "action";
-                                                        editForm.appendChild(actionInput);
-                                                    }
-                                                    actionInput.value = "save";
-                                                    editForm.submit();
-                                                });
-                                            })();
-
-                                            // Supplier search filter
-                                            document.getElementById("searchSupplierInput").addEventListener("keyup", function () {
-                                                let filter = this.value.toLowerCase();
-                                                let rows = document.querySelectorAll("#supplierListTable tbody tr");
-                                                rows.forEach(row => {
-                                                    let taxId = row.cells[0].textContent.toLowerCase();
-                                                    let companyName = row.cells[1].textContent.toLowerCase();
-                                                    let email = row.cells[2].textContent.toLowerCase();
-                                                    if (taxId.includes(filter) || companyName.includes(filter) || email.includes(filter)) {
-                                                        row.style.display = "";
-                                                    } else {
-                                                        row.style.display = "none";
-                                                    }
-                                                });
-                                            });
-
-                                            // Product search filter
-                                            document.getElementById("searchProductInput").addEventListener("keyup", function () {
-                                                let filter = this.value.toLowerCase();
-                                                let rows = document.querySelectorAll("#productListTable tbody tr");
-                                                rows.forEach(row => {
-                                                    let id = row.cells[0].textContent.toLowerCase();
-                                                    let name = row.cells[1].textContent.toLowerCase();
-                                                    if (name.includes(filter) || id.includes(filter)) {
-                                                        row.style.display = "";
-                                                    } else {
-                                                        row.style.display = "none";
-                                                    }
-                                                });
-                                            });
-
-                                            // Cancel button
-                                            window.cancelImportStock = function () {
-                                                window.location.href = 'ImportStatistic';
-                                            }
-                                            window.cancelEditImportStock = function () {
-                                                window.location.href = 'ImportStock';
-                                            }
-
-                                            // Import button: submit form
-                                            window.redirectToImport = function () {
-                                                const form = document.createElement("form");
-                                                form.method = "POST";
-                                                form.action = "ImportStock";
-                                                document.body.appendChild(form);
-                                                form.submit();
-                                            }
                                         });
+
+                                        // Open supplier modal
+                                        document.getElementById("openModalBtn").addEventListener("click", function () {
+                                            var myModal = new bootstrap.Modal(document.getElementById("createImportStock"));
+                                            myModal.show();
+                                        });
+
+                                        // Open product modal
+                                        document.getElementById("openProductModalBtn").addEventListener("click", function () {
+                                            let productModal = new bootstrap.Modal(document.getElementById("selectProductModal"));
+                                            productModal.show();
+                                        });
+
+                                        // Select supplier inside modal
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const confirmBtn = document.getElementById("confirmSelection");
+                                            const supplierIDInput = document.getElementById("selectedSupplierID");
+                                            document.querySelectorAll(".select-supplier").forEach(button => {
+                                                button.addEventListener("click", function () {
+                                                    const supplierID = this.dataset.id;
+                                                    const selectedRow = this.closest("tr");
+                                                    supplierIDInput.value = supplierID;
+                                                    document.querySelectorAll("#supplierListTable tbody tr").forEach(row => {
+                                                        row.classList.remove("table-success");
+                                                    });
+                                                    selectedRow.classList.add("table-success");
+                                                    confirmBtn.disabled = false;
+                                                });
+                                            });
+                                        });
+
+                                        // Select product and input quantity, price
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const confirmProductBtn = document.getElementById("confirmProductSelection");
+                                            const productIdInput = document.getElementById("selectedProductId");
+                                            const productQuantityInput = document.getElementById("selectedProductQuantity");
+                                            const productPriceInput = document.getElementById("selectedProductPrice");
+                                            // Function to show error message
+                                            function showInputError(input, message) {
+                                                input.classList.add('is-invalid');
+                                                // Remove existing error message
+                                                const existingError = input.parentNode.querySelector('.invalid-feedback');
+                                                if (existingError) {
+                                                    existingError.remove();
+                                                }
+                                                // Add new error message
+                                                const errorDiv = document.createElement('div');
+                                                errorDiv.className = 'invalid-feedback';
+                                                errorDiv.textContent = message;
+                                                input.parentNode.appendChild(errorDiv);
+                                            }
+
+                                            // Function to clear error message
+                                            function clearInputError(input) {
+                                                input.classList.remove('is-invalid');
+                                                const errorDiv = input.parentNode.querySelector('.invalid-feedback');
+                                                if (errorDiv) {
+                                                    errorDiv.remove();
+                                                }
+                                            }
+
+                                            // Add event listeners to clear errors when typing
+                                            document.querySelectorAll('.product-quantity, .product-price').forEach(input => {
+                                                input.addEventListener('input', function () {
+                                                    clearInputError(this);
+                                                });
+                                            });
+                                            document.querySelectorAll(".select-product").forEach(button => {
+                                                button.addEventListener("click", function () {
+                                                    const productId = this.dataset.id;
+                                                    const selectedRow = this.closest("tr");
+                                                    const quantityInput = selectedRow.querySelector(".product-quantity");
+                                                    const priceInput = selectedRow.querySelector(".product-price");
+                                                    const productQuantity = parseInt(quantityInput.value);
+                                                    const productPrice = parseFloat(priceInput.value);
+                                                    // Clear previous errors
+                                                    clearInputError(quantityInput);
+                                                    clearInputError(priceInput);
+                                                    let hasError = false;
+                                                    if (isNaN(productQuantity) || productQuantity < 1) {
+                                                        showInputError(quantityInput, 'Please enter a valid quantity (minimum: 1)');
+                                                        quantityInput.focus();
+                                                        hasError = true;
+                                                    }
+
+                                                    if (isNaN(productPrice) || productPrice < 1000) {
+                                                        showInputError(priceInput, 'Please enter a valid price (minimum: 1,000)');
+                                                        if (!hasError)
+                                                            priceInput.focus();
+                                                        hasError = true;
+                                                    }
+
+                                                    if (hasError) {
+                                                        selectedRow.classList.remove("table-success");
+                                                        confirmProductBtn.disabled = true;
+                                                        return;
+                                                    }
+
+                                                    productQuantityInput.value = productQuantity;
+                                                    productPriceInput.value = productPrice;
+                                                    productIdInput.value = productId;
+                                                    document.querySelectorAll("#productListTable tbody tr").forEach(row => {
+                                                        row.classList.remove("table-success");
+                                                    });
+                                                    selectedRow.classList.add("table-success");
+                                                    confirmProductBtn.disabled = false;
+                                                });
+                                            });
+                                        });
+
+                                        // Open modal to edit imported product
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const editModal = new bootstrap.Modal(document.getElementById("editProductModal"));
+                                            document.querySelectorAll(".edit-product").forEach(button => {
+                                                button.addEventListener("click", function () {
+                                                    const productId = this.dataset.id;
+                                                    const productName = this.dataset.name;
+                                                    const quantity = this.dataset.quantity;
+                                                    const price = this.dataset.price;
+                                                    const salePrice = this.dataset.saleprice;
+                                                    document.getElementById("editProductId").value = productId;
+                                                    document.getElementById("editProductName").value = productName;
+                                                    document.getElementById("editProductQuantity").value = quantity;
+                                                    document.getElementById("editProductPrice").value = price;
+                                                    document.getElementById("editProductSalePrice").value = salePrice;
+                                                    editModal.show();
+                                                });
+                                            });
+                                            // Validation cho edit product price
+                                            document.getElementById("editProductPrice").addEventListener("input", function () {
+                                                const importPrice = parseFloat(this.value);
+                                                const salePrice = parseFloat(document.getElementById("editProductSalePrice").value);
+                                                const submitBtn = document.querySelector("#editProductModal .create-btn");
+                                                let errorDiv = this.parentNode.querySelector('.invalid-feedback');
+                                                if (!errorDiv) {
+                                                    errorDiv = document.createElement('div');
+                                                    errorDiv.className = 'invalid-feedback';
+                                                    this.parentNode.appendChild(errorDiv);
+                                                }
+
+                                                if (!isNaN(importPrice) && !isNaN(salePrice) && importPrice >= salePrice) {
+                                                    this.classList.add('is-invalid');
+                                                    errorDiv.textContent = 'Import price must be less than sale price (' + salePrice.toLocaleString('vi-VN') + ' VND)';
+                                                    submitBtn.disabled = true;
+                                                } else {
+                                                    this.classList.remove('is-invalid');
+                                                    errorDiv.textContent = '';
+                                                    submitBtn.disabled = false;
+                                                }
+                                            });
+                                        });
+
+                                        // Supplier search filter
+                                        document.getElementById("searchSupplierInput").addEventListener("keyup", function () {
+                                            let filter = this.value.toLowerCase();
+                                            let rows = document.querySelectorAll("#supplierListTable tbody tr");
+                                            rows.forEach(row => {
+                                                let taxId = row.cells[0].textContent.toLowerCase();
+                                                let companyName = row.cells[1].textContent.toLowerCase();
+                                                let email = row.cells[2].textContent.toLowerCase();
+                                                if (taxId.includes(filter) || companyName.includes(filter) || email.includes(filter)) {
+                                                    row.style.display = "";
+                                                } else {
+                                                    row.style.display = "none";
+                                                }
+                                            });
+                                        });
+
+                                        // Product search filter
+                                        document.getElementById("searchProductInput").addEventListener("keyup", function () {
+                                            let filter = this.value.toLowerCase();
+                                            let rows = document.querySelectorAll("#productListTable tbody tr");
+                                            rows.forEach(row => {
+                                                let id = row.cells[0].textContent.toLowerCase();
+                                                let name = row.cells[1].textContent.toLowerCase();
+                                                if (name.includes(filter) || id.includes(filter)) {
+                                                    row.style.display = "";
+                                                } else {
+                                                    row.style.display = "none";
+                                                }
+                                            });
+                                        });
+
+                                        // Cancel button: redirect to import statistics page
+                                        function cancelImportStock() {
+                                            window.location.href = 'ImportStatistic';
+                                        }
+                                        function cancelEditImportStock() {
+                                            window.location.href = 'ImportStock';
+                                        }
+
+                                        // Import button: submit form
+                                        function redirectToImport() {
+                                            const form = document.createElement("form");
+                                            form.method = "POST";
+                                            form.action = "ImportStock";
+                                            document.body.appendChild(form);
+                                            form.submit();
+                                        }
         </script>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Kiểm tra Import Price và disable nút Select nếu lỗi
+                document.querySelectorAll("#productListTable tbody tr").forEach(function (row) {
+                    const priceInput = row.querySelector(".product-price");
+                    const selectBtn = row.querySelector(".select-product");
+                    const salePrice = parseFloat(priceInput.getAttribute("data-saleprice"));
+                    priceInput.addEventListener("input", function () {
+                        const importPrice = parseFloat(this.value);
+                        let errorDiv = this.parentNode.querySelector('.invalid-feedback');
+                        if (!errorDiv) {
+                            errorDiv = document.createElement('div');
+                            errorDiv.className = 'invalid-feedback';
+                            this.parentNode.appendChild(errorDiv);
+                        }
+                        // Check lỗi
+                        if (!isNaN(importPrice) && !isNaN(salePrice) && importPrice >= salePrice) {
+                            this.classList.add('is-invalid');
+                            errorDiv.textContent = 'Import price must be less than sale price (' + salePrice.toLocaleString('vi-VN') + ' VND)';
+                            selectBtn.disabled = true;
+                        } else {
+                            this.classList.remove('is-invalid');
+                            errorDiv.textContent = '';
+                            selectBtn.disabled = false;
+                        }
+                    });
+                });
+            });
+        </script>
 
         <!-- SweetAlert2: success/failure messages from servlet (English) -->
         <%
