@@ -15,6 +15,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/customerProductDetail.css">
+        <style>
+        body {
+            background-color: #F2F4F7 !important;
+        }
+    </style>
     </head>
 
     <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
@@ -52,9 +57,4 @@
     </body>
     <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
 
-    <style>
-        body {
-            background-color: #F2F4F7;
-        }
-    </style>
 </html>

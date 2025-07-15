@@ -1132,12 +1132,12 @@ public class ProductDAO extends DBContext {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
                 + "isd.UnitPrice, isd.Quantity, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL " 
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "
                 + "JOIN Categories cate ON cate.CategoryID = p.CategoryID "
                 + "JOIN Brands br on br.BrandID = p.BrandID "
-                + "JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
+                + "LEFT JOIN ImportStockDetails isd ON isd.ProductID = p.ProductID "
                 + "LEFT JOIN Suppliers sup on sup.SupplierID = p.SupplierID "
                 + "where cate.CategoryID = ?";
 
@@ -1184,7 +1184,7 @@ public class ProductDAO extends DBContext {
     public Product getProductByIdHasImportPrice(int productId) {
         Product product = null;
         String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
-                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
+                + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
                 + "isd.UnitPrice, isd.Quantity "
                 + "FROM Products p "
                 + "JOIN ProductImages pro ON p.ProductID = pro.ProductID "

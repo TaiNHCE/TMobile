@@ -36,9 +36,16 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
         <link rel="stylesheet" href="Css/productDetail1.css">
+
+        <style>
+            .img-thumbnail {
+                padding: .25rem;
+            }
+        </style>
+
     </head>
     <body>
-        <div class="container">
+        <div class="container divAllImg">
 
             <!--            <======================================================= xu ly anh ================================================>-->
             <h3><%= product.getProductName()%></h3>
@@ -51,14 +58,13 @@
                 <form method="post" action="AdminUpdateProductDetail?productId=<%= product.getProductId()%>" enctype="multipart/form-data">
                     <div class = "row" style = "gap: 2%">
                         <!-- ✅ Div cha bọc cả ảnh lớn và 4 ảnh nhỏ — có nền trắng -->
-                        <div style="width: 38.5%; background-color: #ffffff; padding: 16px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                        <div style="width: 38.5%; background-color: #ffffff; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); height: 290px;">
 
                             <!-- Ảnh lớn - KHÔNG CÓ nền trắng -->
-                            <div class="text-center divAnhLon"
-                                 style="width: 100%; margin-bottom: 16px; border-radius: 15px; max-height: 400px">
-                                <label for="fileInputMain" style="cursor: pointer;">
+                            <div class="text-center divAnhLon" style="width: 100%; border-radius: 15px;">
+                                <label for="fileInputMain" style="cursor: pointer; width: 74%;">
                                     <img id="previewMainImage" src="<%= product.getImageUrl()%>"
-                                         style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 370px"
+                                         style="width: 100%;"
                                          alt="Click to change image"
                                          title="Click to change image">
                                 </label>
@@ -68,12 +74,11 @@
 
 
                             <!-- 4 ảnh nhỏ -->
-                            <div class="d-flex flex-wrap gap-3 row div4AnhNho" style="gap: 2%; margin-top: 8px; justify-content: center;">
+                            <div class="d-flex flex-wrap gap-3 row div4AnhNho" style="gap: .5rem !important;  justify-content: center;">
 
                                 <!-- Ảnh nhỏ 1 -->
-                                <div class="text-center"
-                                     style="border: 1px solid #ccc; border-radius: 12px; max-height: 500px; width: 22%;">
-                                    <label for="fileInput1" style="cursor: pointer;">
+                                <div class="img-thumbnail text-center" style="border: 1px solid #ccc; border-radius: 10px; max-height: 500px; width: 20%;">
+                                    <label for="fileInput1" style="cursor: pointer; width: 100%;">
                                         <img id="previewImage1" src="<%= proDetail.getImageUrl1()%>"
                                              style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 465px"
                                              alt="Click to change image"
@@ -84,8 +89,8 @@
                                 </div>
 
                                 <!-- Ảnh nhỏ 2 -->
-                                <div class="text-center"
-                                     style="border: 1px solid #ccc; border-radius: 12px; max-height: 500px; width: 22%;">
+                                <div class=" img-thumbnail text-center"
+                                     style="border: 1px solid #ccc; border-radius: 10px; max-height: 500px; width: 20%;">
                                     <label for="fileInput2" style="cursor: pointer;">
                                         <img id="previewImage2" src="<%= proDetail.getImageUrl2()%>"
                                              style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 465px"
@@ -97,8 +102,8 @@
                                 </div>
 
                                 <!-- Ảnh nhỏ 3 -->
-                                <div class="text-center"
-                                     style="border: 1px solid #ccc; border-radius: 12px; max-height: 500px; width: 22%;">
+                                <div class="img-thumbnail text-center"
+                                     style="border: 1px solid #ccc; border-radius: 10px; max-height: 500px; width: 20%;">
                                     <label for="fileInput3" style="cursor: pointer;">
                                         <img id="previewImage3" src="<%= proDetail.getImageUrl3()%>"
                                              style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 465px"
@@ -110,8 +115,8 @@
                                 </div>
 
                                 <!-- Ảnh nhỏ 4 -->
-                                <div class="text-center"
-                                     style="border: 1px solid #ccc; border-radius: 12px; max-height: 500px; width: 22%;">
+                                <div class="img-thumbnail text-center"
+                                     style="border: 1px solid #ccc; border-radius: 10px; max-height: 500px; width: 20%;">
                                     <label for="fileInput4" style="cursor: pointer;">
                                         <img id="previewImage4" src="<%= proDetail.getImageUrl4()%>"
                                              style="width: 100%; object-fit: cover; border-radius: 10px; max-height: 465px"
@@ -137,13 +142,19 @@
 
                         <!--            <======================================================= xu ly du lieu ================================================>-->
 
-                        <div class = "" style = "background-color: #FFFFFF; border-radius: 15px; width: 58%;">
 
-                            <div style = "width: 100%;">
+
+                        <div class = "" style = "background-color: #FFFFFF; border-radius: 15px; width: 58%;">
+                            <div style = "width: 100%; display: flex; ">
                                 <h4>
                                     Technical specifications
                                 </h4>
+
+                                <div style = "margin-left: auto; display: flex;">
+                                    <a href="AdminProduct" class="btn btn-back" style = "text-decoration: none">Back</a>
+                                </div>
                             </div>
+
                             <div style = "width: 100%">
                                 <table class="category-table">
                                     <%
@@ -292,41 +303,41 @@
 </style>
 
 <style>
-        .btn-edit {
-            background-color: #198754;
-            color: white;
-            border: 1px solid #198754;
-           
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .btn-edit:hover {
-            background-color: #157347;
-            border-color: #146c43;
-        }
+    .btn-edit {
+        background-color: #198754;
+        color: white;
+        border: 1px solid #198754;
 
-        .btn-back {
-            color: #fff;
-            background-color: #6c757d;
-            border: 1px solid #6c757d;
-           
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .btn-edit:hover {
+        background-color: #157347;
+        border-color: #146c43;
+    }
 
-        .btn-back:hover {
-            background-color: #5c636a;
-            border-color: #565e64;
-        }
+    .btn-back {
+        color: #fff;
+        background-color: #6c757d;
+        border: 1px solid #6c757d;
 
-        .btn-edit, .btn-back {
-            padding: 8px 16px;  /* trước là 10px 20px */
-            font-size: 14px;
-        }
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-    </style>
+    .btn-back:hover {
+        background-color: #5c636a;
+        border-color: #565e64;
+    }
+
+    .btn-edit, .btn-back {
+        padding: 8px 16px;  /* trước là 10px 20px */
+        font-size: 14px;
+    }
+
+</style>
 </html>
 

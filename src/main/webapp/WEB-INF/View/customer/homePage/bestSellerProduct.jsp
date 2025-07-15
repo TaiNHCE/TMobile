@@ -135,26 +135,26 @@
                         <% if (productListBestSeller != null) {
                                 for (Product pro : productListBestSeller) {
                                     if (pro.getDiscount() != 0) {
-                                            oldPrice = pro.getPrice();
-                                            BigDecimal price = pro.getPrice();
-                                            int discount = pro.getDiscount();
+                                        oldPrice = pro.getPrice();
+                                        BigDecimal price = pro.getPrice();
+                                        int discount = pro.getDiscount();
 
-                                            BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
-                                            newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
+                                        BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
+                                        newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
 
-                                            BigDecimal giaCu = oldPrice;
-                                            BigDecimal giaMoi = newPrice;
-                                            BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
+                                        BigDecimal giaCu = oldPrice;
+                                        BigDecimal giaMoi = newPrice;
+                                        BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
 
-                                            Locale localeVN = new Locale("vi", "VN");
-                                            NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                                        Locale localeVN = new Locale("vi", "VN");
+                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
 
-                                            String giaCuFormatted = currencyVN.format(oldPrice);
-                                            String giaMoiFormatted = currencyVN.format(giaMoi);
-                                            String giamFormatted = currencyVN.format(giaDaGiam);
+                                        String giaCuFormatted = currencyVN.format(oldPrice);
+                                        String giaMoiFormatted = currencyVN.format(giaMoi);
+                                        String giamFormatted = currencyVN.format(giaDaGiam);
                         %>
                         <div class="sanPhamMoi">
-                            <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
+                            <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
                                 </div>
@@ -170,15 +170,15 @@
                                 <p class="giam">Giảm <%= giamFormatted%> đ</p>
                             </a>
                         </div>
-                        <% 
+                        <%
                         } else {
-                                oldPrice = pro.getPrice();
-                                Locale localeVN = new Locale("vi", "VN");
-                                NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
-                                String giaCuFormatted = currencyVN.format(oldPrice);
+                            oldPrice = pro.getPrice();
+                            Locale localeVN = new Locale("vi", "VN");
+                            NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                            String giaCuFormatted = currencyVN.format(oldPrice);
                         %>
                         <div class="sanPhamMoi">
-                            <a name="id" href="<%= request.getContextPath()%>/Detail?id=" style="text-decoration: none; color: inherit; display: block;">
+                            <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                 <div class="divHinh">
                                     <img style="width: 98%" src="<%= pro.getImageUrl()%>" alt="anhDienThoai" class="anhDienThoaiDocQuyen">
                                 </div>
@@ -189,7 +189,7 @@
                                 <p class="giaMoi"><%= giaCuFormatted%> đ</p>
                             </a>
                         </div>
-                        <% 
+                        <%
                                 } // end if discount
                             } // end for
                         } else { %>
