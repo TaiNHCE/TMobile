@@ -1,11 +1,17 @@
+-- ========================
+-- CREATE DATABASE & SCHEMA
+-- ========================
 USE master;
 GO
 DROP DATABASE IF EXISTS TShop;
 GO
+
 CREATE DATABASE TShop;
 GO
 USE TShop;
 GO
+
+-- Roles
 CREATE TABLE Roles (
     RoleID INT PRIMARY KEY IDENTITY,
     RoleName NVARCHAR(50) UNIQUE NOT NULL
@@ -51,6 +57,7 @@ CREATE TABLE Admins (
     Gender NVARCHAR(10),
     Level INT DEFAULT 1
 );
+
 CREATE TABLE Categories (
     CategoryID INT PRIMARY KEY IDENTITY,
     CategoryName NVARCHAR(100) NOT NULL,
@@ -81,6 +88,7 @@ CREATE TABLE Brands (
     ImgURLLogo NVARCHAR(500),
     isActive BIT DEFAULT 1
 );
+
 CREATE TABLE Suppliers (
     SupplierID INT PRIMARY KEY IDENTITY,
     TaxID NVARCHAR(20) NOT NULL,
@@ -114,7 +122,9 @@ CREATE TABLE Products (
     CreatedAt DATETIME DEFAULT GETDATE(),
     UpdateAt DATETIME DEFAULT GETDATE(),
     WarrantyPeriod INT,
-    isActive BIT DEFAULT 1
+    DiscountStartDate DATETIME NULL,
+    DiscountEndDate DATETIME NULL,
+    isActive BIT default 1
 );
 
 CREATE TABLE ProductImages (
@@ -128,11 +138,15 @@ CREATE TABLE ProductDetails (
     ProductDetailID INT PRIMARY KEY IDENTITY,
     ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE CASCADE,
     CategoryDetailID INT FOREIGN KEY REFERENCES CategoryDetails(CategoryDetailID) ON DELETE CASCADE,
-    AttributeValue NVARCHAR(255),
+    AttributeValue NVARCHAR(255)
+);
+
+CREATE TABLE ImgProductDetails(
     ImageURL1 NVARCHAR(500),
     ImageURL2 NVARCHAR(500),
     ImageURL3 NVARCHAR(500),
-    ImageURL4 NVARCHAR(500)
+    ImageURL4 NVARCHAR(500),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE CASCADE
 );
 
 CREATE TABLE ProductVariants (
@@ -146,6 +160,26 @@ CREATE TABLE ProductVariants (
     SKU NVARCHAR(50) UNIQUE,
     ImageURL NVARCHAR(500),
     IsActive BIT DEFAULT 1
+);
+
+
+CREATE TABLE Feedbacks (
+    FeedbackID INT PRIMARY KEY IDENTITY,
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE CASCADE,
+    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE CASCADE,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    Comment NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    IsVisible BIT DEFAULT 1
+);
+
+CREATE TABLE FeedbackReplies (
+    ReplyID INT PRIMARY KEY IDENTITY,
+    FeedbackID INT FOREIGN KEY REFERENCES Feedbacks(FeedbackID) ON DELETE CASCADE,
+    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE NO ACTION,
+    ReplyContent NVARCHAR(MAX),
+    RepliedAt DATETIME DEFAULT GETDATE(),
+    IsPublic BIT DEFAULT 1
 );
 
 CREATE TABLE Cart (
@@ -163,21 +197,26 @@ CREATE TABLE CartItems (
     AddedAt DATETIME DEFAULT GETDATE()
 );
 
-CREATE TABLE ShippingAddresses (
-    AddressID INT PRIMARY KEY IDENTITY,
-    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE CASCADE,
-    RecipientName NVARCHAR(100),
-    Phone NVARCHAR(15),
-    AddressLine NVARCHAR(255),
-    Ward NVARCHAR(100),
-    District NVARCHAR(100),
-    City NVARCHAR(100),
-    PostalCode NVARCHAR(10),
-    IsDefault BIT DEFAULT 0
+CREATE TABLE ProductViewHistory (
+    ViewID INT PRIMARY KEY IDENTITY,
+    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE NO ACTION,
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE CASCADE,
+    ViewTime DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE Addresses (
+    AddressID INT PRIMARY KEY IDENTITY(1,1),
+    CustomerID INT NOT NULL,
+    ProvinceName NVARCHAR(64) NOT NULL,
+    DistrictName NVARCHAR(64) NOT NULL,
+    WardName NVARCHAR(64) NOT NULL,
+    AddressDetails NVARCHAR(255) NOT NULL,
+    IsDefault BIT DEFAULT 0,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
 CREATE TABLE Vouchers (
-    VoucherID INT PRIMARY KEY IDENTITY,
+    VoucherID INT PRIMARY KEY IDENTITY(1,1),
     Code NVARCHAR(50) UNIQUE NOT NULL,
     DiscountPercent INT,
     ExpiryDate DATETIME,
@@ -187,35 +226,51 @@ CREATE TABLE Vouchers (
     UsedCount INT DEFAULT 0,
     IsActive BIT DEFAULT 1,
     CreatedAt DATETIME DEFAULT GETDATE(),
-    Description NVARCHAR(MAX)
+    Description NVARCHAR(MAX),
+    IsGlobal BIT DEFAULT 0
+);
+
+CREATE TABLE CustomerVoucher (
+    CustomerID INT NOT NULL,
+    VoucherID INT NOT NULL,
+    ExpirationDate DATETIME,
+    Quantity INT,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (VoucherID) REFERENCES Vouchers(VoucherID)
 );
 
 CREATE TABLE OrderStatus (
-    StatusID INT PRIMARY KEY IDENTITY,
-    StatusName NVARCHAR(50) NOT NULL 
+    ID INT PRIMARY KEY,
+    [Status] NVARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Orders (
-    OrderID INT PRIMARY KEY IDENTITY,
-    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE NO ACTION,
-    OrderDate DATETIME DEFAULT GETDATE(),
-    StatusID INT FOREIGN KEY REFERENCES OrderStatus(StatusID),
-    ShippingAddressID INT FOREIGN KEY REFERENCES ShippingAddresses(AddressID),
-    VoucherID INT NULL FOREIGN KEY REFERENCES Vouchers(VoucherID),
-    TotalAmount DECIMAL(12,2),
-    ShippingFee DECIMAL(10,2),
-    DiscountAmount DECIMAL(10,2),
-    OrderNotes NVARCHAR(MAX),
-    EstimatedDeliveryDate DATETIME
+    OrderID INT PRIMARY KEY IDENTITY(1,1),
+    CustomerID INT,
+    FullName VARCHAR(100) NOT NULL,
+    AddressSnapshot NTEXT NOT NULL,
+    AddressID INT,
+    PhoneNumber VARCHAR(15) NOT NULL,
+    OrderedDate DATETIME NOT NULL,
+    DeliveredDate DATETIME,
+    Status INT,
+    TotalAmount BIGINT,
+    Discount INT,
+	UpdatedAt DATETIME,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (Status) REFERENCES OrderStatus(ID),
+    FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
 );
 
-CREATE TABLE OrderItems (
-    OrderItemID INT PRIMARY KEY IDENTITY,
-    OrderID INT FOREIGN KEY REFERENCES Orders(OrderID) ON DELETE CASCADE,
-    ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE NO ACTION,
-    VariantID INT NULL FOREIGN KEY REFERENCES ProductVariants(VariantID) ON DELETE NO ACTION,
+
+CREATE TABLE OrderDetails (
+    OrderID INT,
+    ProductID INT,
     Quantity INT,
-    UnitPrice DECIMAL(10,2)
+    Price BIGINT,
+    PRIMARY KEY (OrderID, ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
 CREATE TABLE Payments (
@@ -242,5 +297,80 @@ CREATE TABLE ImportStockDetails (
     ProductID INT FOREIGN KEY REFERENCES Products(ProductID) ON DELETE NO ACTION,
     Quantity INT,
     UnitPrice DECIMAL(10,2),
+    QuantityLeft INT,
     PRIMARY KEY (ImportID, ProductID)
 );
+
+CREATE TABLE Notifications (
+    NotificationID INT PRIMARY KEY IDENTITY,
+    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE NO ACTION,
+    Title NVARCHAR(255),
+    Message NVARCHAR(MAX),
+    Type NVARCHAR(50),
+    IsRead BIT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    RelatedEntityID INT NULL,
+    RelatedEntityType NVARCHAR(50) NULL
+);
+
+CREATE TABLE ActivityLogs (
+    LogID INT PRIMARY KEY IDENTITY,
+    AccountID INT FOREIGN KEY REFERENCES Accounts(AccountID) ON DELETE NO ACTION,
+    Action NVARCHAR(255),
+    EntityType NVARCHAR(50),
+    EntityID INT,
+    Details NVARCHAR(MAX),
+    IPAddress NVARCHAR(45),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE Promotions (
+    PromotionID INT PRIMARY KEY IDENTITY,
+    TargetType NVARCHAR(10) NOT NULL CHECK (TargetType IN ('BRAND', 'CATEGORY', 'PRODUCT')),
+    TargetID INT NOT NULL,
+    Discount INT NOT NULL CHECK (Discount BETWEEN 1 AND 100),
+    StartDate DATETIME NOT NULL,
+    EndDate DATETIME NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT CHK_Date CHECK (EndDate > StartDate),
+    Name NVARCHAR(255) NOT NULL DEFAULT '',
+    ActiveDiscount BIT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE ProductRatings (
+    RateID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerID INT,
+    ProductID INT,
+    OrderID INT,
+    CreatedDate DATETIME,
+    Star INT,
+    Comment NVARCHAR(300),
+    IsDeleted BIT,
+    IsRead BIT,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+CREATE TABLE RatingReplies (
+    ReplyID INT IDENTITY (1,1) PRIMARY KEY,
+    StaffID INT,
+    RateID INT,
+    Answer NVARCHAR(300),
+    IsRead BIT,
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID),
+    FOREIGN KEY (RateID) REFERENCES ProductRatings(RateID)
+);
+
+-- Indexes
+CREATE INDEX IX_Products_CategoryID ON Products(CategoryID);
+CREATE INDEX IX_Products_BrandID ON Products(BrandID);
+CREATE INDEX IX_Products_Status ON Products(Status);
+CREATE INDEX IX_Products_IsFeatured ON Products(IsFeatured);
+CREATE INDEX IX_Products_IsBestSeller ON Products(IsBestSeller);
+CREATE INDEX IX_Feedbacks_ProductID ON Feedbacks(ProductID);
+CREATE INDEX IX_Feedbacks_AccountID ON Feedbacks(AccountID);
+CREATE INDEX IX_ProductViewHistory_AccountID ON ProductViewHistory(AccountID);
+CREATE INDEX IX_ProductViewHistory_ProductID ON ProductViewHistory(ProductID);
+CREATE INDEX IX_Notifications_AccountID ON Notifications(AccountID);
+CREATE INDEX IX_Notifications_IsRead ON Notifications(IsRead);

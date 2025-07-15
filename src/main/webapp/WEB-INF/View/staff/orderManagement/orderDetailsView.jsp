@@ -14,6 +14,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
         <!-- Custom Styles -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
         <style>
             body {
@@ -23,19 +24,19 @@
 
             .status-1 {
                 background-color: #f59e0b;
-            }     /* Waiting */
+            } /* Waiting */
             .status-2 {
                 background-color: #0d6efd;
-            }     /* Packaging */
+            } /* Packaging */
             .status-3 {
                 background-color: #6366f1;
-            }     /* Waiting for Delivery */
+            } /* Waiting for Delivery */
             .status-4 {
                 background-color: #22c55e;
-            }     /* Delivered */
+            } /* Delivered */
             .status-5 {
                 background-color: #ef4444;
-            }     /* Cancelled */
+            } /* Cancelled */
 
             .badge {
                 padding: 6px 12px;
@@ -47,10 +48,6 @@
 
             .card h4 {
                 font-weight: 700;
-            }
-
-            ul.list-group li span {
-                min-width: 100px;
             }
 
             .form-select {
@@ -67,9 +64,9 @@
 
         <div class="container mt-5">
             <jsp:include page="../sideBar.jsp" />
-            <div class="card mx-auto shadow" style="max-width: 700px">
+            <div class="card mx-auto shadow" style="max-width: 850px;">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"></i> Order Detail</h4>
+                    <h4 class="mb-0"><i class="fa-solid fa-receipt"></i> Order Detail</h4>
                 </div>
 
                 <div class="card-body">
@@ -90,11 +87,11 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr><th>Total Amount:</th><td> <fmt:formatNumber value="${data.totalAmount}" type="number" groupingUsed="true" />₫</td></tr>
+                        <tr><th>Total Amount:</th><td><fmt:formatNumber value="${data.totalAmount}" type="number" groupingUsed="true" />₫</td></tr>
                         <tr><th>Discount:</th><td>${data.discount}</td></tr>
                         <tr><th>Customer Name:</th><td>${data.fullName}</td></tr>
                         <tr><th>Phone:</th><td>${data.phone}</td></tr>
-                        <tr><th>Address:</th><td>${data.address}</td></tr>
+                        <tr><th>Address:</th><td>${data.addressSnapshot}</td></tr>
                     </table>
 
                     <h5 class="mt-4"><i class="fa-solid fa-box"></i> Order Items</h5>
@@ -103,13 +100,10 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span><strong>${detail.productName}</strong></span>
                                 <span>Quantity: ${detail.quantity}</span>
-                                <span>Price: 
-                                    <fmt:formatNumber value="${detail.price}" type="number" groupingUsed="true" />₫
-                                </span>
+                                <span>Price: <fmt:formatNumber value="${detail.price}" type="number" groupingUsed="true" />₫</span>
                             </li>
                         </c:forEach>
                     </ul>
-
 
                     <h5><i class="fa-solid fa-cogs"></i> Manage Order</h5>
 
@@ -127,11 +121,8 @@
                             <option value="5" <c:if test="${data.status == 5}">selected</c:if>>Cancelled</option>
                             </select>
 
-
                             <button type="submit" class="btn btn-success">Save</button>
-                            <a href="${pageContext.request.contextPath}/ViewOrderList" class="btn btn-outline-primary">
-                            <i></i> Back to list
-                        </a>
+                            <a href="${pageContext.request.contextPath}/ViewOrderList" class="btn btn-outline-primary">Back to list</a>
                     </form>
                 </div>
             </div>
@@ -139,9 +130,6 @@
 
         <!-- JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- JavaScript -->
-
 
         <script>
                             function disableOptions() {
@@ -172,12 +160,8 @@
                                 }
                             }
 
-                            // Gọi khi trang load
-                            disableOptions();
-
+                            disableOptions(); // Gọi khi load trang
         </script>
-
-
 
     </body>
 </html>

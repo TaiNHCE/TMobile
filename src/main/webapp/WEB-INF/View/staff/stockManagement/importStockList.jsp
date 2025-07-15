@@ -15,7 +15,7 @@
     <body>
         <div class="container">
             <jsp:include page="/WEB-INF/View/staff/sideBar.jsp" />
-            <div class="wrapper" style="margin-left:7.5px">
+            <div class="wrapper" style="">
                 <main class="main-content">
                     <jsp:include page="/WEB-INF/View/staff/header.jsp" />
 
