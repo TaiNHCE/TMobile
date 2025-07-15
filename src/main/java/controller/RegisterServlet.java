@@ -80,6 +80,15 @@ public class RegisterServlet extends HttpServlet {
         String fullName = request.getParameter("fullName");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
+        String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/\\\\|~`]).{6,}$";
+        if (!password.matches(passwordPattern)) {
+            request.setAttribute("error", "Password must contain at least one letter, one number, one special character and be at least 6 characters long.");
+            request.setAttribute("phone", phone);
+            request.setAttribute("fullName", fullName);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("WEB-INF/View/account/register.jsp").forward(request, response);
+            return;
+        }
 
         if (!password.equals(confirmPassword)) {
             request.setAttribute("error", "Password and Confirm Password do not match.");

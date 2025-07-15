@@ -12,8 +12,11 @@
         <title>Change Password</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <!-- Import d?ng chung file CSS -->
+        <!-- Import dùng chung file CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/profile.css">
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
     </head>
     <body>
         <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
@@ -48,7 +51,7 @@
                             <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required placeholder="Confirm your new password">
                         </div>
                         <div class="profile-actions">
-                            <a href="ViewProfile?id=<%= accountId %>" class="btn-cancel">
+                            <a href="ViewProfile?id=<%= accountId%>" class="btn-cancel">
                                 <i class="bi bi-arrow-left me-1"></i> Back
                             </a>
                             <button type="submit" class="btn-update">
@@ -57,6 +60,17 @@
                             </button>
                         </div>
                     </form>
+                    <c:if test="${not empty success}">
+                        <div class="alert alert-success" role="alert">
+                            ${success}
+                        </div>
+                    </c:if>
+
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger" role="alert">
+                            ${error}
+                        </div>
+                    </c:if>
                 </div>
             </div>
         </div>

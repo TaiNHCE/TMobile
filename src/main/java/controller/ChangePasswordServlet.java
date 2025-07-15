@@ -87,6 +87,12 @@ public class ChangePasswordServlet extends HttpServlet {
             response.sendRedirect("Login");
             return;
         }
+        String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/\\\\|~`]).{6,}$";
+        if (!newPassword.matches(passwordPattern)) {
+            request.setAttribute("error", "New password must contain at least one letter, one number, one special character and be at least 6 characters long.");
+            request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
+            return;
+        }
 
         if (!newPassword.equals(confirmPassword)) {
             request.setAttribute("error", "New password and confirm password do not match.");
