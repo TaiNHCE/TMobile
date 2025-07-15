@@ -23,10 +23,9 @@
 
             main.main-content {
                 flex: 1;
-                margin-left: 220px;
+                margin-left: 227.5px;
                 min-height: 100vh;
                 box-sizing: border-box;
-                padding: 30px;
             }
 
             h1 {
@@ -111,12 +110,6 @@
                 border-color: #164bb8;
             }
 
-            @media (max-width: 768px) {
-                main.main-content {
-                    margin-left: 0;
-                    padding: 15px;
-                }
-            }
         </style>
     </head>
     <body>
@@ -127,6 +120,8 @@
                 <jsp:include page="../header.jsp" />
 
                     <h1>Customer Feedback</h1>
+                    <div class="search-form" style="height: 44px; margin-bottom: 61.5px;"></div>
+
 
                     <c:if test="${empty ProductRating}">
                         <div class="alert alert-warning text-center">No feedback available.</div>

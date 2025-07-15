@@ -11,12 +11,12 @@
         </style>
     </head>
     <body>
-        <div style = "display: flex" >
+        <div style = "display: flex"  >
             <div style = "width: 18.5%;">
                 <jsp:include page="/sideBar.jsp" />
             </div>
             
-            <div class = "container" style = "flex: 1; ">
+            <div class = "container" style = "flex: 1; margin-left: -12px ">
                 <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductList/fillterProductList.jsp" />
                 <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductList/productList.jsp" />
             </div>
