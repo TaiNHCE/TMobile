@@ -16,7 +16,7 @@
 
 <style>
     body {
-        background-color: #F2F4F7
+        background-color: #F2F4F7 !important;
     }
 </style>
 

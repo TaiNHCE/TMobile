@@ -28,13 +28,7 @@
 
 
         <div style = "display: flex">
-            <h4>
-                Technical specifications
-            </h4>
 
-            <div style = "text-align: right">
-                <a href="AdminProduct" class="btn-back" style = "text-decoration: none">Back</a>
-            </div>
         </div>
         <div class = "container col-md-12" style = "background-color: #FFFFFF; border-radius: 15px;">
             <div class = "row">
