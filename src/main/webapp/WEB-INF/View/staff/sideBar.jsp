@@ -60,7 +60,7 @@
     <a href="ViewOrderList" class="sidebar-link">
         <i class="fas fa-shopping-cart"></i> Orders
     </a>
-    <a href="/products" class="sidebar-link">
+    <a href="ProductListForStaff" class="sidebar-link">
         <i class="fas fa-box"></i> Products
     </a>
     <a href="ImportStatistic" class="sidebar-link">
