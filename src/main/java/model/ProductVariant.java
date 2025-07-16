@@ -3,6 +3,7 @@ package model;
 import java.math.BigDecimal;
 
 public class ProductVariant {
+
     private int variantId;
     private int productId;
     private String color;
@@ -14,13 +15,11 @@ public class ProductVariant {
     private String imageUrl;
     private boolean isActive;
 
-    // Constructor mặc định
     public ProductVariant() {
     }
 
-    // Constructor 10 tham số
-    public ProductVariant(int variantId, int productId, String color, String storage, int quantity, 
-                         BigDecimal price, int discount, String sku, String imageUrl, boolean isActive) {
+    public ProductVariant(int variantId, int productId, String color, String storage, int quantity,
+            BigDecimal price, int discount, String sku, String imageUrl, boolean isActive) {
         this.variantId = variantId;
         this.productId = productId;
         this.color = color;
@@ -33,9 +32,8 @@ public class ProductVariant {
         this.isActive = isActive;
     }
 
-    // Constructor 9 tham số (cập nhật)
-    public ProductVariant(int variantId, int productId, String color, String storage, int quantity, 
-                         BigDecimal price, int discount, String imageUrl, boolean isActive) {
+    public ProductVariant(int variantId, int productId, String color, String storage, int quantity,
+            BigDecimal price, int discount, String imageUrl, boolean isActive) {
         this.variantId = variantId;
         this.productId = productId;
         this.color = color;

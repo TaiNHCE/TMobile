@@ -1,7 +1,3 @@
-/*
- * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import java.sql.PreparedStatement;
@@ -16,10 +12,6 @@ import model.ProductVariant;
 import java.math.BigDecimal;
 import utils.DBContext;
 
-/**
- *
- * @author pc
- */
 public class CartDAO extends DBContext {
 
     public CartDAO() {
@@ -95,10 +87,44 @@ public class CartDAO extends DBContext {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, cartItemId);
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0; // Trả về true nếu xóa thành công
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Trả về false nếu có lỗi
+            return false;
+        }
+    }
+
+    public boolean deleteMultipleCartItems(List<String> cartItemIds) {
+        if (cartItemIds == null || cartItemIds.isEmpty()) {
+            return false;
+        }
+
+        String sql = "DELETE FROM CartItems WHERE CartItemID IN (" +
+                     String.join(",", new String[cartItemIds.size()]).replaceAll("[^,]+", "?") + ")";
+        try {
+            conn.setAutoCommit(false);
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                for (int i = 0; i < cartItemIds.size(); i++) {
+                    ps.setInt(i + 1, Integer.parseInt(cartItemIds.get(i)));
+                }
+                int rowsAffected = ps.executeUpdate();
+                conn.commit();
+                return rowsAffected == cartItemIds.size();
+            }
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -108,10 +134,10 @@ public class CartDAO extends DBContext {
             ps.setInt(1, quantity);
             ps.setInt(2, cartItemId);
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Trả về false nếu có lỗi
+            return false;
         }
     }
 
@@ -125,10 +151,10 @@ public class CartDAO extends DBContext {
             }
             ps.setInt(2, cartItemId);
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Trả về false nếu có lỗi
+            return false;
         }
     }
 }
