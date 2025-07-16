@@ -97,6 +97,7 @@
         </div>
     </body>
 </html>
+
 <script>
     function toggleDetails(index) {
         const detailGroup = document.getElementById("detailGroup" + index);
@@ -104,15 +105,18 @@
         if (detailGroup.classList.contains("hidden")) {
             detailGroup.classList.remove("hidden");
             arrowIcon.innerText = "▲";
+
         } else {
             detailGroup.classList.add("hidden");
             arrowIcon.innerText = "▼";
         }
     }
 </script>
+
 <style>
     .btn-success {
         padding: 8px 16px;
         font-size: 14px;
     }
 </style>
+

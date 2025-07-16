@@ -1,20 +1,23 @@
 <%-- 
     Document   : productDetail
     Created on : Jun 19, 2025, 4:39:39 PM
-    Author     : HP - Gia Khiêm
+    Author     : HP - Minh
 --%>
+
 
 <%@page import="model.Product"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Product product = (Product) request.getAttribute("product");
 %>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
+
 
     <body>
         <div class = "container">
@@ -24,6 +27,7 @@
                 <span style="font-size: 120%; color: gray; margin-top: 4%;">View Product Detail</span>
             </div>
             <h3><%= product.getProductName()%></h3>
+
         </div>
     </body>
 </html>
