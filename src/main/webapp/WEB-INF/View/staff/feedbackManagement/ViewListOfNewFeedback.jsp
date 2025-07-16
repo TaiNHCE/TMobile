@@ -120,9 +120,6 @@
                 <jsp:include page="../header.jsp" />
 
                     <h1>Customer Feedback</h1>
-                    <div class="search-form" style="height: 44px; margin-bottom: 61.5px;"></div>
-
-
                     <c:if test="${empty ProductRating}">
                         <div class="alert alert-warning text-center">No feedback available.</div>
                     </c:if>

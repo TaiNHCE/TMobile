@@ -160,7 +160,7 @@
                                 }
                             }
 
-                            disableOptions(); // Gọi khi load trang
+                            disableOptions(); 
         </script>
 
     </body>

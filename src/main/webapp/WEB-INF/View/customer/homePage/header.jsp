@@ -215,7 +215,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="user-dropdown-item" href="ViewOrder">
+                            <a class="user-dropdown-item" href="${pageContext.request.contextPath}/ViewOrderOfCustomer">
                                 <i class="bi bi-cart"></i>
                                 <span>Order</span>
                             </a>

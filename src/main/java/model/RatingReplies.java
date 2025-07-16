@@ -13,7 +13,7 @@ public class RatingReplies {
     private int staffID;
     private int rateID;
     private String answer;
-    private boolean isRead;
+    private boolean isRead; 
 
     public RatingReplies() {
     }
