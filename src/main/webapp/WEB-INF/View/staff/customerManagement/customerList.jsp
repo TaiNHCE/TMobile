@@ -16,7 +16,6 @@
         <title>Customer List</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css">
     </head>
     <body>
@@ -24,8 +23,12 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
-                     <jsp:include page="header.jsp" />
+
+                    <jsp:include page="../header.jsp" />
+
                     <h1>Customer List</h1>
+                                    <button class="create-btn" style="float: right; margin-bottom: 7.5px; visibility: hidden;">+ New Import</button>
+
                     <form class="search-form" action="CustomerList" method="get">        
                         <input type="text" name="keyword" class="form-control" placeholder="Search customer by name">
                         <input type="hidden" name="action" value="search">
@@ -62,6 +65,11 @@
                                     <%= cus.isActive() ? "Block" : "Unblock"%>
                                 </a>
                                 <a href="CustomerList?action=detail&id=<%= cus.getId()%>" class="btn btn-primary">Detail</a>   
+
+                                <a href="AssignVoucher?customerId=<%= cus.getId()%>" class="btn btn-success">
+                                    Assign Voucher
+                                </a>
+
                             </td>
                         </tr>
                         <%

@@ -22,15 +22,12 @@ public class DeleteAddressServlet extends HttpServlet {
         HttpSession session = request.getSession();
         response.setContentType("application/json;charset=UTF-8");
 
-        // DEV: Nếu chưa có customer, tạo sẵn customer id = 1 (test)
-        Customer cus = (Customer) session.getAttribute("customer");
-        if (cus == null) {
-            cus = new Customer();
-            cus.setId(1);
-            session.setAttribute("customer", cus);
-        }
-
         PrintWriter out = response.getWriter();
+        Customer cus = (Customer) session.getAttribute("cus");
+        if (cus == null) {
+            out.print("{\"success\":false,\"message\":\"Unauthorized.\"}");
+            return;
+        }
 
         if (idStr == null) {
             out.print("{\"success\":false,\"message\":\"Missing address id.\"}");
@@ -46,7 +43,6 @@ public class DeleteAddressServlet extends HttpServlet {
         }
 
         AddressDAO dao = new AddressDAO();
-        // Đảm bảo chỉ xóa address của đúng customer
         Address address = dao.getAddressById(addressId);
         if (address == null || address.getCustomerId() != cus.getId()) {
             out.print("{\"success\":false,\"message\":\"Address not found or unauthorized.\"}");

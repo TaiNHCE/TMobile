@@ -14,6 +14,8 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+                                        <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1 class="mb-4">Import Stock Detail</h1>
                     <div class="d-flex justify-content-end mb-4 btn-group-custom">
                         <!-- Không có nút, nhưng vẫn chiếm chỗ -->

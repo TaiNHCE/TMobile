@@ -31,9 +31,19 @@
                     </div>
 
                     <div class="" style = "width: 40%">
+
                         <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductDetail/imageProductDetail.jsp" />
                     </div>
                     <div class="" style = "width: 60%">
+                        <div style = "display: flex">
+                            <h4>
+                                Technical specifications
+                            </h4>
+
+                            <div style = "display: flex; margin-left: auto;">
+                                <a href="AdminProduct" class="btn btn-back" style = "text-decoration: none">Back</a>
+                            </div>
+                        </div>
                         <jsp:include page="/WEB-INF/View/admin/productManagement/viewProductDetail/productDetail.jsp" />
                     </div>
                 </div>

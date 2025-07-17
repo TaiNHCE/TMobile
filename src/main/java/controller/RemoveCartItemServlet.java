@@ -1,7 +1,3 @@
-/*
- * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import dao.CartDAO;
@@ -12,11 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import model.Account;
 
-/**
- *
- * @author USER
- */
 @WebServlet(name = "RemoveCartItemServlet", urlPatterns = {"/RemoveCartItem"})
 public class RemoveCartItemServlet extends HttpServlet {
 
@@ -25,33 +20,68 @@ public class RemoveCartItemServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        int accountId = (user != null) ? user.getAccountID() : 0;
 
-        if ("remove".equals(action)) {
+        if ("deleteMultiple".equals(action)) {
             try {
-                int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
+                String selectedItems = request.getParameter("selectedItems");
+                if (selectedItems == null || selectedItems.isEmpty()) {
+                    session.setAttribute("message", "No items selected for deletion.");
+                    response.sendRedirect("CartList?accountId=" + accountId);
+                    return;
+                }
+
+                List<String> itemIds = Arrays.asList(selectedItems.split(","));
                 CartDAO cartDAO = new CartDAO();
-                boolean isSuccess = cartDAO.deleteCartItem(cartItemId);
+                boolean isSuccess = cartDAO.deleteMultipleCartItems(itemIds);
 
                 if (isSuccess) {
-                    session.setAttribute("message", "Item removed successfully!");
+                    session.setAttribute("message", "Items deleted successfully.");
+                    response.sendRedirect("CartList?accountId=" + accountId);
                 } else {
-                    session.setAttribute("message", "Failed to remove item.");
+                    session.setAttribute("message", "Error deleting items.");
+                    response.sendRedirect("CartList?accountId=" + accountId);
                 }
-            } catch (NumberFormatException e) {
-                session.setAttribute("message", "Invalid cart item ID.");
+            } catch (Exception e) {
+                session.setAttribute("message", "An error occurred while deleting items.");
+                response.sendRedirect("CartList?accountId=" + accountId);
             }
-            request.getRequestDispatcher("/WEB-INF/View/customer/cartManagement/deletesuccess.jsp").forward(request, response);
-
         } else {
             session.setAttribute("message", "Invalid action.");
-            response.sendRedirect("ViewCartServlet");
+            response.sendRedirect("CartList?accountId=" + accountId);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("ViewCartServlet");
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        int accountId = (user != null) ? user.getAccountID() : 0;
+
+        if ("remove".equals(action)) {
+            try {
+                int cartItemId = Integer.parseInt(request.getParameter("id"));
+                CartDAO cartDAO = new CartDAO();
+                boolean isSuccess = cartDAO.deleteCartItem(cartItemId);
+
+                if (isSuccess) {
+                    session.setAttribute("message", "Item deleted successfully.");
+                    response.sendRedirect("CartList?accountId=" + accountId);
+                } else {
+                    session.setAttribute("message", "Error deleting item.");
+                    response.sendRedirect("CartList?accountId=" + accountId);
+                }
+            } catch (NumberFormatException e) {
+                session.setAttribute("message", "Invalid cart item ID.");
+                response.sendRedirect("CartList?accountId=" + accountId);
+            }
+        } else {
+            session.setAttribute("message", "Invalid action.");
+            response.sendRedirect("CartList?accountId=" + accountId);
+        }
     }
 
     @Override

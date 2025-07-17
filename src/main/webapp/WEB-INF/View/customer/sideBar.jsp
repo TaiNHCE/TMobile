@@ -39,7 +39,7 @@
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="ViewVoucher"
+            <a href="ViewCustomerVoucher"
                class="nav-link<%= currentPage.contains("ViewVoucher") ? " active" : ""%>"
                style="display:flex;align-items:center;">
                 <i class="bi bi-ticket-perforated me-2"></i> <span>My Vouchers</span>

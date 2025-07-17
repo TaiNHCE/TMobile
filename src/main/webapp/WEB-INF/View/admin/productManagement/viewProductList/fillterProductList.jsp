@@ -26,9 +26,22 @@
                 Product Management
             </h1>
         </div>
-        <a class="create-btn" href="AdminCreateProduct">Create</a>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+            <a class="create-btn" href="AddPromotionServlet">Set Promotion</a>
+            <a class="create-btn" href="AdminCreateProduct">Create</a>
+        </div>
 
-        <form class="search-form" action="AdminProduct" method="get" style="margin-top: 32px;">
+        <form class="search-form" method="get" action="AdminProduct">
+            <input
+                type="text"
+                name="keyword"
+                placeholder="Find by name ..."
+                value="<%= request.getParameter("keyword") != null ? request.getParameter("keyword") : ""%>"
+                />
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+
+        <form class="search-form" action="AdminProduct" method="get" style="">
             <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
                 <label for="filter" class="fw-bold">Filter product:</label>
                 <select name="filter" id="filter" onchange="this.form.submit()"
@@ -58,7 +71,7 @@
             min-width: 110px;
             border: 1.5px solid #1e9c46;
             padding: 8px 16px;
-            text-decoration: none;
+text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
             display: inline-block;

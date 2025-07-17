@@ -71,7 +71,7 @@ public class CreateSupplierServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -91,32 +91,18 @@ public class CreateSupplierServlet extends HttpServlet {
         String supplyGroup = (supplyGroupArr != null) ? String.join(",", supplyGroupArr) : "";
 
         String errorMsg = null;
-        // Validate Tax ID: must be 6-15 digits
-        if (taxId == null || !taxId.matches("^\\d{6,15}$")) {
-            errorMsg = "Tax ID must be 6-15 digits.";
-        // Validate Email
-        }else if (email == null || !email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
-            errorMsg = "Invalid email address.";
-        } else if (phoneNumber == null || !phoneNumber.matches("^\\+?[0-9\\s\\-()]{8,20}$")) {
-            errorMsg = "Invalid phone number (must be 8-20 digits, may include +, -, ()).";
-         // Validate Supply Group
-        }else if (supplyGroupArr == null || supplyGroupArr.length == 0) {
-            errorMsg = "Please select at least one Supply Group!";
-        }
-
-        // Check for duplicate Tax ID or Email
         SupplierDAO dao = new SupplierDAO();
-        
-        if (errorMsg == null && dao.isSupplierExist(taxId, email)) {
+
+        // CHỈ kiểm tra trùng dữ liệu (KHÔNG kiểm tra format!)
+        if (dao.isSupplierExist(taxId, email)) {
             errorMsg = "Tax ID or Email already exists!";
-        }
-        else if (errorMsg == null && dao.isSupplierNameExist(name)) {
+        } else if (dao.isSupplierNameExist(name)) {
             errorMsg = "Company name already exists!";
         }
 
         if (errorMsg != null) {
             request.setAttribute("errorMsg", errorMsg);
-            // Save user input to redisplay in the form if needed
+            // Lưu lại dữ liệu đã nhập để hiển thị lại form
             request.setAttribute("oldTaxId", taxId);
             request.setAttribute("oldName", name);
             request.setAttribute("oldEmail", email);
@@ -130,7 +116,7 @@ public class CreateSupplierServlet extends HttpServlet {
             return;
         }
 
-        // Create supplier as usual
+        // Tạo supplier mới
         LocalDateTime now = LocalDateTime.now();
         Suppliers supplier = new Suppliers(
                 0, taxId, name, email, phoneNumber, address,
@@ -147,6 +133,7 @@ public class CreateSupplierServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/View/admin/supplierManagement/createSupplier.jsp").forward(request, response);
         }
     }
+
 
     /**
      * Returns a short description of the servlet.

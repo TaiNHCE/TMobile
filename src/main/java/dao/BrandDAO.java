@@ -44,4 +44,28 @@ public class BrandDAO extends DBContext{
         return brandList;
     }
     
+    public List<Brand> getBrandByCategoryId(int categoryId) {
+        List<Brand> brandList = new ArrayList<>();
+        String sql = "SELECT BrandID, BrandName, Description, CategoryID, ImgURLLogo FROM Brands where CategoryID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int brandId = rs.getInt("BrandID");
+                String brandName = rs.getString("BrandName");
+                String descriptionBrand = rs.getString("Description");
+                int categoryIDDB = categoryId;
+                String imgUrlLogo = rs.getString("ImgURLLogo");
+
+                brandList.add(new Brand(brandId, brandName, descriptionBrand, categoryIDDB, imgUrlLogo));
+            }
+            return brandList;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return brandList;
+    }
+    
 }

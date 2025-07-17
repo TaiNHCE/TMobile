@@ -30,51 +30,58 @@
                 </h1>
                 <button class="create-btn" onclick="location.href = 'CreateCategory'">Create</button>
 
-<!-- Tạo khoảng cách như có search form -->
-<div style="height: 111.5px;"></div>
+                <form class="search-form" method="get" action="AdminProduct">
+                    <input
+                        type="text"
+                        name="keyword"
+                        placeholder="Find by name ..."
+                        value="<%= request.getParameter("keyword") != null ? request.getParameter("keyword") : ""%>"
+                        />
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
 
-                    <%
-                        if (categoryList != null) {
-                    %>
-                    <table aria-label="Suppliers table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Description</th>
-                                <th>Created Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>                
-                            <%
-                                for (Category cate : categoryList) {
-                                    if (cate.getIsActive()) {
-                            %>
-                            <tr>
-                                <td><%= cate.getCategoryId()%></td>
-                                <td><%= cate.getCategoryName()%></td>
-                                <td><%= cate.getDescriptionCategory()%></td>
-                                <td><%= cate.getCreatedAt()%></td>
+                <%
+                    if (categoryList != null) {
+                %>
+                <table aria-label="Suppliers table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category Name</th>
+                            <th>Description</th>
+                            <th>Created Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>                
+                        <%
+                            for (Category cate : categoryList) {
+                                if (cate.getIsActive()) {
+                        %>
+                        <tr>
+                            <td><%= cate.getCategoryId()%></td>
+                            <td><%= cate.getCategoryName()%></td>
+                            <td><%= cate.getDescriptionCategory()%></td>
+                            <td><%= cate.getCreatedAt()%></td>
 
 
-                                <td>
-                                    <a href="CategoryDetail?categoryId=<%= cate.getCategoryId()%>" class="btn btn-primary" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
-                                    <a href="UpdateCategory?categoryId=<%= cate.getCategoryId()%>" class="btn btn-warning" ><i class="bi bi-tools"></i> Edit</a>
-                                    <button class="btn btn-danger" onclick="confirmDelete(<%= cate.getCategoryId()%>)">Delete</button>
-                                </td>
-                            </tr>
+                            <td>
+                                <a href="CategoryDetail?categoryId=<%= cate.getCategoryId()%>" class="btn btn-primary" style="color: white;"><i class="bi bi-tools"></i> Detail</a>
+                                <a href="UpdateCategory?categoryId=<%= cate.getCategoryId()%>" class="btn btn-warning" ><i class="bi bi-tools"></i> Edit</a>
+                                <button class="btn btn-danger" onclick="confirmDelete(<%= cate.getCategoryId()%>)">Delete</button>
+                            </td>
+                        </tr>
 
-                            <%
-                                    }
+                        <%
                                 }
-                            %>
-                    </table>
-                    <%
-                        } else {
-                            out.println("No Data!");
-                        }
-                    %>
+                            }
+                        %>
+                </table>
+                <%
+                    } else {
+                        out.println("No Data!");
+                    }
+                %>
             </main>
         </div>
     </body>

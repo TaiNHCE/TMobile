@@ -12,7 +12,6 @@
     <head>
         <meta charset="UTF-8">
         <title>Product List</title>
-        <link rel="stylesheet" href="<%= request.getContextPath()%>/Css/supplierList_productList.css">
         <style>
             .product-table {
                 width: 100%;
@@ -46,7 +45,7 @@
     </head>
     <body>
         <jsp:include page="/WEB-INF/View/admin/productManagement/deleteProduct/adminDeleteProduct.jsp" />
-        <div class="wrapper">
+        <div class="">
             <div style="overflow-x: auto; width: 100%;">
                 <% if (productList != null) { %>
                 <table class="product-table">
@@ -102,8 +101,10 @@
             </div>
         </div>
 
-        <%
+      <%
             String success = request.getParameter("success");
+            String successpro = request.getParameter("successpro");
+
             String error = request.getParameter("error");
         %>
 
@@ -125,6 +126,15 @@
                 });
             <% }%>
             };
+            window.onload = function () {
+            <% if ("1".equals(successpro)) { %>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful!',
+                    text: 'Set promotion successful.',
+                    timer: 2000
+                });
+            <% }%>
         </script>
     </body>
 </html>

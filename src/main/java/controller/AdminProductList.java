@@ -65,7 +65,7 @@ public class AdminProductList extends HttpServlet {
 
         ProductDAO proDAO = new ProductDAO();
         String filter = request.getParameter("filter");
-        List<Product> productList;
+        List<Product> productList = new ArrayList<>();
 
         if (filter == null || filter.equals("All")) {
             productList = proDAO.getAllProduct();
@@ -79,8 +79,13 @@ public class AdminProductList extends HttpServlet {
             productList = proDAO.getDiscountedProducts();
         } else if (filter.equals("Active")) {
             productList = proDAO.getAllProductActive();
-        } else {
+        } else if (filter.equals("InActive")) {
             productList = proDAO.getAllProductInactive(); // fallback
+        }
+
+        String keyword = request.getParameter("keyword");
+        if (keyword != null) {
+            productList = proDAO.getProductByKeyword(keyword);
         }
 
         request.setAttribute("productList", productList);

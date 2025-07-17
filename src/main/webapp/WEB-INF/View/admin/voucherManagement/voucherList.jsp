@@ -1,8 +1,16 @@
+<%@page import="model.Account"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.*, model.Voucher" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <!DOCTYPE html>
+<%
+    Account acc = (Account) session.getAttribute("admin");
+    if (acc == null || acc.getRoleID() != 1) {
+        response.sendRedirect("LoginAdmin");
+        return;
+    }
+%>
 <html lang="en">
     <head>
         <title>Voucher List</title>
@@ -43,10 +51,9 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Code</th>
+                                <th>Type</th> 
                                 <th>Discount (%)</th>
                                 <th>Expiry</th>
-                                <th>Min Order</th>
-                                <th>Max Discount</th>
                                 <th>Usage Limit</th>
                                 <th>Used</th>
                                 <th>Status</th>
@@ -58,16 +65,19 @@
                                 List<Voucher> list = (List<Voucher>) request.getAttribute("voucherList");
                                 if (list != null && !list.isEmpty()) {
                                     for (Voucher v : list) {
-String statusClass = v.isActive() ? "status-active" : "status-inactive";
+                                        String statusClass = v.isActive() ? "status-active" : "status-inactive";
                                         String statusText = v.isActive() ? "Active" : "Inactive";
                             %>
                             <tr>
                                 <td><%= v.getVoucherID()%></td>
                                 <td><%= v.getCode()%></td>
+                                <td>
+                                    <%= v.isIsGlobal()
+                                            ? "<span style='color: #20c997;'>Global</span>"
+                                            : "<span style='color: #0dcaf0;'>Personal</span>"%>
+                                </td>
                                 <td><%= v.getDiscountPercent()%></td>
                                 <td><%= v.getExpiryDate()%></td>
-                                <td><%= currencyVN.format(v.getMinOrderAmount()) + " đ"%></td>
-                                <td><%= currencyVN.format(v.getMaxDiscountAmount()) + " đ"%></td>
                                 <td><%= v.getUsageLimit()%></td>
                                 <td><%= v.getUsedCount()%></td>
                                 <td><span class="<%= statusClass%>"><%= statusText%></span></td>
@@ -87,9 +97,9 @@ String statusClass = v.isActive() ? "status-active" : "status-inactive";
                             } else {
                             %>
                             <tr>
-                                <td colspan="10" class="text-center">No vouchers found!</td>
+                                <td colspan="11" class="text-center">No vouchers found!</td>
                             </tr>
-                            <% }%>
+                            <% } %>
                         </tbody>
                     </table>
                 </main>
@@ -118,7 +128,7 @@ String statusClass = v.isActive() ? "status-active" : "status-inactive";
                     icon: 'success',
                     title: 'Update Successful!',
                     text: 'Your changes have been saved successfully.',
-showConfirmButton: true,
+                    showConfirmButton: true,
                     confirmButtonText: 'OK',
                     timer: 3000
                 });

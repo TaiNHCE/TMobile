@@ -3,6 +3,7 @@
 <%@ page import="model.Product" %>
 <%@ page import="model.Suppliers" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -162,10 +163,12 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+                    <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1>Import Stock</h1>
 
                     <form class="search-form mb-4" method="get" style="min-height: 45px;">
-                      
+
                     </form>
                     <!-- Selected Supplier -->
                     <c:set value="${sessionScope.supplier}" var="sup" />
@@ -361,6 +364,7 @@
                                     <form id="editProductForm" method="POST" action="ImportStock">
                                         <input type="hidden" id="editProductId" name="productEditedId">
                                         <input type="hidden" id="editProductSalePrice" name="salePrice">
+                                        <input type="hidden" name="action" value="save">
                                         <div class="mb-3">
                                             <label class="form-label">Product Name:</label>
                                             <input type="text" class="form-control" id="editProductName" readonly>
@@ -373,12 +377,14 @@
                                             <label class="form-label">Import Price:</label>
                                             <input type="number" class="form-control" id="editProductPrice" name="price" min="1000" step="1">
                                         </div>
+                                        <div class="mt-2 text-end">
+                                            <button type="submit" class="create-btn">Save</button>
+                                            <button type="button" class="back-btn" onclick="cancelEditImportStock()" style="margin-left: 10px;">Cancel</button>
+                                        </div>
                                     </form>
                                 </div>
-                                <div class="mt-2 text-end">
-                                    <button type="button" class="create-btn" onclick="redirectToImport()">Import</button>
-                                    <button type="button" class="back-btn" onclick="cancelEditImportStock()" style="margin-left: 10px;">Cancel</button>
-                                </div>
+                                
+
                             </div>
                         </div>
                     </div>

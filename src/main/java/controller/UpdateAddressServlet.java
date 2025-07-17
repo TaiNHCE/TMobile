@@ -18,13 +18,10 @@ public class UpdateAddressServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-
-        // DEV MODE: nếu chưa login thì tạo dummy customer id=1
-        Customer cus = (Customer) session.getAttribute("customer");
+        Customer cus = (Customer) session.getAttribute("cus");
         if (cus == null) {
-            cus = new Customer();
-            cus.setId(1);
-            session.setAttribute("customer", cus);
+            response.sendRedirect("Login");
+            return;
         }
 
         String idStr = request.getParameter("id");
@@ -33,12 +30,18 @@ public class UpdateAddressServlet extends HttpServlet {
             return;
         }
 
-        int addressId = Integer.parseInt(idStr);
+        int addressId;
+        try {
+            addressId = Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("ViewShippingAddress");
+            return;
+        }
 
         AddressDAO dao = new AddressDAO();
         Address addr = dao.getAddressById(addressId);
 
-        // Không cho sửa nếu không đúng chủ sở hữu (optionally)
+        // Không cho sửa nếu không đúng chủ sở hữu
         if (addr == null || addr.getCustomerId() != cus.getId()) {
             response.sendRedirect("ViewShippingAddress");
             return;
@@ -53,39 +56,43 @@ public class UpdateAddressServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-
-        // DEV MODE: nếu chưa login thì tạo dummy customer id=1
-        Customer cus = (Customer) session.getAttribute("customer");
+        Customer cus = (Customer) session.getAttribute("cus");
         if (cus == null) {
-            cus = new Customer();
-            cus.setId(1);
-            session.setAttribute("customer", cus);
+            response.sendRedirect("Login");
+            return;
         }
 
-        int addressId = Integer.parseInt(request.getParameter("id"));
+        String idStr = request.getParameter("id");
+        int addressId;
+        try {
+            addressId = Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("ViewShippingAddress");
+            return;
+        }
+
         String province = request.getParameter("province");
         String district = request.getParameter("district");
         String ward = request.getParameter("ward");
         String addressDetails = request.getParameter("addressDetails");
+        boolean isDefault = request.getParameter("isDefault") != null;
 
-        // Validate cơ bản
+        // Validate input
         if (province == null || district == null || ward == null || addressDetails == null
                 || province.trim().isEmpty() || district.trim().isEmpty()
                 || ward.trim().isEmpty() || addressDetails.trim().isEmpty()) {
-            request.setAttribute("error", "Please fill in all required fields.");
             AddressDAO dao = new AddressDAO();
             Address addr = dao.getAddressById(addressId);
             request.setAttribute("address", addr);
+            request.setAttribute("error", "Please fill in all required fields.");
             request.getRequestDispatcher("/WEB-INF/View/customer/shippingAddress/UpdateShippingAddress.jsp").forward(request, response);
             return;
         }
 
-        boolean isDefault = false;
         AddressDAO dao = new AddressDAO();
-        if (!dao.hasDefaultAddress(cus.getId()) || request.getParameter("isDefault") != null) {
+        // Nếu chọn default hoặc chưa có default thì set default
+        if (!dao.hasDefaultAddress(cus.getId()) || isDefault) {
             isDefault = true;
-        }
-        if (isDefault) {
             dao.unsetDefaultAddresses(cus.getId());
         }
 

@@ -60,6 +60,7 @@
                             </button>
                         </div>
                     </form>
+
                     <c:if test="${not empty success}">
                         <div class="alert alert-success" role="alert">
                             ${success}
@@ -71,9 +72,11 @@
                             ${error}
                         </div>
                     </c:if>
+
+                        </div>
+                        </div>
+
                 </div>
-            </div>
-        </div>
 
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
