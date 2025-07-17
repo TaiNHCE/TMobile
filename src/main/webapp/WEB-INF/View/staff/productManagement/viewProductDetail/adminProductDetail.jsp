@@ -103,9 +103,9 @@
     <body>
         <div class="divAll">
             <div class="container">
-
                 <div>
                     <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <jsp:include page="/WEB-INF/View/staff/productManagement/viewProductDetail/productTitle.jsp" />
                 </div>
                 <%@page import="model.Product"%>
@@ -113,7 +113,7 @@
                     Product product = (Product) request.getAttribute("product");
                 %>
                 <div class="header-section">
-
+                    <h4></h4>
                     <a href="ProductListForStaff" class="btn-back">Back</a>
                 </div>
                 <div class="checkbox-container">
