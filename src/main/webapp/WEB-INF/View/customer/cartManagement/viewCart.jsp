@@ -3,6 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="model.CartItem"%>
 <%@page import="model.Product"%>
+<%@page import="model.Account"%>
 <%@page import="model.ProductVariant"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -111,6 +112,8 @@
     </head>
     <body>
         <div class="container">
+            <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
+
             <h2 class="mb-4">Your Shopping Cart</h2>
 
             <!-- Display notification -->
@@ -126,12 +129,11 @@
             <%
                 List<CartItem> cartItems = (List<CartItem>) request.getAttribute("cartItems");
                 List<ProductVariant> allVariants = (List<ProductVariant>) request.getAttribute("allVariants");
-                String deleteType = request.getParameter("deleteType") != null ? request.getParameter("deleteType") : "";
                 if (cartItems != null && !cartItems.isEmpty()) {
             %>
-            <form id="deleteForm" action="RemoveCartItem" method="post">
+            <form id="deleteForm" action="${pageContext.request.contextPath}/RemoveCartItem" method="post">
                 <input type="hidden" name="action" value="deleteMultiple">
-                <input type="hidden" name="accountId" value="<%= request.getParameter("accountId")%>">
+                <input type="hidden" name="accountId" value="<%= session.getAttribute("user") != null ? ((Account) session.getAttribute("user")).getAccountID() : 0%>">
                 <input type="hidden" name="selectedItems" id="selectedItems">
                 <div class="table-header-actions">
                     <div>
@@ -174,7 +176,7 @@
                         <tr data-unit-price="<%= discountedPrice.setScale(0, BigDecimal.ROUND_HALF_UP).toString()%>" data-cart-item-id="<%= item.getCartItemID()%>" data-item-total="<%= itemTotal.setScale(0, BigDecimal.ROUND_HALF_UP).toString()%>">
                             <td><input type="checkbox" class="selectItem" data-item-total="<%= itemTotal.setScale(0, BigDecimal.ROUND_HALF_UP).toString()%>" onclick="updateCartTotal()"></td>
                             <td>
-                                <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= product.getProductId()%>&categoryId=<%= product.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
+                                <a href="${pageContext.request.contextPath}/ProductDetail?productId=<%= product.getProductId()%>&categoryId=<%= product.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
                                     <div class="d-flex align-items-center">
                                         <img src="<%= product.getImageUrl() != null ? product.getImageUrl() : "https://via.placeholder.com/80"%>" alt="<%= product.getProductName()%>">
                                         <div class="ms-3">
@@ -184,7 +186,7 @@
                                 </a>
                             </td>
                             <td>
-                                <form action="CartList" method="post" class="action-buttons" id="variantForm-<%= item.getCartItemID()%>">
+                                <form action="${pageContext.request.contextPath}/CartList" method="post" class="action-buttons" id="variantForm-<%= item.getCartItemID()%>">
                                     <input type="hidden" name="action" value="updateVariant">
                                     <input type="hidden" name="cartItemId" value="<%= item.getCartItemID()%>">
                                     <select name="variantId" class="form-select variant-select" onchange="updateVariant(<%= item.getCartItemID()%>)">
@@ -225,7 +227,7 @@
                                 <% }%>
                             </td>
                             <td>
-                                <form action="CartList" method="post" class="action-buttons" id="quantityForm-<%= item.getCartItemID()%>">
+                                <form action="${pageContext.request.contextPath}/CartList" method="post" class="action-buttons" id="quantityForm-<%= item.getCartItemID()%>">
                                     <input type="hidden" name="action" value="update">
                                     <input type="hidden" name="cartItemId" value="<%= item.getCartItemID()%>">
                                     <div class="quantity-container">
@@ -254,8 +256,8 @@
                         <span id="cartTotal">0 VND</span>
                     </div>
                     <div class="text-end mt-3">
-                        <a href="CheckoutServlet" class="btn btn-success">Proceed to Checkout</a>
-                        <a href="Home" class="btn btn-secondary">Continue Shopping</a>
+                        <a href="${pageContext.request.contextPath}/CheckoutServlet" class="btn btn-success">Proceed to Checkout</a>
+                        <a href="${pageContext.request.contextPath}/Home" class="btn btn-secondary">Continue Shopping</a>
                     </div>
                 </div>
             </form>
@@ -263,120 +265,115 @@
             } else {
             %>
             <div class="alert alert-info">
-                Your cart is empty. <a href="Home">Shop now!</a>
+                Your cart is empty. <a href="${pageContext.request.contextPath}/Home">Shop now!</a>
             </div>
             <%
                 }
             %>
-        </div>
-        <%
-            String successdelete = request.getParameter("successdelete");
-            String errordelete = request.getParameter("errordelete");
-        %>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            // Hàm xác nhận xóa một mục
-            function confirmDeleteCart(cartItemId) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This cart item will be deleted.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'RemoveCartItem?action=remove&id=' + cartItemId + '&accountId=<%= request.getParameter("accountId")%>&deleteType=single';
-                    }
-                });
-            }
 
-            // Hàm xác nhận xóa nhiều mục
-            function confirmDeleteMultiple() {
-                const selected = Array.from(document.querySelectorAll('.selectItem:checked')).map(item => item.closest('tr').getAttribute('data-cart-item-id'));
-                if (selected.length === 0) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'No items selected',
-                        text: 'Please select at least one item to delete.',
-                        showConfirmButton: true
-                    });
-                    return;
-                }
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: `You are about to delete ${selected.length} item(s).`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('selectedItems').value = selected.join(',');
-                        document.getElementById('deleteForm').action = 'RemoveCartItem?deleteType=multiple';
-                        document.getElementById('deleteForm').submit();
-                    }
-                });
-            }
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                                        // Hàm xác nhận xóa một mục
+                                        function confirmDeleteCart(cartItemId) {
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "This cart item will be deleted.",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                confirmButtonText: 'Delete',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    window.location.href = '${pageContext.request.contextPath}/RemoveCartItem?action=remove&id=' + cartItemId + '&accountId=<%= session.getAttribute("user") != null ? ((Account) session.getAttribute("user")).getAccountID() : 0%>';
+                                                }
+                                            });
+                                        }
 
-            // Format number with commas
-            function formatNumber(number) {
-                if (isNaN(number) || number === null) {
-                    console.warn("Số không hợp lệ để định dạng:", number);
-                    return "0";
-                }
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
+                                        // Hàm xác nhận xóa nhiều mục
+                                        function confirmDeleteMultiple() {
+                                            const selected = Array.from(document.querySelectorAll('.selectItem:checked')).map(item => item.closest('tr').getAttribute('data-cart-item-id'));
+                                            if (selected.length === 0) {
+                                                Swal.fire({
+                                                    icon: 'warning',
+                                                    title: 'No items selected',
+                                                    text: 'Please select at least one item to delete.',
+                                                    showConfirmButton: true
+                                                });
+                                                return;
+                                            }
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: `You are about to delete ${selected.length} item(s).`,
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                confirmButtonText: 'Delete',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    document.getElementById('selectedItems').value = selected.join(',');
+                                                    document.getElementById('deleteForm').submit();
+                                                }
+                                            });
+                                        }
 
-            // Update cart total based on selected items
-            function updateCartTotal() {
-                console.log("updateCartTotal được gọi");
-                let total = 0;
-                document.querySelectorAll('.selectItem:checked').forEach(item => {
-                    const itemTotal = parseInt(item.getAttribute('data-item-total') || 0);
-                    console.log("Tổng mục:", itemTotal);
-                    total += itemTotal;
-                });
-                console.log("Tổng tính được:", total);
-                document.getElementById('cartTotal').textContent = formatNumber(total) + ' VND';
-            }
+                                        // Format number with commas
+                                        function formatNumber(number) {
+                                            if (isNaN(number) || number === null) {
+                                                console.warn("Số không hợp lệ để định dạng:", number);
+                                                return "0";
+                                            }
+                                            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                        }
 
-            // Toggle select all checkboxes
-            function toggleSelectAll() {
-                console.log("toggleSelectAll called");
-                const selectAll = document.getElementById('selectAll');
-                document.querySelectorAll('.selectItem').forEach(item => {
-                    item.checked = selectAll.checked;
-                });
-                updateCartTotal();
-            }
+                                        // Update cart total based on selected items
+                                        function updateCartTotal() {
+                                            console.log("updateCartTotal được gọi");
+                                            let total = 0;
+                                            document.querySelectorAll('.selectItem:checked').forEach(item => {
+                                                const itemTotal = parseInt(item.getAttribute('data-item-total') || 0);
+                                                console.log("Tổng mục:", itemTotal);
+                                                total += itemTotal;
+                                            });
+                                            console.log("Tổng tính được:", total);
+                                            document.getElementById('cartTotal').textContent = formatNumber(total) + ' VND';
+                                        }
 
-            // Update variant using AJAX
-            function updateVariant(cartItemId) {
-                console.log("updateVariant is called cartItemId:", cartItemId);
-                let form = document.getElementById(`variantForm-${cartItemId}`);
-                let formData = new FormData(form);
-                $.ajax({
-                    url: 'CartList',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        console.log('Update successful variant:', response);
-                        location.reload();
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error when updating variant:', error);
-                    }
-                });
-            }
-        </script>
+                                        // Toggle select all checkboxes
+                                        function toggleSelectAll() {
+                                            console.log("toggleSelectAll called");
+                                            const selectAll = document.getElementById('selectAll');
+                                            document.querySelectorAll('.selectItem').forEach(item => {
+                                                item.checked = selectAll.checked;
+                                            });
+                                            updateCartTotal();
+                                        }
+
+                                        // Update variant using AJAX
+                                        function updateVariant(cartItemId) {
+                                            console.log("updateVariant is called cartItemId:", cartItemId);
+                                            let form = document.getElementById(`variantForm-${cartItemId}`);
+                                            let formData = new FormData(form);
+                                            $.ajax({
+                                                url: '${pageContext.request.contextPath}/CartList',
+                                                type: 'POST',
+                                                data: formData,
+                                                processData: false,
+                                                contentType: false,
+                                                success: function (response) {
+                                                    console.log('Update successful variant:', response);
+                                                    location.reload();
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error('Error when updating variant:', error);
+                                                }
+                                            });
+                                        }
+            </script>
     </body>
 </html>
