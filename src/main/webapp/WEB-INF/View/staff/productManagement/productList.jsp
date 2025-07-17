@@ -31,6 +31,8 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+                    <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1>Product List</h1>
                     <div class="create-btn-placeholder"></div> 
 
