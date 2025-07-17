@@ -2,7 +2,6 @@
 <%@page import="model.Account"%>
 <%@page import="model.Staff"%>
 <%
-    Customer cus = (Customer) request.getAttribute("cus");
     Integer accountId = (Integer) session.getAttribute("accountId");
 %>
 <!DOCTYPE html>
@@ -12,7 +11,7 @@
         <title>Change Password</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <!-- Import dùng chung file CSS -->
+        <!-- Import d?ng chung file CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/profile.css">
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -37,21 +36,22 @@
                                 <i class="bi bi-lock me-2"></i>Old Password
                             </label>
                             <input type="password" class="form-control" name="oldPassword" id="oldPassword" required placeholder="Enter your current password">
+                                   
                         </div>
                         <div class="form-group">
                             <label for="newPassword" class="form-label">
                                 <i class="bi bi-key me-2"></i>New Password
                             </label>
-                            <input type="password" class="form-control" name="newPassword" id="newPassword" required placeholder="Enter your new password">
+                            <input type="password" class="form-control" name="newPassword" id="newPassword" required placeholder="Enter your new password!">
                         </div>
                         <div class="form-group">
                             <label for="confirmPassword" class="form-label">
                                 <i class="bi bi-key-fill me-2"></i>Confirm New Password
                             </label>
-                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required placeholder="Confirm your new password">
+                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required placeholder="Confirm your new password!">
                         </div>
                         <div class="profile-actions">
-                            <a href="ViewProfile?id=<%= accountId%>" class="btn-cancel">
+                            <a href="ViewProfile" class="btn-cancel">
                                 <i class="bi bi-arrow-left me-1"></i> Back
                             </a>
                             <button type="submit" class="btn-update">

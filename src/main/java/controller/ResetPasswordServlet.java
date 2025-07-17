@@ -83,12 +83,16 @@ public class ResetPasswordServlet extends HttpServlet {
 
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
-
+        String passwordPattern = "^.{9,}$";
+        if (!newPassword.matches(passwordPattern)) {
+             request.setAttribute("error", "Password must be at least 9 characters long.");
+        }
         if (!newPassword.equals(confirmPassword)) {
             request.setAttribute("error", "Passwords do not match.");
             request.getRequestDispatcher("WEB-INF/View/account/reset-password.jsp").forward(request, response);
             return;
         }
+        
 
         AccountDAO dao = new AccountDAO();
         String hashedPassword = dao.hashMD5(newPassword);

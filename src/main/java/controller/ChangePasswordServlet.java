@@ -75,27 +75,25 @@ public class ChangePasswordServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Integer accountId = (Integer) session.getAttribute("accountId");
-        System.out.println("✅ AccountID from session: " + accountId);
-        String oldPassword = request.getParameter("oldPassword");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
-        System.out.println("🔐 Mật khẩu cũ nhập vào: " + oldPassword);
-        System.out.println("🔐 Mật khẩu mới nhập vào: " + newPassword);
-        System.out.println("🔐 Mật khẩu xác nhận: " + confirmPassword);
 
         if (accountId == null) {
             response.sendRedirect("Login");
             return;
         }
-        String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/\\\\|~`]).{6,}$";
-        if (!newPassword.matches(passwordPattern)) {
-            request.setAttribute("error", "New password must contain at least one letter, one number, one special character and be at least 6 characters long.");
+        String oldPassword = request.getParameter("oldPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        String passwordPattern = "^.{9,}$";
+
+        if (!newPassword.equals(confirmPassword)) {
+            request.setAttribute("error", "New password and confirm password do not match.");
             request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
             return;
         }
 
-        if (!newPassword.equals(confirmPassword)) {
-            request.setAttribute("error", "New password and confirm password do not match.");
+        if (!newPassword.matches(passwordPattern)) {
+            request.setAttribute("error", "Password must be at least 9 characters long.");
             request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
             return;
         }
@@ -108,7 +106,6 @@ public class ChangePasswordServlet extends HttpServlet {
         } else {
             request.setAttribute("error", "Old password is incorrect or update failed.");
         }
-
         request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
     }
 

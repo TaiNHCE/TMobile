@@ -106,7 +106,7 @@
                             <i class="bi bi-shield-lock me-2"></i>
                             Change Password
                         </a>
-                        <a href="UpdateProfile?id=<%= sta.getId()%>" class="btn-update">
+                        <a href="UpdateProfile" class="btn-update">
                             <i class="bi bi-pencil-square me-2"></i>
                             Update Profile
                         </a>

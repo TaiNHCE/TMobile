@@ -113,7 +113,7 @@ public class VerifyOTPServlet extends HttpServlet {
             return;
         }
 
-        if (otpManager.getOtpCode() != enteredOtp) {
+        if (EmailService.verifyOTP(email, enteredOtp)) {
             request.setAttribute("error", "Incorrect OTP.");
             request.getRequestDispatcher("WEB-INF/View/account/verify.jsp").forward(request, response);
             return;

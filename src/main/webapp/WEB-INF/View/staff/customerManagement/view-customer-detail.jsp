@@ -26,6 +26,8 @@
             } else {
         %>
         <jsp:include page="../sideBar.jsp" />
+         <main class="main-content">
+         <jsp:include page="header.jsp" />
         <div class="container mt-5">
             <div class="card mx-auto shadow" style="max-width: 700px;">
                 <div class="card-header bg-primary text-white">
@@ -75,6 +77,7 @@
                 <%
                     }
                 %>
+                </main>
             </div>
         </div>
     </body>

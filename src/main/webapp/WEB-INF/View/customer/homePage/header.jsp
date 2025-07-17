@@ -1,3 +1,9 @@
+<%-- 
+    Document   : header
+    Created on : Jun 13, 2025, 3:27:43 PM
+    Author     : HP - Gia Khiêm
+--%>
+
 <%@page import="model.Account"%>
 <%@page import="model.Brand"%>
 <%@page import="model.Category"%>
@@ -8,7 +14,6 @@
     List<Brand> brandList = (List<Brand>) request.getAttribute("brandList");
     Account user = (Account) session.getAttribute("user");
 %>
-
 <style>
     .user-dropdown {
         position: relative;
@@ -113,120 +118,40 @@
     .user-dropdown-item .bi-box-arrow-right{
         margin-left: 60px;
     }
-     .user-dropdown-item .bi-geo-alt{
+    .user-dropdown-item .bi-geo-alt{
         margin-left: 60px;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .user-dropdown-menu {
-            min-width: 180px;
-        }
-
-        .user-dropdown-item {
-            padding: 10px 14px;
-            font-size: 13px;
-        }
-
-        .user-dropdown-item i {
-            font-size: 14px;
-        }
-
-        .user-dropdown .btn {
-            width: 40px;
-            height: 40px;
-            font-size: 16px;
-        }
+.user-dropdown-item .bi-ticket-perforated{
+        margin-left: 60px;
     }
+    
 </style>
 <!DOCTYPE html>
 <html>
-    <head>
+    <head class="header-red">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Genuine Phones, Laptops, Watches, and Accessories</title>
         <!-- Bootstrap 5 CSS & Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> <!-- bootstrap css -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/header.css">
-        <style>
-            /* ----- ACCOUNT DROPDOWN STYLE ----- */
-            .account-dropdown-wrapper {
-                position: relative;
-                display: flex;
-                align-items: center;
-            }
-            .account-circle {
-                background: #fff;
-                border-radius: 50%;
-                width: 44px;
-                height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 2rem;
-                color: #222;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.09);
-                border: 2px solid #55C3FC;
-                cursor: pointer;
-                transition: box-shadow 0.18s;
-            }
-            .account-circle:hover {
-                box-shadow: 0 6px 24px rgba(85,195,252,0.17);
-            }
-            .account-dropdown {
-                display: none;
-                position: absolute;
-                top: 52px;
-                left: 0;
-                min-width: 185px;
-                background: #fff;
-                border-radius: 14px;
-                box-shadow: 0 6px 22px rgba(85,195,252,0.27);
-                padding: 10px 0;
-                z-index: 100;
-                border: 2px solid #55C3FC;
-                animation: fadeInDown 0.22s;
-            }
-            .account-dropdown .dropdown-item {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                padding: 15px 24px;
-                color: #222;
-                font-size: 1.15rem;
-                font-weight: 400;
-                background: none;
-                border: none;
-                transition: background 0.16s;
-                text-decoration: none;
-            }
-            .account-dropdown .dropdown-item i {
-                font-size: 1.6rem;
-                min-width: 34px;
-                text-align: center;
-            }
-            .account-dropdown .dropdown-item:hover {
-                background: #eaf6ff;
-                color: #0d6efd;
-            }
-            @keyframes fadeInDown {
-                from { transform: translateY(-10px); opacity: 0; }
-                to   { transform: translateY(0); opacity: 1; }
-            }
-        </style>
     </head>
-    <body>
+
+    <body>        
         <div class="header-top d-flex align-items-center justify-content-between py-2 px-3" style="background-color: #55C3FC;">
             <!-- (1) TRÁI: LOGO & NÚT DANH MỤC -->
             <div class="d-flex align-items-center">
                 <!-- Logo -->
-                <a style="margin-left: 25%" href="${pageContext.request.contextPath}/TMobile" class="me-3">
-                    <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919684/Logo_nl7ahl.png"
-                         class="header-logo"
+                <a style = "margin-left: 25%" href="${pageContext.request.contextPath}/Home" class="me-3">
+                    <img src="https://res.cloudinary.com/dgnyskpc3/image/upload/v1750919684/Logo_nl7ahl.png" 
+
+                         class="header-logo" 
                          style="height: 40px; object-fit: contain;" />
                 </a>
+
                 <!-- Danh mục: Dropdown -->
-                <div class="dropdown" style="margin-left: 20%">
+                <div class="dropdown" style="margin-left: 20%;">
                     <button class="category-btn"
                             type="button"
                             id="dropdownMenuButton"
@@ -234,55 +159,34 @@
                             aria-expanded="false">
                         <i class="bi bi-list"></i> Categories
                     </button>
+
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <%
-                            if (categoryList != null) {
+
+                        <% if (categoryList != null) {
                                 for (Category cate : categoryList) {
                                     if (cate.getIsActive()) {
                         %>
-                        <li class="dropdown-submenu position-relative">
-                            <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/Brand?name=">
-                                <img src="<%= cate.getImgUrlLogo()%>"
-                                     style="width: 18%; margin-right: 4%;">
-                                <%= cate.getCategoryName()%>
+                        <li style="flex: 0 0 20%; text-align: center; list-style: none;">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/FilterProduct?categoryId=<%= cate.getCategoryId()%>">
+                                <img src="<%= cate.getImgUrlLogo()%>" style="width: 50px; height: 50px; object-fit: contain;">
+                                <p><%= cate.getCategoryName()%></p>
                             </a>
-                            <ul class="dropdown-menu">
-                                <%
-                                    if (brandList != null) {
-                                        for (Brand brand : brandList) {
-                                            if (brand.getCategoryID() == cate.getCategoryId()) {
-                                %>
-                                <li>
-                                    <a class="dropdown-item"
-                                       href="${pageContext.request.contextPath}/Brand?name=<%= brand.getBrandName()%>">
-                                        <img src="<%= brand.getImgUrlLogo()%>"
-                                             style="width: 18%; margin-right: 4%;">
-                                        <%= brand.getBrandName()%>
-                                    </a>
-                                </li>
-                                <%
-                                            }
-                                        }
-                                    }
-                                %>
-                            </ul>
                         </li>
-                        <%
-                                    }
+                        <% }
                                 }
-                            }
-                        %>
+                            } %>
                     </ul>
                 </div>
+
             </div>
 
             <!-- (2) GIỮA: THANH TÌM KIẾM -->
             <div class="search-wrapper mx-3 position-relative" style="flex: 0 0 30%;">
-                <form action="Search" method="get" class="search-bar position-relative">
+                <form action="SearchProduct" method="get" class="search-bar position-relative">
                     <input type="text"
                            name="keyword"
                            class="form-control"
+
                            style="padding-right: 40px;">
                     <button type="submit"
                             class="search-btn btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y">
@@ -292,16 +196,20 @@
             </div>
 
             <!-- (3) PHẢI: TÀI KHOẢN & GIỎ HÀNG -->
-            <div class="header-right d-flex align-items-center" style="width: 15%; margin-right: 5%;">
-                <!-- User Account Dropdown -->
-                <div class="account-dropdown-wrapper">
-                    <div class="account-circle" id="accountDropdownToggle">
+            <div style = "width: 15%; margin-right: 5%" class="header-right d-flex align-items-center">
+                <% if (user == null) { %>
+                <a style = "border-radius: 15px;" href="${pageContext.request.contextPath}/Login" class="btn btn-outline-dark me-2" title="Tài khoản">
+                    <i class="bi bi-person"></i>
+                </a>
+                <% } else {%>
+                <!-- Đã đăng nhập -->
+                <div class="user-dropdown">
+                    <a style="border-radius: 15px;" class="btn btn-outline-dark me-2" title="Tài khoản">
                         <i class="bi bi-person"></i>
-<<<<<<< HEAD
                     </a>
                     <ul class="user-dropdown-menu" aria-labelledby="userDropdown">
                         <li>
-                            <a class="user-dropdown-item" href="ViewProfile?id=<%= user.getAccountID()%>">
+                            <a class="user-dropdown-item" href="ViewProfile">
                                 <i class="bi bi-person-circle"></i>
                                 <span>Profile</span>
                             </a>
@@ -313,11 +221,18 @@
                             </a>
                         </li>
                         <li>
-                            <a class="user-dropdown-item" href="ViewAdress">
+                            <a class="user-dropdown-item" href="ViewShippingAddress">
                                 <i class="bi bi-geo-alt"></i>
                                 <span>Address</span>
                             </a>
                         </li>
+                        <li>
+                            <a class="user-dropdown-item" href="ViewCustomerVoucher">
+                                <i class="bi bi-ticket-perforated"></i>
+                                <span>Voucher</span>
+                            </a>
+                        </li>
+
                         <li><hr class="user-dropdown-divider"></li>
                         <li>
                             <a class="user-dropdown-item text-danger" href="Logout">
@@ -326,49 +241,26 @@
                             </a>
                         </li>
                     </ul>
-=======
-                    </div>
-                    <div class="account-dropdown" id="accountDropdownMenu">
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/profile">
-                            <i class="bi bi-person-circle"></i>
-                            <span>Profile</span>
-                        </a>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/order">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <span>Order</span>
-                        </a>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/ViewShippingAddress">
-                            <i class="bi bi-geo-alt"></i>
-                            <span>Address</span>
-                        </a>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
-                            <i class="bi bi-box-arrow-left"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
->>>>>>> main
                 </div>
-                <!-- Cart -->
-                <a style="width: 60%; border-radius: 15px; margin-left:16px;" href="${pageContext.request.contextPath}/CartList" class="btn btn-outline-dark" title="Giỏ hàng">
+                <% }%>
+
+                <a style = "width: 60%; border-radius: 15px;" href="${pageContext.request.contextPath}/CartList" class="btn btn-outline-dark" title="Giỏ hàng">
                     <i class="bi bi-cart"></i> Cart
                 </a>
             </div>
         </div>
 
-        <!-- ================== JS LIBRARY ================== -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Dropdown toggle logic
-            const toggle = document.getElementById('accountDropdownToggle');
-            const menu = document.getElementById('accountDropdownMenu');
-            document.addEventListener('click', function(e) {
-                if (toggle && toggle.contains(e.target)) {
-                    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-                } else if (menu && !menu.contains(e.target)) {
-                    menu.style.display = 'none';
-                }
-            });
-        </script>
+
+
+        <!-- ================== GÓI JS, JQUERY, POPPER, BOOTSTRAP ================== -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- JQuery -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS Bundle(dropdown) -->
     </body>
 </html>
+
+<style>
+
+
+
+
+</style>
