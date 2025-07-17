@@ -103,7 +103,9 @@
     <body>
         <div class="divAll">
             <div class="container">
+
                 <div>
+                    <jsp:include page="/WEB-INF/View/staff/header.jsp" />
                     <jsp:include page="/WEB-INF/View/staff/productManagement/viewProductDetail/productTitle.jsp" />
                 </div>
                 <%@page import="model.Product"%>
@@ -111,20 +113,20 @@
                     Product product = (Product) request.getAttribute("product");
                 %>
                 <div class="header-section">
-                    <h4>Technical specifications</h4>
-                    <a href="ProductListForStaffDetail" class="btn-back">Back</a>
+
+                    <a href="ProductListForStaff" class="btn-back">Back</a>
                 </div>
                 <div class="checkbox-container">
                     <div class="form-check">
-                        <input class="form-check-input rounded-circle" type="checkbox" id="isFeatured" name="isFeatured" <%= product != null && product.isIsFeatured() ? "checked" : "" %>>
+                        <input class="form-check-input rounded-circle" type="checkbox" id="isFeatured" name="isFeatured" <%= product != null && product.isIsFeatured() ? "checked" : ""%>>
                         <label class="form-check-label" for="isFeatured">Is Featured</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input rounded-circle" type="checkbox" id="isNew" name="isNew" <%= product != null && product.isIsNew() ? "checked" : "" %>>
+                        <input class="form-check-input rounded-circle" type="checkbox" id="isNew" name="isNew" <%= product != null && product.isIsNew() ? "checked" : ""%>>
                         <label class="form-check-label" for="isNew">Is New</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input rounded-circle" type="checkbox" id="isBestSeller" name="isBestSeller" <%= product != null && product.isIsBestSeller() ? "checked" : "" %>>
+                        <input class="form-check-input rounded-circle" type="checkbox" id="isBestSeller" name="isBestSeller" <%= product != null && product.isIsBestSeller() ? "checked" : ""%>>
                         <label class="form-check-label" for="isBestSeller">Is Best Seller</label>
                     </div>
                 </div>

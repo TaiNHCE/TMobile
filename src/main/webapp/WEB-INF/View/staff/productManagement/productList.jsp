@@ -1,6 +1,8 @@
 <%@page import="java.util.List"%>
 <%@page import="model.Product"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,13 +26,22 @@
                 float: right;
                 display: inline-block;
             }
+            /* Đảm bảo header hiển thị */
+            header, .navbar {
+                display: block !important;
+                visibility: visible !important;
+                height: auto !important;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <jsp:include page="../sideBar.jsp" />
+            <jsp:include page="/WEB-INF/View/staff/sideBar.jsp" />
+
             <div class="wrapper">
                 <main class="main-content">
+                    <jsp:include page="/WEB-INF/View/staff/header.jsp" />
+
                     <h1>Product List</h1>
                     <div class="create-btn-placeholder"></div> 
 
@@ -53,43 +64,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%
-                                List<Product> products = (List<Product>) request.getAttribute("products");
-                                if (products != null && !products.isEmpty()) {
-                                    for (Product product : products) {
-                            %>
-                            <tr>
-                                <td><%= product.getProductId()%></td>
-                                <td><%= product.getProductName()%></td>
-                                <td><%= product.getPrice()%></td>
-                                <td><%= product.getStock()%></td>
-                                <td class="action-col">
-                                    <a href="ProductListForStaffDetail?productId=<%= product.getProductId()%>" class="btn btn-primary">Detail</a>
-
-                                </td>
-                            </tr>
-                            <%
-                                }
-                            } else {
-                            %>
-                            <tr>
-                                <td colspan="5" class="text-center">No products found!</td>
-                            </tr>
-                            <%
-                                }
-                            %>
+                            <c:choose>
+                                <c:when test="${not empty products and !products.isEmpty()}">
+                                    <c:forEach items="${products}" var="product">
+                                        <tr>
+                                            <td>${product.productId}</td>
+                                            <td>${product.productName}</td>
+                                            <td><fmt:formatNumber value="${product.price}" type="currency" currencySymbol="₫"/></td>
+                                            <td>${product.stock}</td>
+                                            <td class="action-col">
+                                                <a href="ProductListForStaffDetail?productId=${product.productId}" class="btn btn-primary">Detail</a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No products found!</td>
+                                    </tr>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
 
                     <!-- Optional message -->
-                    <%
-                        String mes = (String) request.getAttribute("message");
-                        if (mes != null) {
-                    %>
-                    <div class="alert alert-info mt-3"><%= mes%></div>
-                    <%
-                        }
-                    %>
+                    <c:if test="${not empty message}">
+                        <div class="alert alert-info mt-3">${message}</div>
+                    </c:if>
                 </main>
             </div>
         </div>
