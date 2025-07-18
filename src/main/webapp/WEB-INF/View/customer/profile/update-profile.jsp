@@ -104,7 +104,7 @@
                         </div>
 
                         <div class="profile-actions">
-                            <a href="ViewProfile?id=<%= accountId %>" class="btn-cancel">
+                            <a href="ViewProfile" class="btn-cancel">
                                 <i class="bi bi-x-circle me-2"></i>
                                 Cancel
                             </a>

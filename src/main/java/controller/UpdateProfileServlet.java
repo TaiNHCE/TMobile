@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Customer;
 
 /**
@@ -60,17 +61,10 @@ public class UpdateProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProfileDAO dao = new ProfileDAO();
-        String idRaw = request.getParameter("id");
-        int id = 1;
-        try {
-            id = Integer.parseInt(idRaw);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            // Nếu lỗi thì có thể redirect hoặc báo lỗi
-            response.sendRedirect("error.jsp");
-            return;
-        }
-        Customer cus = dao.getCustomerbyCustomerID(id);
+        HttpSession session = request.getSession();
+
+        int id = (Integer) session.getAttribute("accountId");
+        Customer cus = dao.getCustomerbyID(id);
         request.setAttribute("cus", cus);
         request.getRequestDispatcher("/WEB-INF/View/customer/profile/update-profile.jsp").forward(request, response);
 
@@ -99,7 +93,7 @@ public class UpdateProfileServlet extends HttpServlet {
         if (success) {
             int accountId = dao.getAccountIDByCustomerID(id); // truy ngược
             if (accountId != -1) {
-                response.sendRedirect("ViewProfile?id=" + accountId);
+                response.sendRedirect("ViewProfile");
             } else {
                 request.setAttribute("error", "Update failed!");
                 request.getRequestDispatcher("/WEB-INF/View/customer/profile/update-profile.jsp").forward(request, response);
@@ -107,16 +101,14 @@ public class UpdateProfileServlet extends HttpServlet {
         }
     }
 
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
-        
-            () {
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
-        }// </editor-fold>
+    }// </editor-fold>
 
-    }
+}

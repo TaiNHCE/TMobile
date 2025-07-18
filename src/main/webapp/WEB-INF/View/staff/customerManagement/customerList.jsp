@@ -23,6 +23,7 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+
                     <jsp:include page="../header.jsp" />
 
                     <h1>Customer List</h1>
@@ -59,16 +60,16 @@
                             <td><%= formattedDate%></td>
                             <td><%= cus.isActive() ? "Active" : "Block"%></td>
                             <td class="action-col">
-                                <a href="CustomerList?action=detail&id=<%= cus.getId()%>" class="btn btn-primary">Detail</a> 
-                                <a href="#"
-                                   class="btn btn-warning"
-                                   onclick="confirmStatusChange(<%=cus.getId()%>,<%=cus.isActive()%>, '<%=cus.getFullName()%>')">
-                                    Change Status
+                                <a href="CustomerList?action=changeStatus&id=<%= cus.getId()%>" 
+                                   class="btn btn-warning">
+                                    <%= cus.isActive() ? "Block" : "Unblock"%>
                                 </a>
+                                <a href="CustomerList?action=detail&id=<%= cus.getId()%>" class="btn btn-primary">Detail</a>   
 
                                 <a href="AssignVoucher?customerId=<%= cus.getId()%>" class="btn btn-success">
                                     Assign Voucher
                                 </a>
+
                             </td>
                         </tr>
                         <%
@@ -91,36 +92,5 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-                                   function confirmStatusChange(customerId, currentStatus, fullName) {
-
-                                       const actionUpper = currentStatus ? "Block" : "Unblock";
-                                       const statusText = currentStatus
-                                               ? `This user ${fullName} will be Blocked.`
-                                               : `This user ${fullName} will be Unblocked.`;
-
-                                       console.log("ID:", customerId);
-                                       console.log("Full name:", fullName);
-                                       console.log("Status Text:", statusText);
-
-                                       Swal.fire({
-                                           title: 'Are you sure?',
-                                           text: statusText,
-                                           icon: 'warning',
-                                           showCancelButton: true,
-                                           confirmButtonColor: '#d33',
-                                           cancelButtonColor: '#3085d6',
-                                           confirmButtonText: actionUpper,
-                                           cancelButtonText: 'Cancel'
-                                       }).then((result) => {
-                                           if (result.isConfirmed) {
-                                               window.location.href = 'CustomerList?action=changeStatus&id=' + customerId;
-                                           }
-                                       });
-                                   }
-
-
-
-        </script>
     </body>
 </html>

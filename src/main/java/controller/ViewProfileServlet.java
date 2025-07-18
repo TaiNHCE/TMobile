@@ -62,20 +62,13 @@ public class ViewProfileServlet extends HttpServlet {
             throws ServletException, IOException {
         ProfileDAO dao = new ProfileDAO();
         HttpSession session = request.getSession();
-        String action = request.getParameter("action");
-        if (action == null) {
-            action = "list";
-        }
-        if (action.equalsIgnoreCase("list")) {
-            String idRaw = request.getParameter("id");
-            int id = 1;
-            id = Integer.parseInt(idRaw);
-            Customer cus = dao.getCustomerbyID(id);
-            int accountID = dao.getAccountIDByCustomerID(cus.getId());
-            session.setAttribute("accountId", accountID);
-            request.setAttribute("cus", cus);
-            request.getRequestDispatcher("/WEB-INF/View/customer/profile/view-profile.jsp").forward(request, response);
-        }
+
+        int id = (Integer) session.getAttribute("accountId");
+        int accountID = dao.getAccountIDByCustomerID(id);
+        session.setAttribute("accountId", id);
+        Customer cus = dao.getCustomerbyID(id);
+        request.setAttribute("cus", cus);
+        request.getRequestDispatcher("/WEB-INF/View/customer/profile/view-profile.jsp").forward(request, response);
 
     }
 
