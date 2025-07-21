@@ -28,8 +28,10 @@ public class OrderDAO extends DBContext {
                         rs.getInt("Status"),
                         rs.getInt("Discount"),
                         rs.getString("AddressSnapshot"),
-                        rs.getInt("AddressID")
+                        rs.getInt("AddressID"),
+                        rs.getString("UpdatedAt")
                 );
+
                 list.add(o);
             }
         } catch (Exception e) {
@@ -56,7 +58,8 @@ public class OrderDAO extends DBContext {
                         rs.getInt("Status"),
                         rs.getInt("Discount"),
                         rs.getString("AddressSnapshot"),
-                        rs.getInt("AddressID")
+                        rs.getInt("AddressID"),
+                        rs.getString("UpdatedAt")
                 );
             }
         } catch (Exception e) {
@@ -97,7 +100,8 @@ public class OrderDAO extends DBContext {
                         rs.getInt("Status"),
                         rs.getInt("Discount"),
                         rs.getString("AddressSnapshot"),
-                        rs.getInt("AddressID")
+                        rs.getInt("AddressID"),
+                        rs.getString("UpdatedAt")
                 );
                 list.add(o);
             }
@@ -109,29 +113,54 @@ public class OrderDAO extends DBContext {
 
     public int updateOrder(int orderID, int status) {
         int count = 0;
-        String query = "Update Orders SET Orders.Status= ? WHERE Orders.OrderID=?";
-        String query2 = "UPDATE Orders\n"
-                + "SET Status = ?,\n"
-                + "    DeliveredDate = DATEADD(HOUR, 7, GETUTCDATE())\n"
-                + "WHERE OrderID = ?;";
+        String query = "UPDATE Orders SET Status = ?, UpdatedAt = DATEADD(HOUR, 7, GETUTCDATE()) WHERE OrderID = ?";
+        String queryWithDeliveredDate = "UPDATE Orders SET Status = ?, DeliveredDate = DATEADD(HOUR, 7, GETUTCDATE()), UpdatedAt = DATEADD(HOUR, 7, GETUTCDATE()) WHERE OrderID = ?";
+
         try {
+            PreparedStatement pre;
             if (status == 4) {
-                PreparedStatement pre = conn.prepareStatement(query2);
-                pre.setInt(1, status);
-                pre.setInt(2, orderID);
-
-                count = pre.executeUpdate();
+                pre = conn.prepareStatement(queryWithDeliveredDate);
             } else {
-                PreparedStatement pre = conn.prepareStatement(query);
-                pre.setInt(1, status);
-                pre.setInt(2, orderID);
-
-                count = pre.executeUpdate();
+                pre = conn.prepareStatement(query);
             }
+            pre.setInt(1, status);
+            pre.setInt(2, orderID);
+
+            count = pre.executeUpdate();
         } catch (Exception e) {
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
         }
         return count;
+    }
+
+    public List<Order> getOrdersByCustomerID(int customerID) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM Orders WHERE CustomerID = ? ORDER BY OrderedDate DESC";
+        try {
+            PreparedStatement pre = conn.prepareStatement(sql);
+            pre.setInt(1, customerID);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Order o = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getString("FullName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getLong("TotalAmount"),
+                        rs.getString("OrderedDate"),
+                        rs.getString("DeliveredDate"),
+                        rs.getInt("Status"),
+                        rs.getInt("Discount"),
+                        rs.getString("AddressSnapshot"),
+                        rs.getInt("AddressID"),
+                        rs.getString("UpdatedAt")
+                );
+                list.add(o);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 //

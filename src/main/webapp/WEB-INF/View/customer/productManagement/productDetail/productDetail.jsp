@@ -6,6 +6,7 @@
 
 <%@page import="model.Product"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%
     Product product = (Product) request.getAttribute("product");
 %>
@@ -47,7 +48,10 @@
                 <div class = "customerDivinfomationDetail" style = "margin-top: 15px;">
                     <jsp:include page="/WEB-INF/View/customer/productManagement/productDetail/infomationDetail.jsp" />
                 </div>
-
+                <div class = "" style = "">
+                    <jsp:include page="/WEB-INF/View/customer/productManagement/productDetail/feedback.jsp" />
+                </div>
+              
             </div>
 
             <div class = "customerDivaddToCartAndBuyNow" style = "width: 40%; margin-top: 6.8%; max-height: 820px;">

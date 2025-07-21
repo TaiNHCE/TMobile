@@ -4,27 +4,23 @@
  */
 package controller;
 
-import dao.ProductRatingDAO;
-import dao.RatingRepliesDAO;
-import model.Staff;
-import model.RatingReplies;
-import dao.StaffDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
+import dao.OrderDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import model.Order;
 
 /**
  *
- *
+ * @author VinhNTCE181630
  */
-@WebServlet(name = "ReplyFeedbackServlet", urlPatterns = {"/ReplyFeedback"})
-public class ReplyFeedbackServlet extends HttpServlet {
+@WebServlet(name = "CancelOrderServlet", urlPatterns = {"/CancelOrder"})
+public class CancelOrderServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -42,10 +38,10 @@ public class ReplyFeedbackServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReplyFeedbackServlet</title>");
+            out.println("<title>Servlet CancelOrderServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReplyFeedbackServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CancelOrderServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +59,7 @@ public class ReplyFeedbackServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
@@ -77,35 +73,17 @@ public class ReplyFeedbackServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        OrderDAO dao = new OrderDAO();
+        Order order = dao.getOrderByID(orderID + "");
 
-        HttpSession session = request.getSession(false); // không tạo session mới nếu mất
-        Staff staff = (Staff) session.getAttribute("staff");
-
-        if (staff != null) {
-            try {
-                int rateID = Integer.parseInt(request.getParameter("rateID"));
-                String answer = request.getParameter("Answer");
-
-                int stID = staff.getStaffID(); // Lấy trực tiếp từ object Staff
-
-                RatingRepliesDAO rrDAO = new RatingRepliesDAO();
-                ProductRatingDAO prDAO = new ProductRatingDAO();
-
-                int count = rrDAO.addRatingReply(stID, rateID, answer);
-                prDAO.updateisReadComment(rateID);
-
-                if (count > 0) {
-                    response.sendRedirect("ViewFeedBackForStaff?rateID=" + rateID + "&success=success");
-                } else {
-                    response.sendRedirect("ViewFeedBackForStaff?rateID=" + rateID + "&success=failed");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("ViewFeedBackForStaff?rateID=" + request.getParameter("rateID") + "&success=error");
-            }
+        if (order.getStatus() == 1 || order.getStatus() == 2) {
+            dao.updateStatus(orderID, 5);
+            response.sendRedirect("ViewOrderOfCustomer?success=cancel");
         } else {
-            response.sendRedirect("LoginStaff");
+            response.sendRedirect("ViewOrderOfCustomer?error=not-cancelable");
         }
+
     }
 
     /**

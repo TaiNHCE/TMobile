@@ -5,6 +5,7 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -15,6 +16,7 @@ import java.util.Date;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 public class ProductRating {
+
     private int rateID;
     private int customerID;
     private int productID;
@@ -25,6 +27,8 @@ public class ProductRating {
     private boolean isDeleted;
     private boolean isRead;
     private String fullName;
+    private Customer customer;
+    private List<RatingReplies> replies;
 
     public ProductRating(int star) {
         this.star = star;
@@ -54,9 +58,7 @@ public class ProductRating {
         this.isDeleted = isDeleted;
         this.isRead = isRead;
     }
-   
 
-    
     public ProductRating() {
     }
 
@@ -139,7 +141,20 @@ public class ProductRating {
     public void setIsRead(boolean isRead) {
         this.isRead = isRead;
     }
-    
-    
-}
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public List<RatingReplies> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<RatingReplies> replies) {
+        this.replies = replies;
+    }
+}
