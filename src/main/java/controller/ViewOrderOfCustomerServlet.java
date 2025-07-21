@@ -4,13 +4,11 @@
  */
 package controller;
 
-import dao.ProductRatingDAO;
-import dao.RatingRepliesDAO;
-import model.Staff;
-import model.RatingReplies;
-import dao.StaffDAO;
+import dao.OrderDAO;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,13 +16,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
+import model.Customer;
+import model.Order;
 
 /**
  *
- *
+ * @author VinhNTCE181630
  */
-@WebServlet(name = "ReplyFeedbackServlet", urlPatterns = {"/ReplyFeedback"})
-public class ReplyFeedbackServlet extends HttpServlet {
+@WebServlet(name = "ViewOrderOfCustomerServlet", urlPatterns = {"/ViewOrderOfCustomer"})
+public class ViewOrderOfCustomerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -42,10 +42,10 @@ public class ReplyFeedbackServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReplyFeedbackServlet</title>");
+            out.println("<title>Servlet CustomerOrderListServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReplyFeedbackServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CustomerOrderListServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +63,24 @@ public class ReplyFeedbackServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
 
+        Account acc = (Account) session.getAttribute("user");
+        Customer cus = (Customer) session.getAttribute("cus");
+
+        if (acc == null || cus == null) {
+            response.sendRedirect("Login");
+            return;
+        }
+        OrderDAO dao = new OrderDAO();
+        List<Order> orders = dao.getOrdersByCustomerID(cus.getId());
+        String success = request.getParameter("success");
+        String error = request.getParameter("error");
+
+        request.setAttribute("success", success);
+        request.setAttribute("error", error);
+        request.setAttribute("orderList", orders);
+        request.getRequestDispatcher("/WEB-INF/View/customer/orderManagement/viewOrder.jsp").forward(request, response);
     }
 
     /**
@@ -77,35 +94,7 @@ public class ReplyFeedbackServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession(false); // không tạo session mới nếu mất
-        Staff staff = (Staff) session.getAttribute("staff");
-
-        if (staff != null) {
-            try {
-                int rateID = Integer.parseInt(request.getParameter("rateID"));
-                String answer = request.getParameter("Answer");
-
-                int stID = staff.getStaffID(); // Lấy trực tiếp từ object Staff
-
-                RatingRepliesDAO rrDAO = new RatingRepliesDAO();
-                ProductRatingDAO prDAO = new ProductRatingDAO();
-
-                int count = rrDAO.addRatingReply(stID, rateID, answer);
-                prDAO.updateisReadComment(rateID);
-
-                if (count > 0) {
-                    response.sendRedirect("ViewFeedBackForStaff?rateID=" + rateID + "&success=success");
-                } else {
-                    response.sendRedirect("ViewFeedBackForStaff?rateID=" + rateID + "&success=failed");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("ViewFeedBackForStaff?rateID=" + request.getParameter("rateID") + "&success=error");
-            }
-        } else {
-            response.sendRedirect("LoginStaff");
-        }
+        processRequest(request, response);
     }
 
     /**

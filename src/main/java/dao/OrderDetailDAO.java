@@ -123,4 +123,37 @@ public class OrderDetailDAO extends DBContext {
             System.out.println(order.getPrice());
         }
     }
+
+    public List<OrderDetail> getOrderDetailsByOrderID(int orderID) {
+        List<OrderDetail> list = new ArrayList<>();
+        String sql
+                = "SELECT od.OrderID, od.ProductID, od.Quantity, od.Price, "
+                + "p.ProductName, c.CategoryName "
+                + "FROM OrderDetails od "
+                + "JOIN Products p ON od.ProductID = p.ProductID "
+                + "JOIN Categories c ON p.CategoryID = c.CategoryID "
+                + "WHERE od.OrderID = ?";
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDetail detail = new OrderDetail();
+                detail.setOrderID(rs.getInt("OrderID"));
+                detail.setProductID(rs.getInt("ProductID"));
+                detail.setQuantity(rs.getInt("Quantity"));
+                detail.setPrice(rs.getLong("Price"));
+                detail.setProductName(rs.getString("ProductName"));
+                detail.setCategory(rs.getString("CategoryName"));
+
+                list.add(detail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }

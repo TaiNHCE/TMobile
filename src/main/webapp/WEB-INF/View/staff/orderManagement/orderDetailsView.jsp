@@ -145,8 +145,7 @@
                                     options[1].disabled = true;
                                     options[4].disabled = true;
                                 } else if (status === '2') {
-                                    options[0].disabled = true;
-                                    options[4].disabled = true;
+                                    options[0].disabled = true;                                
                                 } else if (status === '4') {
                                     options[0].disabled = true;
                                     options[1].disabled = true;
@@ -160,7 +159,7 @@
                                 }
                             }
 
-                            disableOptions(); // Gọi khi load trang
+                            disableOptions(); 
         </script>
 
     </body>

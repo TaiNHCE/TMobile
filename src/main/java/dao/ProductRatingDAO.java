@@ -15,9 +15,9 @@ import java.util.List;
 
 /**
  *
- * @author 
+ * @author
  */
-public class ProductRatingDAO extends DBContext{
+public class ProductRatingDAO extends DBContext {
 
     public List<ProductRating> getAllProductRating(int productID) {
         List<ProductRating> list = new ArrayList<>();
@@ -175,7 +175,7 @@ public class ProductRatingDAO extends DBContext{
             pre.setInt(2, productId);
             pre.setInt(3, star);
             pre.setString(4, comment);
-           count = pre.executeUpdate();
+            count = pre.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,7 +201,8 @@ public class ProductRatingDAO extends DBContext{
 
         return p;
     }
-       public boolean markReplyAsUnRead(int ReplyID) {
+
+    public boolean markReplyAsUnRead(int ReplyID) {
         String query = "UPDATE ProductRatings SET IsRead= 0 WHERE RateID = ?";
 
         try (
@@ -216,4 +217,42 @@ public class ProductRatingDAO extends DBContext{
         return false;
 
     }
+
+    public List<ProductRating> getProductRatingsByProductId(int productId) {
+        List<ProductRating> list = new ArrayList<>();
+
+        // ✅ JOIN để lấy thêm FullName từ bảng Customers
+        String sql = "SELECT P.*, C.FullName "
+                + "FROM ProductRatings P "
+                + "JOIN Customers C ON P.CustomerID = C.CustomerID "
+                + "WHERE P.ProductID = ? AND P.IsDeleted = 0 "
+                + "ORDER BY P.CreatedDate DESC";
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ProductRating rating = new ProductRating();
+                    rating.setRateID(rs.getInt("RateID"));
+                    rating.setCustomerID(rs.getInt("CustomerID"));
+                    rating.setProductID(rs.getInt("ProductID"));
+                    rating.setCreatedDate(rs.getTimestamp("CreatedDate"));
+                    rating.setStar(rs.getInt("Star"));
+                    rating.setComment(rs.getString("Comment"));
+                    rating.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    rating.setIsRead(rs.getBoolean("IsRead"));
+
+                    // ✅ Thêm dòng này để set FullName (rất quan trọng)
+                    rating.setFullName(rs.getString("FullName"));
+
+                    list.add(rating);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }

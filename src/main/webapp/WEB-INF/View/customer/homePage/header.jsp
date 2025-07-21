@@ -215,7 +215,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="user-dropdown-item" href="ViewOrder">
+                            <a class="user-dropdown-item" href="${pageContext.request.contextPath}/ViewOrderOfCustomer">
                                 <i class="bi bi-cart"></i>
                                 <span>Order</span>
                             </a>
@@ -244,11 +244,7 @@
                 </div>
                 <% }%>
 
-<<<<<<< HEAD
-                <a style = "width: 60%; border-radius: 15px;" href="${pageContext.request.contextPath}/CartList" class="btn btn-outline-dark" title="Giỏ hàng">
-=======
                 <a style="width: 60%; border-radius: 15px;" href="${pageContext.request.contextPath}/CartList?accountId=<%= user != null ? user.getAccountID() : 0 %>" class="btn btn-outline-dark" title="Giỏ hàng">
->>>>>>> main
                     <i class="bi bi-cart"></i> Cart
                 </a>
             </div>

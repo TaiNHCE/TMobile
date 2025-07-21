@@ -19,6 +19,9 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
 
+        <%
+            NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        %>
         <style>
             body {
                 background-color: #f4f6fb;
@@ -49,24 +52,21 @@
                 font-size: 14px;
             }
 
-            .search-form {
-                margin-bottom: 20px;
-                display: flex;
-                gap: 10px;
+            .card h4 {
+                font-weight: 700;
             }
 
-            .search-form input[type="text"] {
-                flex: 1;
+            ul.list-group li span {
+                min-width: 100px;
             }
 
-            .search-btn {
+            .form-select {
+                border-radius: 8px;
+            }
+
+            .btn {
                 border-radius: 8px;
                 font-weight: 600;
-                padding: 6px 16px;
-            }
-
-            table {
-                width: 100%;
             }
         </style>
     </head>
@@ -75,22 +75,12 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
-                    <jsp:include page="../header.jsp" />
-
                     <h1>Orders</h1>
-                                                        <button class="create-btn" style="float: right; margin-bottom: 7.5px; visibility: hidden;">+ New Import</button>
-
 
                     <!-- Search Form -->
                     <form class="search-form" method="get" action="ViewOrderList">
-                        <input
-                            type="text"
-                            name="search"
-                            class="form-control"
-                            placeholder="Search by Name, Phone..."
-                            value="${searchQuery}"
-                            />
-                        <button type="submit" class="btn btn-primary search-btn">Search</button>
+                        <input type="text" name="search" placeholder="Search by Name, Phone..." value="${searchQuery}" />
+                        <button type="submit" class="search-btn">Search</button>
                     </form>
 
                     <!-- Alert if message exists -->
@@ -103,14 +93,15 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th scope="col">Order ID</th>
-                                    <th scope="col">Customer Name</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Total Amount</th>
-                                    <th scope="col">Order Date</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
+                                    <th>Order ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Total Amount</th>
+                                    <th>Order Date</th>
+                                    <th>Order Update</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,6 +113,8 @@
                                         <td>${order.addressSnapshot}</td>
                                         <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫" /></td>
                                         <td>${order.orderDate}</td>
+                                        <td>${order.updatedDate}</td>
+
                                         <td>
                                             <span class="badge status-${order.status}">
                                                 <c:choose>
@@ -134,9 +127,11 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="ViewOrderDetail?orderID=${order.orderID}" class="btn btn-primary btn-sm">
-                                                Detail
-                                            </a>
+                                            <div class="text-center">
+                                                <a href="ViewOrderDetail?orderID=${order.orderID}" class="btn btn-primary">
+                                                    Detail
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -146,25 +141,23 @@
 
                     <!-- If order list is empty -->
                     <c:if test="${empty orderList}">
-                        <div class="text-center mt-3">No orders found!</div>
+                        <div class="text-center">No orders found!</div>
                     </c:if>
                 </main>
             </div>
         </div>
-
         <%
             String success = request.getParameter("success");
             String error = request.getParameter("error");
         %>
-
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             window.onload = function () {
             <% if ("update".equals(success)) { %>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Update Successful!',
-                    text: 'The order status has been updated.',
+                    title: 'Updated successfully!',
+                    text: 'Order status has been updated.',
                     timer: 3000,
                     confirmButtonText: 'OK'
                 });
@@ -172,11 +165,18 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'Unable to update the order status.',
+                    text: 'Unable to update order status.',
                     timer: 3000,
-                    confirmButtonText: 'Try Again'
+                    confirmButtonText: 'Retry'
                 });
             <% }%>
+                // 🔁 Clean up the URL
+                if (window.history.replaceState) {
+                    const url = new URL(window.location);
+                    url.searchParams.delete('success');
+                    url.searchParams.delete('error');
+                    window.history.replaceState({}, document.title, url.pathname);
+                }
             };
         </script>
 
