@@ -142,7 +142,7 @@
                                         <td>${rate.fullName}</td>
                                         <td>
                                             <span class="badge ${!rate.isRead ? 'bg-success' : 'bg-secondary'}">
-                                                ${!rate.isRead ? 'New' : 'Old'}
+                                                ${!rate.isRead ? 'New' : 'Seen'}
                                             </span>
                                         </td>
                                         <td>

@@ -1,7 +1,7 @@
+<!-- My Orders History (Updated with unified CSS classes) -->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@page import="model.Order"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,39 +9,42 @@
         <title>My Orders History</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/Css/profile.css" rel="stylesheet">
         <style>
             body {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                font-family: 'Segoe UI', sans-serif;
-            }
-            .order-card {
-                background: white;
-                border-radius: 20px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                margin-bottom: 30px;
-                padding: 25px 30px;
-            }
-            .order-header {
-                font-weight: 700;
-                font-size: 1.25rem;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 15px;
                 color: #333;
-                margin-bottom: 15px;
             }
-            .order-info th {
-                width: 140px;
-                color: #555;
-                vertical-align: middle;
-            }
-            .order-info td {
+
+            th {
+                font-weight: 600;
+                font-size: 15px;
                 color: #333;
-                font-weight: 500;
             }
+
+            td {
+                font-weight: 400;
+                font-size: 15px;
+                color: #333;
+            }
+
+            .profile-body {
+                font-family: inherit;
+            }
+
+            .btn-update, .btn-cancel {
+                font-family: inherit;
+                font-size: 14px;
+            }
+
             .badge {
-                padding: 6px 12px;
+                padding: 10px 12px;
                 border-radius: 999px;
                 font-size: 14px;
                 font-weight: 600;
             }
+
             .status-1 {
                 background-color: #f59e0b;
                 color: #fff;
@@ -62,33 +65,43 @@
                 background-color: #ef4444;
                 color: #fff;
             }
-
-            .action-buttons a,
-            .action-buttons form {
-                display: inline-block;
-                margin-right: 10px;
+            .scrollable-orders {
+                max-height: 600px; /* Bạn có thể thay đổi giá trị này tùy theo thiết kế mong muốn */
+                overflow-y: auto;
+                padding-right: 8px; /* tránh che nội dung bởi scroll bar */
             }
+            .scrollable-orders::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-orders::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+
         </style>
+
     </head>
+
     <body class="d-flex flex-column min-vh-100">
         <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
+        <div class="main-account container-fluid">
+            <!-- Sidebar -->
+            <jsp:include page="/WEB-INF/View/customer/sideBar.jsp" />
 
-        <!-- Main content -->
-        <div class="container flex-grow-1">
-            <h2 class="mb-4">My Orders History</h2>
-
-            <c:choose>
-                <c:when test="${not empty orderList}">
-                    <c:forEach var="order" items="${orderList}">
-                        <div class="order-card">
-                            <div class="order-header">
-                                <i class="bi bi-receipt-cutoff me-2"></i> Order #${order.orderID}
-                            </div>
-                            <table class="table order-info">
-                                <tr><th>Date Update:</th><td>${order.updatedDate}</td></tr>
-                                <tr><th>Date Order:</th><td>${order.orderDate}</td></tr>
-                                <tr><th>Status:</th>
-                                    <td>
+            <!-- Main Content -->
+            <div class="profile-card flex-grow-1">
+                <div class="profile-header">
+                    <h4><i class="bi bi-bag-check-fill me-2"></i> My Orders History</h4>
+                </div>
+                <div class="profile-body scrollable-orders">
+                    <c:choose>
+                        <c:when test="${not empty orderList}">
+                            <c:forEach var="order" items="${orderList}">
+                                <div class="mb-4 p-4" style="background: #fff; border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="fw-semibold fs-5"><i class="bi bi-receipt-cutoff me-2"></i> Order #${order.orderID}</div>
                                         <span class="badge status-${order.status}">
                                             <c:choose>
                                                 <c:when test="${order.status == 1}">Waiting</c:when>
@@ -98,79 +111,63 @@
                                                 <c:otherwise>Cancelled</c:otherwise>
                                             </c:choose>
                                         </span>
-                                    </td>
-                                </tr>
-                                <tr><th>Total Amount:</th><td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true" />₫</td></tr>
-                                <tr><th>Recipient:</th><td>${order.fullName} - ${order.phone}</td></tr>
-                                <tr><th>Address:</th><td>${order.addressSnapshot}</td></tr>
-                            </table>
+                                    </div>
 
-                            <div class="action-buttons mt-3">
-                                <a href="CustomerOrderDetail?orderID=${order.orderID}" class="btn btn-outline-primary">
-                                    <i class="bi bi-eye"></i> View Detail
-                                </a>
-
-                                <c:if test="${order.status == 1 || order.status ==2 }">
-                                    <form class="cancel-form" action="CancelOrder" method="POST">
-                                        <input type="hidden" name="orderID" value="${order.orderID}" />
-                                        <button type="button" class="btn btn-outline-danger cancel-btn">
-                                            <i class="bi bi-x-circle"></i> Cancel Order
-                                        </button>
-                                    </form>
-                                </c:if>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <th scope="row"><i class="bi bi-calendar-check me-2"></i>Order Date:</th>
+                                            <td>${order.orderDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><i class="bi bi-clock-history me-2"></i>Last Updated:</th>
+                                            <td>${order.updatedDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><i class="bi bi-cash-stack me-2"></i>Total Amount:</th>
+                                            <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> ₫</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><i class="bi bi-person-lines-fill me-2"></i>Recipient:</th>
+                                            <td>${order.fullName} - ${order.phone}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><i class="bi bi-geo-alt-fill me-2"></i>Address:</th>
+                                            <td>${order.addressSnapshot}</td>
+                                        </tr>
+                                    </table>
+                                    <div class="d-flex gap-3 mt-3">
+                                        <a href="CustomerOrderDetail?orderID=${order.orderID}" class="btn-update">
+                                            <i class="bi bi-eye me-1"></i> View Detail
+                                        </a>
+                                        <c:if test="${order.status == 1 || order.status == 2}">
+                                            <form action="CancelOrder" method="POST" class="d-inline-block cancel-form">
+                                                <input type="hidden" name="orderID" value="${order.orderID}" />
+                                                <button type="button" class="btn-cancel cancel-btn">
+                                                    <i class="bi bi-x-circle me-1"></i> Cancel Order
+                                                </button>
+                                            </form>
+                                        </c:if>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="alert alert-info mt-4">
+                                <i class="bi bi-info-circle me-2"></i> You haven't placed any orders yet.
                             </div>
-                        </div>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <div class="alert alert-info">You haven't placed any orders yet.</div>
-                </c:otherwise>
-            </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
         </div>
 
-        <!-- Footer -->
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <!-- SweetAlert on success/error -->
-        <c:if test="${not empty success || not empty error}">
-            <script>
-                window.onload = function () {
-                <c:if test="${success == 'cancel'}">
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Order Cancelled',
-                        text: 'Order cancelled successfully.',
-                        timer: 3000,
-                        confirmButtonText: 'OK'
-                    });
-                </c:if>
-
-                <c:if test="${error == 'not-cancelable'}">
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Action Not Allowed',
-                        text: 'Cannot cancel the order unless it is in Waiting or Packing status.',
-                        timer: 3000,
-                        confirmButtonText: 'Close'
-                    });
-                </c:if>
-
-                    // Remove query params
-                    if (window.history.replaceState) {
-                        const url = new URL(window.location);
-                        url.searchParams.delete('success');
-                        url.searchParams.delete('error');
-                        window.history.replaceState({}, document.title, url.pathname);
-                    }
-                };
-            </script>
-        </c:if>
-
-        <!-- SweetAlert cancel confirmation -->
+        <!-- SweetAlert for cancel confirmation -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 document.querySelectorAll('.cancel-btn').forEach(function (button) {
@@ -194,5 +191,37 @@
                 });
             });
         </script>
+
+        <!-- SweetAlert for server response -->
+        <c:if test="${not empty success || not empty error}">
+            <script>
+                window.onload = function () {
+                <c:if test="${success == 'cancel'}">
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Cancelled',
+                        text: 'Order cancelled successfully.',
+                        timer: 3000,
+                        confirmButtonText: 'OK'
+                    });
+                </c:if>
+                <c:if test="${error == 'not-cancelable'}">
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Action Not Allowed',
+                        text: 'Cannot cancel the order unless it is in Waiting or Packing status.',
+                        timer: 3000,
+                        confirmButtonText: 'Close'
+                    });
+                </c:if>
+
+                    // Remove query params
+                    const url = new URL(window.location);
+                    url.searchParams.delete('success');
+                    url.searchParams.delete('error');
+                    window.history.replaceState({}, document.title, url.pathname);
+                };
+            </script>
+        </c:if>
     </body>
 </html>

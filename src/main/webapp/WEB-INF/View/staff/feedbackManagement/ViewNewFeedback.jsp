@@ -176,314 +176,314 @@
 
     </head>
     <body>
+        <div class="container">
+            <jsp:include page="../sideBar.jsp" />
+            <div class="wrapper">
+                <main class="main-content">
+                    <jsp:include page="../header.jsp" />
+                    <div class="banner">
+                        <h1>Customer Reviews</h1>              
+                    </div>
+                    <%--<c:forEach var="rate" items="${dataRating}">--%>
+                    <div class="review-card">
+                        <h3>"${Product.productName}" - <fmt:formatNumber value="${Product.price}" type="number" groupingUsed="true" />đ</h3>
 
-        <!-- Sidebar -->
-        <jsp:include page="../sideBar.jsp" />
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="banner">
-                <h1>Customer Reviews</h1>              
-            </div>
-            <%--<c:forEach var="rate" items="${dataRating}">--%>
-            <div class="review-card">
-                <h3>"${Product.productName}" - <fmt:formatNumber value="${Product.price}" type="number" groupingUsed="true" />đ</h3>
 
-
-                <div class="star-rating">
-                    <c:forEach var="i" begin="1" end="5">
-                        <c:choose>
-                            <c:when test="${i <= rate.star}">
-                                <i class="fa fa-star"></i>
-                            </c:when>
-                            <c:otherwise>
-                                <i class="fa fa-star text-muted"></i>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                </div>
-
-                <!-- Comment -->
-                <p id="comment-${rate.rateID}" data-original="${rate.comment}" class="${rate.isDeleted ? 'hidden-feedback' : ''}">
-                    ${rate.isDeleted ? "This feedback was hidden for some reason." : rate.comment}
-                </p>
-
-                <!-- Toggle Ẩn/Hiện -->
-                <button id="toggle-btn-${rate.rateID}" class="btn btn-toggle ${rate.isDeleted ? 'btn-warning' : 'btn-success'} btn-sm" onclick="toggleVisibility(${rate.rateID}, ${rate.isDeleted ? 1 : 0})">
-                    <i class="fa ${rate.isDeleted ? 'fa-eye' : 'fa-eye-slash'}"></i>
-                    ${rate.isDeleted ? "Show" : "Hidden"}
-                </button>
-
-                <!-- Reply Button -->
-                <button class="reply-btn btn-sm" onclick="toggleReplyForm(${rate.rateID})">
-                    <i class="fa fa-reply"></i> Reply
-                </button>
-
-                <!-- Reply List -->
-                <c:forEach var="reply" items="${dataReplies}">
-                    <c:if test="${reply.rateID == rate.rateID}">
-                        <div id="reply-container-${reply.replyID}" class="reply-container">
-                            <strong>Staff</strong>
-                            <p>${reply.answer}</p>
-
-                            <button class="update-btn btn btn-primary btn-sm" onclick="openUpdateModal(${reply.replyID}, '${reply.answer}', ${rate.rateID})">
-                                <i class="fa fa-edit"></i> Update
-                            </button>
-
-                            <button class="delete-btn btn btn-danger btn-sm" onclick="openDeleteModal(${reply.replyID})">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
+                        <div class="star-rating">
+                            <c:forEach var="i" begin="1" end="5">
+                                <c:choose>
+                                    <c:when test="${i <= rate.star}">
+                                        <i class="fa fa-star"></i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fa fa-star text-muted"></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
                         </div>
-                    </c:if>
-                </c:forEach>
+
+                        <!-- Comment -->
+                        <p id="comment-${rate.rateID}" data-original="${rate.comment}" class="${rate.isDeleted ? 'hidden-feedback' : ''}">
+                            ${rate.isDeleted ? "This feedback was hidden for some reason." : rate.comment}
+                        </p>
+
+                        <!-- Toggle Ẩn/Hiện -->
+                        <button id="toggle-btn-${rate.rateID}" class="btn btn-toggle ${rate.isDeleted ? 'btn-warning' : 'btn-success'} btn-sm" onclick="toggleVisibility(${rate.rateID}, ${rate.isDeleted ? 1 : 0})">
+                            <i class="fa ${rate.isDeleted ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                            ${rate.isDeleted ? "Show" : "Hidden"}
+                        </button>
+
+                        <!-- Reply Button -->
+                        <button class="reply-btn btn-sm" onclick="toggleReplyForm(${rate.rateID})">
+                            <i class="fa fa-reply"></i> Reply
+                        </button>
+
+                        <!-- Reply List -->
+                        <c:forEach var="reply" items="${dataReplies}">
+                            <c:if test="${reply.rateID == rate.rateID}">
+                                <div id="reply-container-${reply.replyID}" class="reply-container">
+                                    <strong>Staff</strong>
+                                    <p>${reply.answer}</p>
+
+                                    <button class="update-btn btn btn-primary btn-sm" onclick="openUpdateModal(${reply.replyID}, '${reply.answer}', ${rate.rateID})">
+                                        <i class="fa fa-edit"></i> Update
+                                    </button>
+
+                                    <button class="delete-btn btn btn-danger btn-sm" onclick="openDeleteModal(${reply.replyID})">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </c:if>
+                        </c:forEach>
 
 
-                <!-- Reply Form -->
-                <div id="replyForm-${rate.rateID}" class="reply-form">
-                    <form method="POST" action="ReplyFeedback">
-                        <input type="hidden" name="rateID" value="${rate.rateID}">
-                        <textarea required="true" name="Answer" class="form-control" placeholder="Write your reply..."></textarea>
-                        <button type="submit" class="btn btn-primary btn-sm mt-2">Submit Reply</button>
-                    </form>
+                        <!-- Reply Form -->
+                        <div id="replyForm-${rate.rateID}" class="reply-form">
+                            <form method="POST" action="ReplyFeedback">
+                                <input type="hidden" name="rateID" value="${rate.rateID}">
+                                <textarea required="true" name="Answer" class="form-control" placeholder="Write your reply..."></textarea>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Submit Reply</button>
+                            </form>
+                        </div>
+                    </div>
+                    <%--</c:forEach>--%>
+            </div>
+
+
+
+            <!-- Success Modal -->
+            <div id="successModal" class="modal">
+                <div class="modal-content">
+                    <h3>Action Successful!</h3>
+                    <p>You will be redirected shortly...</p>
                 </div>
             </div>
-            <%--</c:forEach>--%>
-        </div>
 
 
 
-        <!-- Success Modal -->
-        <div id="successModal" class="modal">
-            <div class="modal-content">
-                <h3>Action Successful!</h3>
-                <p>You will be redirected shortly...</p>
-            </div>
-        </div>
+            <script>
+                // Hàm hiển thị popup thành công và tự động chuyển hướng sau 2 giây
+                function showSuccessAndRedirect() {
+                    // Hiển thị modal thành công
+                    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    successModal.show();
+
+                    // Chuyển hướng sau 2 giây
+                    setTimeout(function () {
+                        window.location.href = "ViewListFeedback"; // Cập nhật URL nếu cần
+                    }, 2000);
+                }
 
 
 
-        <script>
-            // Hàm hiển thị popup thành công và tự động chuyển hướng sau 2 giây
-            function showSuccessAndRedirect() {
-                // Hiển thị modal thành công
-                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                successModal.show();
+                // Hàm xử lý khi submit trả lời
+                function submitReply(rateID) {
+                    let replyText = document.querySelector("#replyForm-" + rateID + " textarea").value;
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("POST", "ReplyFeedbackServlet", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-                // Chuyển hướng sau 2 giây
-                setTimeout(function () {
-                    window.location.href = "ViewListFeedback"; // Cập nhật URL nếu cần
-                }, 2000);
-            }
-
-
-
-// Hàm xử lý khi submit trả lời
-            function submitReply(rateID) {
-                let replyText = document.querySelector("#replyForm-" + rateID + " textarea").value;
-                let xhr = new XMLHttpRequest();
-                xhr.open("POST", "ReplyFeedbackServlet", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let response = xhr.responseText.trim();
-                        if (response === "Success") {
-                            showSuccessAndRedirect(); // Hiển thị popup thành công và chuyển hướng
-                        } else {
-                            alert("Failed to submit the reply. Please try again.");
-                        }
-                    }
-                };
-                xhr.send("rateID=" + rateID + "&Answer=" + encodeURIComponent(replyText));
-            }
-
-
-
-            function toggleReplyForm(rateID) {
-                let form = document.getElementById("replyForm-" + rateID);
-                form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
-            }
-
-            function toggleVisibility(rateID, currentStatus) {
-                let newStatus = currentStatus === 1 ? 0 : 1;
-
-                let xhr = new XMLHttpRequest();
-                xhr.open("POST", "UpdateStatusCommentServlet", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let btn = document.getElementById("toggle-btn-" + rateID);
-                        let comment = document.getElementById("comment-" + rateID);
-
-                        if (newStatus === 1) {
-                            btn.innerHTML = '<i class="fa fa-eye"></i> Show';
-                            btn.classList.remove("btn-success");
-                            btn.classList.add("btn-warning");
-
-                            comment.setAttribute("data-original", comment.innerHTML);
-                            comment.innerHTML = "This feedback was hidden for some reason.";
-                            comment.classList.add("hidden-feedback");
-                        } else {
-                            btn.innerHTML = '<i class="fa fa-eye-slash"></i> Hidden';
-                            btn.classList.remove("btn-warning");
-                            btn.classList.add("btn-success");
-
-                            let originalContent = comment.getAttribute("data-original");
-                            if (originalContent) {
-                                comment.innerHTML = originalContent;
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            let response = xhr.responseText.trim();
+                            if (response === "Success") {
+                                showSuccessAndRedirect(); // Hiển thị popup thành công và chuyển hướng
+                            } else {
+                                alert("Failed to submit the reply. Please try again.");
                             }
-                            comment.classList.remove("hidden-feedback");
                         }
+                    };
+                    xhr.send("rateID=" + rateID + "&Answer=" + encodeURIComponent(replyText));
+                }
 
-                        btn.setAttribute("onclick", "toggleVisibility(" + rateID + ", " + newStatus + ")");
-                    } else {
-                        console.error("error form server:", xhr.status, xhr.responseText);
-                    }
-                };
 
-                xhr.send("rateID=" + rateID + "&isDeleted=" + newStatus);
-            }
 
-            function openDeleteModal(replyID) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this reply!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Gửi request xoá nếu xác nhận
-                        let xhr = new XMLHttpRequest();
-                        xhr.open("POST", "DeleteReply", true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                function toggleReplyForm(rateID) {
+                    let form = document.getElementById("replyForm-" + rateID);
+                    form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+                }
 
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4) {
-                                if (xhr.status === 200 && xhr.responseText.trim() === "Success") {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Deleted!',
-                                        text: 'The reply has been deleted.',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    }).then(() => {
-                                        location.reload(); // Reload lại trang
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Failed',
-                                        text: 'Something went wrong. Please try again.'
-                                    });
+                function toggleVisibility(rateID, currentStatus) {
+                    let newStatus = currentStatus === 1 ? 0 : 1;
+
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("POST", "UpdateStatusComment", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            let btn = document.getElementById("toggle-btn-" + rateID);
+                            let comment = document.getElementById("comment-" + rateID);
+
+                            if (newStatus === 1) {
+                                btn.innerHTML = '<i class="fa fa-eye"></i> Show';
+                                btn.classList.remove("btn-success");
+                                btn.classList.add("btn-warning");
+
+                                comment.setAttribute("data-original", comment.innerHTML);
+                                comment.innerHTML = "This feedback was hidden for some reason.";
+                                comment.classList.add("hidden-feedback");
+                            } else {
+                                btn.innerHTML = '<i class="fa fa-eye-slash"></i> Hidden';
+                                btn.classList.remove("btn-warning");
+                                btn.classList.add("btn-success");
+
+                                let originalContent = comment.getAttribute("data-original");
+                                if (originalContent) {
+                                    comment.innerHTML = originalContent;
                                 }
+                                comment.classList.remove("hidden-feedback");
                             }
-                        };
 
-                        xhr.send("replyID=" + replyID);
+                            btn.setAttribute("onclick", "toggleVisibility(" + rateID + ", " + newStatus + ")");
+                        } else {
+                            console.error("error form server:", xhr.status, xhr.responseText);
+                        }
+                    };
+
+                    xhr.send("rateID=" + rateID + "&isDeleted=" + newStatus);
+                }
+
+                function openDeleteModal(replyID) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this reply!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Gửi request xoá nếu xác nhận
+                            let xhr = new XMLHttpRequest();
+                            xhr.open("POST", "DeleteReply", true);
+                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4) {
+                                    if (xhr.status === 200 && xhr.responseText.trim() === "Success") {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Deleted!',
+                                            text: 'The reply has been deleted.',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload(); // Reload lại trang
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Failed',
+                                            text: 'Something went wrong. Please try again.'
+                                        });
+                                    }
+                                }
+                            };
+
+                            xhr.send("replyID=" + replyID);
+                        }
+                    });
+                }
+                function openUpdateModal(replyID, currentText, rateID) {
+                    if (!replyID) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Invalid reply ID'
+                        });
+                        return;
                     }
-                });
-            }
-            function openUpdateModal(replyID, currentText, rateID) {
-                if (!replyID) {
+                    Swal.fire({
+                        title: 'Update Reply',
+                        input: 'textarea',
+                        inputLabel: 'Your reply',
+                        inputValue: currentText,
+                        showCancelButton: true,
+                        confirmButtonText: 'Save',
+                        cancelButtonText: 'Cancel',
+                        inputValidator: (value) => {
+                            if (!value.trim()) {
+                                return 'Reply cannot be empty!';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const updatedText = result.value.trim();
+                            let xhr = new XMLHttpRequest();
+                            xhr.open("POST", "UpdateReply", true);
+                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4) {
+                                    console.log("UpdateReply response:", xhr.responseText, "Status:", xhr.status);
+                                    if (xhr.status === 200 && xhr.responseText.trim() === "Success") {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Updated!',
+                                            text: 'The reply has been updated.',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Failed',
+                                            text: 'Failed to update reply: ' + xhr.responseText
+                                        });
+                                    }
+                                }
+                            };
+                            xhr.send("replyID=" + encodeURIComponent(replyID) + "&answer=" + encodeURIComponent(updatedText));
+                        }
+                    });
+                }
+                <% String success = request.getParameter("success");
+                    String rateID = request.getParameter("rateID"); // lấy từ URL
+                %>
+                window.onload = function () {
+                <% if ("success".equals(success)) {%>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Reply Submitted!',
+                        text: 'Your reply was sent successfully.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '/TMobile/ViewFeedBackForStaff?rateID=<%=rateID%>';
+                    });
+                <% } else if ("failed".equals(success)) { %>
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: 'Invalid reply ID'
+                        title: 'Reply Failed!',
+                        text: 'Failed to submit your reply.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
                     });
-                    return;
-                }
-                Swal.fire({
-                    title: 'Update Reply',
-                    input: 'textarea',
-                    inputLabel: 'Your reply',
-                    inputValue: currentText,
-                    showCancelButton: true,
-                    confirmButtonText: 'Save',
-                    cancelButtonText: 'Cancel',
-                    inputValidator: (value) => {
-                        if (!value.trim()) {
-                            return 'Reply cannot be empty!';
-                        }
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const updatedText = result.value.trim();
-                        let xhr = new XMLHttpRequest();
-                        xhr.open("POST", "UpdateReply", true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4) {
-                                console.log("UpdateReply response:", xhr.responseText, "Status:", xhr.status);
-                                if (xhr.status === 200 && xhr.responseText.trim() === "Success") {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Updated!',
-                                        text: 'The reply has been updated.',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Failed',
-                                        text: 'Failed to update reply: ' + xhr.responseText
-                                    });
-                                }
-                            }
-                        };
-                        xhr.send("replyID=" + encodeURIComponent(replyID) + "&answer=" + encodeURIComponent(updatedText));
-                    }
-                });
-            }
-            <% String success = request.getParameter("success");
-                String rateID = request.getParameter("rateID"); // lấy từ URL
-            %>
-            window.onload = function () {
-            <% if ("success".equals(success)) {%>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Reply Submitted!',
-                    text: 'Your reply was sent successfully.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '/TMobile/ViewFeedBackForStaff?rateID=<%=rateID%>';
-                });
-            <% } else if ("failed".equals(success)) { %>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Reply Failed!',
-                    text: 'Failed to submit your reply.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload();
-                });
-            <% } else if ("error".equals(success)) {%>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Server Error!',
-                    text: 'Something went wrong while processing your reply.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '/TMobile/ViewFeedBackForStaff?rateID=<%=rateID%>';
-                });
-            <% } else if ("nostaff".equals(success)) {%>
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Permission Denied!',
-                    text: 'Staff ID not found for this account.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '/TMobile/ViewFeedBackForStaff?rateID=<%=rateID%>';
-                });
-            <% }%>
-            };
+                <% } else if ("error".equals(success)) {%>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Server Error!',
+                        text: 'Something went wrong while processing your reply.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '/TMobile/ViewFeedBackForStaff?rateID=<%=rateID%>';
+                    });
+                <% } else if ("nostaff".equals(success)) {%>
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Permission Denied!',
+                        text: 'Staff ID not found for this account.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '/TMobile/ViewFeedBackForStaff?rateID=<%=rateID%>';
+                    });
+                <% }%>
+                };
 
-        </script>
+            </script>
 
     </body>
 </html>
