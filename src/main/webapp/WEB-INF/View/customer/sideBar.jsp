@@ -25,10 +25,10 @@
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="ViewOrder"
+            <a href="${pageContext.request.contextPath}/ViewOrderOfCustomer"
                class="nav-link<%= currentPage.contains("ViewOrder") ? " active" : ""%>"
                style="display:flex;align-items:center;">
-                <i class="bi bi-bag-check me-2"></i> <span>My Orders</span>
+                <i class="bi bi-bag-check me-2"></i> <span>Order</span>
             </a>
         </li>
         <li class="nav-item mb-1">

@@ -75,6 +75,8 @@
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">
                 <main class="main-content">
+                    <jsp:include page="../header.jsp" />
+
                     <h1>Orders</h1>
 
                     <!-- Search Form -->
