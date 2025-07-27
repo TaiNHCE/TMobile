@@ -8,6 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%
     Product product = (Product) request.getAttribute("product");
@@ -63,7 +64,6 @@
                             Customer Feedback
                         </h2>
                     </div>
-
                     <c:if test="${empty productRatings}">
                         <p style="text-align: center; color: gray;">No feedback available for this product.</p>
                     </c:if>
@@ -86,8 +86,8 @@
 
                             <%-- ✅ Nếu có phản hồi từ nhân viên --%>
                             <c:if test="${not empty rating.replies}">
-                                 <div style="margin-top: 15px; padding: 10px 15px; border: 1px solid #3399ff; border-radius: 6px; background-color: #f0f8ff;">
-                                   
+                                <div style="margin-top: 15px; padding: 10px 15px; border: 1px solid #3399ff; border-radius: 6px; background-color: #f0f8ff;">
+
                                     <c:forEach var="reply" items="${rating.replies}">
                                         <div style="margin-top: 15px; padding: 10px 15px; background: #eaf4ff; border-left: 4px solid #3399ff; border-radius: 6px;">
                                             <strong style="color: #004a99;">Staff Response:</strong>

@@ -24,6 +24,8 @@ import model.ProductRating;
 import model.Customer;
 import dao.RatingRepliesDAO;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import model.RatingReplies;
 
 /**
@@ -103,7 +105,7 @@ public class ProductDetailServlet extends HttpServlet {
                 }
                 rating.setReplies(replies);
             }
-
+            
             // Truyền dữ liệu sang JSP
             request.setAttribute("product", product);
             request.setAttribute("cateGroupList", cateGroupList);
@@ -111,7 +113,6 @@ public class ProductDetailServlet extends HttpServlet {
             request.setAttribute("productDetailList", productDetailList);
             request.setAttribute("productRatings", productRatings);
 
-            // Forward tới giao diện chi tiết sản phẩm
             request.getRequestDispatcher("/WEB-INF/View/customer/productManagement/productDetail/productDetail.jsp").forward(request, response);
         }
     }

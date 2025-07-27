@@ -13,11 +13,9 @@
         <meta charset="UTF-8">
         <title>Product Reviews</title>
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-        <!-- Font Awesome for icons -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <!-- SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -172,15 +170,24 @@
             .btn-success:hover {
                 background-color: #16a34a;
             }
+            main.main-content {
+                flex: 1;
+                margin-left: 227.5px;
+                min-height: 100vh;
+                box-sizing: border-box;
+            }
+            
         </style>
 
     </head>
     <body>
+        
         <div class="container">
             <jsp:include page="../sideBar.jsp" />
+             <jsp:include page="../header.jsp" />
             <div class="wrapper">
                 <main class="main-content">
-                    <jsp:include page="../header.jsp" />
+                   
                     <div class="banner">
                         <h1>Customer Reviews</h1>              
                     </div>

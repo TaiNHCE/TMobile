@@ -166,15 +166,18 @@ public class ProductRatingDAO extends DBContext {
         }
     }
 
-    public int addProductRating(int customerId, int productId, int star, String comment) {
+    public int addProductRating(int customerId, int productId, int orderId, int star, String comment) {
         int count = 0;
-        String query = "INSERT INTO ProductRatings (CustomerID, ProductID, CreatedDate, Star, Comment, isDeleted, isRead) VALUES (?, ?, GETDATE(), ?, ?, 0, 0)";
+        String query = "INSERT INTO ProductRatings "
+                + "(CustomerID, ProductID, OrderID, CreatedDate, Star, Comment, isDeleted, isRead) "
+                + "VALUES (?, ?, ?, GETDATE(), ?, ?, 0, 0)";
         try {
             PreparedStatement pre = conn.prepareStatement(query);
             pre.setInt(1, customerId);
             pre.setInt(2, productId);
-            pre.setInt(3, star);
-            pre.setString(4, comment);
+            pre.setInt(3, orderId);
+            pre.setInt(4, star);
+            pre.setString(5, comment);
             count = pre.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,6 +256,23 @@ public class ProductRatingDAO extends DBContext {
         }
 
         return list;
+    }
+
+    public boolean hasRatedProduct(int customerID, int productID, int orderID) {
+        String sql = "SELECT COUNT(*) FROM ProductRatings WHERE CustomerID = ? AND ProductID = ? AND OrderID = ?";
+        try (
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.setInt(2, productID);
+            ps.setInt(3, orderID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
