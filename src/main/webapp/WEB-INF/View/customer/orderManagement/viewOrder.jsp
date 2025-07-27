@@ -71,14 +71,34 @@
                 padding-right: 8px; /* tránh che nội dung bởi scroll bar */
             }
             .scrollable-orders::-webkit-scrollbar {
-    width: 8px;
-}
+                width: 8px;
+            }
 
-.scrollable-orders::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-}
+            .scrollable-orders::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.2);
+                border-radius: 8px;
+            }
 
+            .btn-feedback {
+                background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
+                border: none;
+                border-radius: 10px;
+                padding: 12px 30px;
+                font-weight: 600;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .btn-feedback:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(41, 128, 185, 0.3);
+                color: white;
+            }
 
         </style>
 
@@ -147,6 +167,7 @@
                                                 </button>
                                             </form>
                                         </c:if>
+                                        
                                     </div>
                                 </div>
                             </c:forEach>
@@ -190,7 +211,10 @@
                     });
                 });
             });
+            
+            
         </script>
+        
 
         <!-- SweetAlert for server response -->
         <c:if test="${not empty success || not empty error}">

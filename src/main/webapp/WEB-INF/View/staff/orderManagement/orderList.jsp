@@ -14,9 +14,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-        <!-- Sidebar & Shared Styles -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/sideBar.css" />
+        
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css" />
 
         <%
@@ -69,8 +67,10 @@
                 font-weight: 600;
             }
         </style>
+        
     </head>
     <body>
+
         <div class="container">
             <jsp:include page="../sideBar.jsp" />
             <div class="wrapper">

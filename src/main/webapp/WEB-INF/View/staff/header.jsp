@@ -53,6 +53,23 @@
         font-weight: 500;
         color: #212529;
     }
+.header-container {
+    position: fixed;
+    top: 0;
+    left: 250px; /* n?u sidebar có width 250px */
+    width: calc(100% - 250px);
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    padding: 16px 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+main.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    padding-top: 100px; /* tránh b? header che */
+    width: calc(100% - 250px);
+}
 
     .user-details small {
         color: #6c757d;
