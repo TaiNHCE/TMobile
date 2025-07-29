@@ -192,6 +192,111 @@ public class AccountDAO extends DBContext {
         }
     }
 
+    public boolean addNewAccountGoogle(String email, String fullName, String phone) {
+        String insertAccountSQL = "INSERT INTO Accounts (Email, RoleID, IsActive) VALUES (?, ?, ?)";
+        String getNextCustomerIdSQL = "SELECT ISNULL(MAX(CustomerID), 0) + 1 AS NextID FROM Customers";
+        String insertCustomerSQL = "INSERT INTO Customers (CustomerID, AccountID, FullName, PhoneNumber) VALUES (?, ?, ?, ?)";
+
+        try {
+            conn.setAutoCommit(false); // bắt đầu transaction
+
+            // Thêm account
+            PreparedStatement psAcc = conn.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
+            psAcc.setString(1, email);
+            psAcc.setInt(2, 3); // RoleID = 3 (customer)
+            psAcc.setBoolean(3, true);
+            int accInserted = psAcc.executeUpdate();
+
+            if (accInserted == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            // Lấy AccountID vừa tạo
+            ResultSet rsAcc = psAcc.getGeneratedKeys();
+            int accountId;
+            if (rsAcc.next()) {
+                accountId = rsAcc.getInt(1);
+            } else {
+                conn.rollback();
+                return false;
+            }
+
+            // Lấy CustomerID mới
+            PreparedStatement psNextId = conn.prepareStatement(getNextCustomerIdSQL);
+            ResultSet rs = psNextId.executeQuery();
+            int customerId = 1;
+            if (rs.next()) {
+                customerId = rs.getInt("NextID");
+            }
+
+            // Thêm vào bảng Customers
+            PreparedStatement psCus = conn.prepareStatement(insertCustomerSQL);
+            psCus.setInt(1, customerId);
+            psCus.setInt(2, accountId);
+            psCus.setString(3, fullName);
+            psCus.setString(4, phone);
+            int cusInserted = psCus.executeUpdate();
+
+            if (cusInserted == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            System.out.println("❌ DB Error: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+  public Account getAccountByEmail(String email) {
+    String sql = "SELECT * FROM Accounts WHERE Email = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, email);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int accountId = rs.getInt("AccountID");
+                int roleId = rs.getInt("RoleID");
+                boolean status = rs.getBoolean("IsActive");
+
+                return new Account(accountId, email,status,roleId);
+            }
+        }
+    } catch (Exception e) {
+        System.out.println("❌ getAccountByEmail Error: " + e.getMessage());
+    }
+    return null; // Không tìm thấy hoặc có lỗi
+}
+
+
+    public int getRoleByEmail(String email) {
+        String sql = "SELECT RoleID FROM Accounts WHERE Email = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("RoleID");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("❌ getRoleByEmail Error: " + e.getMessage());
+        }
+        return -1; // Không tìm thấy hoặc có lỗi
+    }
+
     public boolean updatePassword(String email, String hashedPassword) {
         String sql = "UPDATE Accounts SET PasswordHash = ? WHERE Email = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {

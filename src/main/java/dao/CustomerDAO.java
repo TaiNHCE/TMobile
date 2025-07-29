@@ -52,7 +52,7 @@ public class CustomerDAO extends DBContext {
 
     public Customer getCustomerbyID(int customerID) {
         Customer cus = null;
-        String sql = "Select CustomerID, a.Email, FullName, PhoneNumber,a.IsActive,BirthDate,Gender from Customers c JOIN Accounts a on c.AccountID = a.AccountID Where CustomerID = ?";
+        String sql = "SELECT c.CustomerID, a.Email, c.FullName, c.PhoneNumber,a.IsActive, c.BirthDate, c.Gender, d.AddressDetails FROM Customers c  JOIN Accounts a ON c.AccountID = a.AccountID JOIN Addresses d ON c.CustomerID = d.CustomerID WHERE c.CustomerID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             try ( ResultSet rs = ps.executeQuery()) {
@@ -64,7 +64,10 @@ public class CustomerDAO extends DBContext {
                     boolean isActive = rs.getBoolean("IsActive");
                     String birthday = rs.getString("BirthDate");
                     String gender = rs.getString("Gender");
-                    cus = new Customer(id, email, fullName, phone, isActive, birthday, gender);
+                    String address = rs.getString("AddressDetails");
+
+                    // Gọi constructor có thêm addressDetails
+                    cus = new Customer(id, email, fullName, phone, isActive, birthday, gender, address);
                 }
             }
         } catch (Exception e) {
@@ -112,32 +115,31 @@ public class CustomerDAO extends DBContext {
 
         return list;
     }
-    
-    public Customer getCustomerByAccountId(int accountId) {
-    Customer cus = null;
-    String sql = "SELECT CustomerID, a.Email, FullName, PhoneNumber, a.IsActive, BirthDate, Gender " +
-                 "FROM Customers c JOIN Accounts a ON c.AccountID = a.AccountID " +
-                 "WHERE c.AccountID = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, accountId);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                int id = rs.getInt("CustomerID");
-                String email = rs.getString("Email");
-                String fullName = rs.getString("FullName");
-                String phone = rs.getString("PhoneNumber");
-                boolean isActive = rs.getBoolean("IsActive");
-                String birthday = rs.getString("BirthDate");
-                String gender = rs.getString("Gender");
-                cus = new Customer(id, email, fullName, phone, isActive, birthday, gender);
-            }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return cus;
-}
 
+    public Customer getCustomerByAccountId(int accountId) {
+        Customer cus = null;
+        String sql = "SELECT CustomerID, a.Email, FullName, PhoneNumber, a.IsActive, BirthDate, Gender "
+                + "FROM Customers c JOIN Accounts a ON c.AccountID = a.AccountID "
+                + "WHERE c.AccountID = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("CustomerID");
+                    String email = rs.getString("Email");
+                    String fullName = rs.getString("FullName");
+                    String phone = rs.getString("PhoneNumber");
+                    boolean isActive = rs.getBoolean("IsActive");
+                    String birthday = rs.getString("BirthDate");
+                    String gender = rs.getString("Gender");
+                    cus = new Customer(id, email, fullName, phone, isActive, birthday, gender);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cus;
+    }
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO(); // giả sử bạn đã có class này
