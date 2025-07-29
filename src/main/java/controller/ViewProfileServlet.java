@@ -69,7 +69,7 @@ public class ViewProfileServlet extends HttpServlet {
         Customer cus = dao.getCustomerbyID(id);
         request.setAttribute("cus", cus);
         request.getRequestDispatcher("/WEB-INF/View/customer/profile/view-profile.jsp").forward(request, response);
-
+        request.getAttribute("user");
     }
 
     /**

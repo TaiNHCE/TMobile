@@ -20,7 +20,9 @@ public class Customer {
     private boolean isActive;
     private String birthDay;
     private String gender;
+    private String address;
 
+ 
     public Customer() {
     }
 
@@ -41,6 +43,17 @@ public class Customer {
         this.isActive = isActive;
         this.birthDay = birthDay;
         this.gender = gender;
+    }
+
+    public Customer(int id, String email, String fullName, String phone, boolean active, String birthday, String gender, String address) {
+        this.id = id;
+        this.email = email;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.isActive = isActive;
+        this.birthDay = birthDay;
+        this.gender = gender;
+        this.address = address;
     }
 
     public String getBirthDay() {
@@ -119,5 +132,11 @@ public class Customer {
         this.isActive = isActive;
     }
     
-    
+       public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

@@ -66,6 +66,25 @@
                 box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
             }
 
+            .btn-google {
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                border: none;
+                color: white !important;
+                border-radius: 10px;
+                padding: 12px 30px;
+                font-weight: 600;
+                width: 100%;
+                transition: all 0.3s ease;
+                margin-bottom: 20px;
+            }
+
+            .btn-google:hover {
+                background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3);
+                color: white !important;
+            }
+
             .btn-register {
                 background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
                 border: none;
@@ -163,6 +182,13 @@
                         Login
                     </button>
                 </form>
+
+                <!-- Google Login Button -->
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile&access_type=online&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8080/TMobile/LoginGoogle&client_id=311074511236-tveal4v1lt2euj2o36qpvrseigthsfol.apps.googleusercontent.com"
+                   class="btn btn-google">
+                    <i class="bi bi-google me-2"></i>
+                    Login with Google
+                </a>
 
                 <div class="divider">
                     <span>or</span>
