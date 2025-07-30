@@ -262,25 +262,25 @@ public class AccountDAO extends DBContext {
             }
         }
     }
-  public Account getAccountByEmail(String email) {
-    String sql = "SELECT * FROM Accounts WHERE Email = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, email);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                int accountId = rs.getInt("AccountID");
-                int roleId = rs.getInt("RoleID");
-                boolean status = rs.getBoolean("IsActive");
 
-                return new Account(accountId, email,status,roleId);
+    public Account getAccountByEmail(String email) {
+        String sql = "SELECT * FROM Accounts WHERE Email = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int accountId = rs.getInt("AccountID");
+                    int roleId = rs.getInt("RoleID");
+                    boolean status = rs.getBoolean("IsActive");
+
+                    return new Account(accountId, email, status, roleId);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("❌ getAccountByEmail Error: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("❌ getAccountByEmail Error: " + e.getMessage());
+        return null; // Không tìm thấy hoặc có lỗi
     }
-    return null; // Không tìm thấy hoặc có lỗi
-}
-
 
     public int getRoleByEmail(String email) {
         String sql = "SELECT RoleID FROM Accounts WHERE Email = ?";
@@ -303,6 +303,21 @@ public class AccountDAO extends DBContext {
             ps.setString(1, hashedPassword);
             ps.setString(2, email);
             return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean adminResetPassword(int id, String newPassword) {
+        String sqlUpdate = "UPDATE Accounts SET PasswordHash = ? WHERE AccountID = ?";
+
+        try ( PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
+            String newPasswordHash = hashMD5(newPassword);
+            updateStmt.setString(1, newPasswordHash);
+            updateStmt.setInt(2, id);
+            int rowsAffected = updateStmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

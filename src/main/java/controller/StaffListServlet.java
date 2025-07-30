@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Staff;
 
@@ -60,6 +61,7 @@ public class StaffListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         StaffDAO dao = new StaffDAO();
         String action = request.getParameter("action");
         if (action == null) {
@@ -85,20 +87,25 @@ public class StaffListServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/staffList.jsp").forward(request, response);
             return;
         }
-            if (action.equalsIgnoreCase("detail")) {
-          String idRaw = request.getParameter("id");
+        if (action.equalsIgnoreCase("detail")) {
+            String idRaw = request.getParameter("id");
+
             int id = 0;
             try {
                 id = Integer.parseInt(idRaw);
                 Staff sta = dao.getStaffByID(id);
+                int accountId = dao.getAccountIdByStaffId(id);
+                session.setAttribute("accountId", accountId); // để ChangePassword lấy được
                 request.setAttribute("data", sta);
                 request.getRequestDispatcher("/WEB-INF/View/admin/staffManagement/view-staff-detail.jsp").forward(request, response);
+                System.out.println("Session ID: " + session.getId());
+                System.out.println("accountId: " + session.getAttribute("accountId"));
             } catch (Exception e) {
                 PrintWriter out = response.getWriter();
                 out.print(e.getMessage());
-        }
+            }
 
-    }
+        }
     }
 
     /**
