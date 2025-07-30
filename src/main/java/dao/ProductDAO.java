@@ -33,7 +33,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductIsNew() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
@@ -55,8 +55,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -74,7 +72,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -87,7 +85,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductIsFeatured() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
@@ -109,8 +107,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -128,7 +124,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -141,7 +137,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductIsBestSeller() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
@@ -163,8 +159,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -182,7 +176,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -195,7 +189,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getDiscountedProducts() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
@@ -215,8 +209,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -234,7 +226,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -247,7 +239,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductList() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, p.CategoryID, p.BrandID, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.IsActive, "
                 + "pi.ImageURL "
                 + "FROM Products p "
@@ -281,9 +273,7 @@ public class ProductDAO extends DBContext {
                 boolean isActive = rs.getBoolean("IsActive");
                 String imageUrl = rs.getString("ImageURL");
 
-                list.add(new Product(productID, productName, description, price, discount, stock, status,
-                        supplierId, categoryId, brandId, isFeatured, isBestSeller, isNew,
-                        warrantyPeriod, isActive, imageUrl));
+                list.add(new Product(productID, productName, description, price, discount, supplierId, categoryId, brandId, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -294,7 +284,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> searchProductByName(String keyword) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, p.CategoryID, p.BrandID, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.IsActive, "
                 + "pi.ImageURL "
                 + "FROM Products p "
@@ -331,9 +321,7 @@ public class ProductDAO extends DBContext {
                     boolean isActive = rs.getBoolean("IsActive");
                     String imageUrl = rs.getString("ImageURL");
 
-                    list.add(new Product(productID, productName, description, price, discount, stock, status,
-                            supplierId, categoryId, brandId, isFeatured, isBestSeller, isNew,
-                            warrantyPeriod, isActive, imageUrl));
+                    list.add(new Product(productID, productName, description, price, discount, supplierId, categoryId, brandId, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl));
                 }
             }
         } catch (Exception e) {
@@ -345,7 +333,7 @@ public class ProductDAO extends DBContext {
 
     public Product getProductByID(int productID) {
         Product product = null;
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, p.CategoryID, p.BrandID, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.IsActive, "
                 + "pi.ImageURL "
                 + "FROM Products p "
@@ -381,9 +369,7 @@ public class ProductDAO extends DBContext {
                     boolean isActive = rs.getBoolean("IsActive");
                     String imageUrl = rs.getString("ImageURL");
 
-                    product = new Product(productID, productName, description, price, discount, stock, status,
-                            supplierId, categoryId, brandId, isFeatured, isBestSeller, isNew,
-                            warrantyPeriod, isActive, imageUrl);
+                    product = new Product(productID, productName, description, price, discount, supplierId, categoryId, brandId, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl);
                 }
             }
         } catch (Exception e) {
@@ -442,7 +428,7 @@ public class ProductDAO extends DBContext {
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
         String sql = 
-    "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, " +
+    "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, " +
     "       isd.UnitPrice, isd.Quantity, " +
     "       p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, " +
     "       br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, " +
@@ -468,8 +454,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -487,7 +471,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -500,7 +484,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getAllProductInactive() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
 
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
@@ -523,8 +507,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -542,7 +524,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -555,7 +537,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getAllProductActive() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
 
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
@@ -578,8 +560,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -595,9 +575,8 @@ public class ProductDAO extends DBContext {
 
                 String supplierName = rs.getString("Name");
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
-                int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -610,7 +589,7 @@ public class ProductDAO extends DBContext {
 
     public Product getProductById(int productId) {
         Product product = null;
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL "
                 + "FROM Products p "
@@ -629,8 +608,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 String supplierName = rs.getString("Name");
                 int categoryId = rs.getInt("CategoryID");
@@ -646,9 +623,8 @@ public class ProductDAO extends DBContext {
                 String imageUrl = rs.getString("ImageURL");
 
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
-                int quatity = rs.getInt("Quantity");
 
-                product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -901,7 +877,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductByBrandAndPrice(int brandId, BigDecimal min, BigDecimal max) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, "
                 + "p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
                 + "isd.UnitPrice, isd.Quantity "
@@ -926,8 +902,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -946,7 +920,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandIdDB, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandIdDB, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -958,7 +932,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductByCategoryAndPrice(int categoryId, BigDecimal min, BigDecimal max) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, "
                 + "p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
                 + "isd.UnitPrice, isd.Quantity "
@@ -983,8 +957,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryIdDB = categoryId;
                 String categoryName = rs.getString("CategoryName");
@@ -1002,7 +974,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryIdDB, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryIdDB, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -1014,7 +986,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductByKeyword(String keyword) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, "
                 + "p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
                 + "isd.UnitPrice, isd.Quantity "
@@ -1042,8 +1014,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -1061,7 +1031,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -1073,7 +1043,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductByBrand(int brandId) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, "
                 + "cate.CategoryID, cate.CategoryName, "
@@ -1098,8 +1068,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryId = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -1117,7 +1085,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandIdDB, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandIdDB, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -1130,7 +1098,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductByCategory(int categoryId) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "isd.UnitPrice, isd.Quantity, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL " 
                 + "FROM Products p "
@@ -1151,8 +1119,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 int categoryIdDB = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
@@ -1170,7 +1136,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                Product product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                Product product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
 
                 list.add(product);
             }
@@ -1183,7 +1149,7 @@ public class ProductDAO extends DBContext {
 
     public Product getProductByIdHasImportPrice(int productId) {
         Product product = null;
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, p.Stock, p.Status, "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
                 + "p.SupplierID, sup.Name, cate.CategoryID, cate.CategoryName, br.BrandID, br.BrandName, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.isActive, pro.ImageURL, "
                 + "isd.UnitPrice, isd.Quantity "
                 + "FROM Products p "
@@ -1202,8 +1168,6 @@ public class ProductDAO extends DBContext {
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 String supplierName = rs.getString("Name");
                 int categoryId = rs.getInt("CategoryID");
@@ -1221,7 +1185,7 @@ public class ProductDAO extends DBContext {
                 BigDecimal unitPrice = rs.getBigDecimal("UnitPrice");
                 int quatity = rs.getInt("Quantity");
 
-                product = new Product(productId, productName, description, price, discount, quatity, status, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
+                product = new Product(productId, productName, description, price, discount, supplierId, supplierName, categoryId, categoryName, brandId, brandName, isFeatured, isBestSeller, isNew, warrantyPeriod, isActive, imageUrl, unitPrice);
             }
         } catch (SQLException e) {
             e.printStackTrace();
