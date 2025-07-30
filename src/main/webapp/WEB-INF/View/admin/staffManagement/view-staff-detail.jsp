@@ -88,7 +88,7 @@
                         </table>
                         <div class="d-flex justify-content-between mt-4">
                             <div>
-                                <a href="ChangePassword" class="btn btn-secondary" ><i class="bi bi-tools"></i> Change Password</a>
+                                <a href="ChangePasswordStaff" class="btn btn-secondary" ><i class="bi bi-tools"></i> Reset Password</a>
                                 <a href="StaffList" class="btn btn-outline-primary" id="back"><i class="bi bi-arrow-return-left"></i> Back to list</a>
                             </div>
                             <div>      
