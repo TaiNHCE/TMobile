@@ -1,7 +1,3 @@
-/*
- * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import dao.CartDAO;
@@ -16,40 +12,39 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
 import model.CartItem;
-import model.ProductVariant;
 
-/**
- * Servlet for handling cart operations
- */
 @WebServlet(name = "CartListServlet", urlPatterns = {"/CartList"})
 public class CartListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         CartDAO dao = new CartDAO();
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("Login");
+            return;
+        }
 
         if (action == null) {
             action = "list";
         }
 
         try {
-            int accountId = (user != null) ? user.getAccountID() : 0;
+            int accountId = user.getAccountID();
 
             if (action.equalsIgnoreCase("list")) {
                 List<CartItem> cartItems = dao.getCartItemsByAccountId(accountId);
-
                 request.setAttribute("cartItems", cartItems);
+
                 if (cartItems.isEmpty()) {
                     request.setAttribute("message", "No items found in the cart.");
                 }
+
                 request.getRequestDispatcher("/WEB-INF/View/customer/cartManagement/viewCart.jsp").forward(request, response);
-            }
-            if (action.equalsIgnoreCase("shop")) {
+            } else if (action.equalsIgnoreCase("shop")) {
                 request.getRequestDispatcher("/WEB-INF/View/customer/homePage/homePage.jsp").forward(request, response);
             }
 
@@ -59,68 +54,69 @@ public class CartListServlet extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CartDAO cartDAO = new CartDAO();
         HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
         String action = request.getParameter("action");
 
+        if (user == null) {
+            response.sendRedirect("Login");
+            return;
+        }
+
+        int accountId = user.getAccountID();
+
         try {
-            if ("update".equals(action)) {
+            if ("saveSelectedItems".equals(action)) {
+                String selectedCartItemIds = request.getParameter("selectedCartItemIds");
+                session.setAttribute("selectedCartItemIds", selectedCartItemIds);
+                response.setContentType("text/plain");
+                response.getWriter().write("Selected items saved");
+                return;
+            } else if ("update".equals(action)) {
                 int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
-                int quantity = Integer.parseInt(request.getParameter("quantity"));
-                String[] selectedItems = request.getParameterValues("selectedItems");
+                int newQuantity = Integer.parseInt(request.getParameter("quantity"));
 
-                // Check if the cart item is selected
-                boolean isSelected = false;
-                if (selectedItems != null) {
-                    for (String selectedItem : selectedItems) {
-                        if (Integer.parseInt(selectedItem) == cartItemId) {
-                            isSelected = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!isSelected) {
-                    session.setAttribute("message", "Please select the item to update quantity!");
-                    response.sendRedirect("CartList?accountId=" + request.getParameter("accountId"));
+                // Kiểm tra số lượng hợp lệ
+                if (newQuantity <= 0) {
+                    session.setAttribute("message", "Quantity must be greater than 0!");
+                    response.sendRedirect("CartList?action=list&accountId=" + accountId);
                     return;
                 }
 
-                // Check stock availability
+                // Lấy thông tin cart item để validation
                 CartItem cartItem = cartDAO.getCartItemById(cartItemId);
-                int stock = cartItem.getVariant() != null ? cartItem.getVariant().getQuantity() : cartItem.getProduct().getStock();
-                if (quantity > stock) {
-                    session.setAttribute("message", "Requested quantity exceeds available stock!");
-                } else {
-                    boolean success = cartDAO.updateCartItemQuantity(cartItemId, quantity);
-                    if (success) {
-                        // Update stock
-                        if (cartItem.getVariant() != null) {
-                            cartDAO.updateVariantStock(cartItem.getVariant().getVariantId(), stock - quantity);
-                        } else {
-                            cartDAO.updateProductStock(cartItem.getProductID(), stock - quantity);
-                        }
-                        session.setAttribute("message", "Quantity updated successfully!");
-                    } else {
-                        session.setAttribute("message", "Error updating quantity!");
-                    }
+                if (cartItem == null) {
+                    session.setAttribute("message", "Cart item not found!");
+                    response.sendRedirect("CartList?action=list&accountId=" + accountId);
+                    return;
                 }
-            } else if ("updateVariant".equals(action)) {
-                int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
-                String variantIdStr = request.getParameter("variantId");
-                Integer variantId = variantIdStr.equals("0") ? null : Integer.parseInt(variantIdStr);
-                boolean success = cartDAO.updateCartItemVariant(cartItemId, variantId);
-                session.setAttribute("message", success ? "Variant updated successfully!" : "Error updating variant!");
+
+//                // Cập nhật số lượng
+//                boolean success = cartDAO.updateCartItemQuantity(cartItemId, newQuantity);
+//
+//                if (success) {
+//                    session.setAttribute("message", "Quantity updated successfully!");
+//                } else {
+//                    session.setAttribute("message", "Failed to update quantity!");
+//                }
+//
+//                response.sendRedirect("CartList?action=list&accountId=" + accountId);
+//                return;
             }
+
         } catch (NumberFormatException e) {
-            session.setAttribute("message", "Invalid input.");
+            System.err.println("NumberFormatException in CartListServlet: " + e.getMessage());
+            session.setAttribute("message", "Invalid input parameters.");
+        } catch (Exception e) {
+            System.err.println("Exception in CartListServlet: " + e.getMessage());
+            session.setAttribute("message", "An error occurred while updating cart.");
         }
 
-        response.sendRedirect("CartList?accountId=" + request.getParameter("accountId"));
+        response.sendRedirect("CartList?action=list&accountId=" + accountId);
     }
 
     @Override

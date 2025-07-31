@@ -163,75 +163,74 @@ public class OrderDAO extends DBContext {
         return list;
     }
 
-//
-//    public Customer getCustomerByOrderId(int id) {
-//        String sql = "SELECT c.CustomerID, c.FullName, c.PhoneNumber, c.Email, "
-//                + "c.IsBlock, c.IsDeleted FROM customers c "
-//                + "JOIN orders o ON c.CustomerID = o.CustomerID WHERE o.OrderID = ?";
-//        try ( PreparedStatement ps = connector.prepareStatement(sql)) {
-//            ps.setInt(1, id);
-//            try ( ResultSet rs = ps.executeQuery()) {
-//                if (rs.next()) {
-//                    return new Customer(
-//                            rs.getInt("CustomerID"),
-//                            rs.getString("FullName"),
-//                            null,
-//                            null,
-//                            null,
-//                            rs.getString("PhoneNumber"),
-//                            rs.getString("Email"),
-//                            null,
-//                            rs.getInt("IsBlock"),
-//                            rs.getInt("IsDeleted"),
-//                            null
-//                    );
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        } catch (Exception e) {
-//            System.err.println(e.getMessage());
-//        }
-//
-//        return null; // Không tìm thấy khách hàng
-//    }
-//
-//    public List<Order> getOrdersToDelete(int month) {
-//        List<Order> list = new ArrayList<>();
-//        String sql = "SELECT * FROM Orders "
-//                + "WHERE [Status] = '5' "
-//                + "AND OrderedDate < DATEADD(MONTH, -?, GETUTCDATE())";
-//        try {
-//            PreparedStatement pre = conn.prepareStatement(sql);
-//            pre.setInt(1, month);
-//            ResultSet rs = pre.executeQuery();
-//            while (rs.next()) {
-//                Order o = new Order(
-//                        rs.getInt("OrderID"),
-//                        rs.getInt("CustomerID"),
-//                        rs.getString("FullName"),
-//                        rs.getString("PhoneNumber"),
-//                        rs.getString("Address"),
-//                        rs.getInt("TotalAmount"),
-//                        rs.getString("OrderedDate"),
-//                        rs.getInt("Status")
-//                );
-//                list.add(o);
-//            }
-//        } catch (SQLException e) {
-//            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
-//        }
-//        return list;
-//    }
-//
-//    public static void main(String[] args) {
-//        OrderDAO o = new OrderDAO();
-////        o.addOrderDetail(1, 1, 3, 34000000);
-////        List<Order> list = o.getAllOrderOfCustomer(1);
-////        for (Order order : list) {
-////            System.out.println(order.getAddress());
-////        }
-//        Order od = new Order(13, "Nguyen The Vinh", "0335150884", "fjds, fds fds, sdfhds, dshfdd", 20000000, 30000);
-//        
-//    }
+    public int createOrder(int customerId, String fullName, String addressSnapshot,
+            String phoneNumber, String orderedDate, String deliveredDate, int status,
+            long totalAmount, int discount, int addressId) {
+
+        String sql = "INSERT INTO Orders (CustomerID, FullName, AddressSnapshot, PhoneNumber, OrderedDate, DeliveredDate, Status, TotalAmount, Discount, AddressID) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try ( PreparedStatement pre = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pre.setInt(1, customerId);
+            pre.setString(2, fullName);
+            pre.setString(3, addressSnapshot);
+            pre.setString(4, phoneNumber);
+
+            Timestamp orderedTimestamp = null;
+            if (orderedDate != null && !orderedDate.trim().isEmpty()) {
+                try {
+                    orderedTimestamp = Timestamp.valueOf(orderedDate);
+                } catch (IllegalArgumentException e) {
+                    Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE,
+                            "Invalid OrderedDate format: {0}", orderedDate);
+                    return -1;
+                }
+            } else {
+                Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, "OrderedDate is null or empty");
+                return -1;
+            }
+            pre.setTimestamp(5, orderedTimestamp);
+
+            Timestamp deliveredTimestamp = null;
+            if (deliveredDate != null && !deliveredDate.trim().isEmpty()) {
+                try {
+                    deliveredTimestamp = Timestamp.valueOf(deliveredDate);
+                } catch (IllegalArgumentException e) {
+                    Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE,
+                            "Invalid DeliveredDate format: {0}", deliveredDate);
+                    return -1;
+                }
+            }
+            pre.setTimestamp(6, deliveredTimestamp);
+
+            pre.setInt(7, status);
+            pre.setLong(8, totalAmount);
+            pre.setInt(9, discount);
+            pre.setInt(10, addressId);
+
+            int affectedRows = pre.executeUpdate();
+
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.INFO,
+                    "SQL execution completed. Affected rows: {0}", affectedRows);
+
+            if (affectedRows > 0) {
+                try ( ResultSet rs = pre.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int orderId = rs.getInt(1);
+                        Logger.getLogger(OrderDAO.class.getName()).log(Level.INFO,
+                                "Order created successfully with OrderID: {0}", orderId);
+                        return orderId;
+                    }
+                }
+            }
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.WARNING, "No rows affected when inserting order");
+            return -1;
+        } catch (SQLException e) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE,
+                    "SQL Error creating order: Message={0}, SQLState={1}, ErrorCode={2}",
+                    new Object[]{e.getMessage(), e.getSQLState(), e.getErrorCode()});
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }

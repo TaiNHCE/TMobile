@@ -180,4 +180,15 @@ public class CustomerVoucherDAO extends DBContext {
         }
         return false;
     }
+
+    public void decreaseVoucherQuantity(int customerId, int voucherId) {
+        String sql = "UPDATE CustomerVoucher SET Quantity = Quantity - 1 WHERE CustomerID = ? AND VoucherID = ? AND Quantity > 0";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ps.setInt(2, voucherId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
