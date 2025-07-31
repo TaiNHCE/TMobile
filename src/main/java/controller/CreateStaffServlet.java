@@ -27,7 +27,7 @@ public class CreateStaffServlet extends HttpServlet {
             // Lấy dữ liệu từ form
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            String ProfileImageURL = request.getParameter("profileImageURL");
+            
             String fullName = request.getParameter("fullName");
             String phone = request.getParameter("phoneNumber");
             String birthDateStr = request.getParameter("birthDate");
@@ -50,7 +50,7 @@ public class CreateStaffServlet extends HttpServlet {
             account.setEmail(email);
             account.setPasswordHash(password); // Hash password nếu cần
 //            account.setRoleID(roleID);
-            account.setProfileImageURL(ProfileImageURL);
+           
 
             // Tạo đối tượng Staff
             Staff staff = new Staff();

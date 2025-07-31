@@ -296,7 +296,7 @@
                 if (message != null) {
             %>
             <div class="alert alert-info text-center">
-                <%= message%>
+
             </div>
             <%
                     session.removeAttribute("message");
@@ -548,11 +548,11 @@
                                     return true;
                                 }
                                 function increaseQuantity(cartItemId) {
-                                    alert('Increase function called for cartItemId: ' + cartItemId);
-                                    console.log('Increase clicked for cartItemId:', cartItemId);
+
+
                                     const quantityInput = document.getElementById(`quantity-${cartItemId}`);
                                     if (!quantityInput) {
-                                        alert('Quantity input not found for cartItemId: ' + cartItemId);
+
                                         console.error('Quantity input not found for cartItemId:', cartItemId);
                                         return;
                                     }
@@ -560,21 +560,21 @@
                                     if (currentQuantity < 1000) {
                                         currentQuantity++;
                                         quantityInput.value = currentQuantity;
-                                        alert('Quantity increased to: ' + currentQuantity);
+
                                         console.log('Quantity increased to:', currentQuantity);
                                         submitQuantityForm(cartItemId);
                                     } else {
-                                        alert('Maximum quantity (1000) reached for cartItemId: ' + cartItemId);
+
                                         console.log('Maximum quantity reached:', currentQuantity);
                                     }
                                 }
 
                                 function decreaseQuantity(cartItemId) {
-                                    alert('Decrease function called for cartItemId: ' + cartItemId);
-                                    console.log('Decrease clicked for cartItemId:', cartItemId);
+
+
                                     const quantityInput = document.getElementById(`quantity-${cartItemId}`);
                                     if (!quantityInput) {
-                                        alert('Quantity input not found for cartItemId: ' + cartItemId);
+
                                         console.error('Quantity input not found for cartItemId:', cartItemId);
                                         return;
                                     }
@@ -582,22 +582,22 @@
                                     if (currentQuantity > 1) {
                                         currentQuantity--;
                                         quantityInput.value = currentQuantity;
-                                        alert('Quantity decreased to: ' + currentQuantity);
+
                                         console.log('Quantity decreased to:', currentQuantity);
                                         submitQuantityForm(cartItemId);
                                     } else {
-                                        alert('Minimum quantity (1) reached for cartItemId: ' + cartItemId);
+                                        a
                                         console.log('Minimum quantity reached:', currentQuantity);
                                     }
                                 }
 
                                 function submitQuantityForm(cartItemId) {
-                                    alert('Submit function called for cartItemId: ' + cartItemId);
+
                                     console.log('Submit triggered for cartItemId:', cartItemId);
                                     const quantityInput = document.getElementById(`quantity-${cartItemId}`);
                                     const form = document.getElementById(`quantityForm-${cartItemId}`);
                                     if (!quantityInput || !form) {
-                                        alert('Form or input not found for cartItemId: ' + cartItemId);
+
                                         console.error('Form or input not found for cartItemId:', cartItemId);
                                         return;
                                     }
@@ -605,7 +605,7 @@
                                     if (currentQuantity < 1) {
                                         quantityInput.value = 1;
                                         currentQuantity = 1;
-                                        alert('Quantity set to minimum (1) for cartItemId: ' + cartItemId);
+
                                         console.log('Quantity set to minimum:', currentQuantity);
                                     }
                                     const formData = new FormData(form);
@@ -622,19 +622,19 @@
                                         success: function (response) {
                                             console.log('Update response:', response);
                                             if (response.trim() === "success") {
-                                                alert('Quantity updated successfully for cartItemId: ' + cartItemId);
+
                                                 console.log('Quantity updated successfully:', cartItemId);
                                                 updateItemTotal(cartItemId);
                                             } else {
                                                 console.error('Update failed:', response);
-                                                alert('Failed to update quantity for cartItemId: ' + cartItemId + '. Response: ' + response);
+
                                                 quantityInput.value = parseInt(quantityInput.getAttribute('data-previous-value')) || 1;
                                                 updateItemTotal(cartItemId);
                                             }
                                         },
                                         error: function (xhr, status, error) {
                                             console.error('AJAX error:', error, xhr.status, xhr.responseText);
-                                            alert('Error updating quantity for cartItemId: ' + cartItemId + '. Status: ' + xhr.status);
+
                                             quantityInput.value = parseInt(quantityInput.getAttribute('data-previous-value')) || 1;
                                             updateItemTotal(cartItemId);
                                         },
@@ -643,6 +643,20 @@
                                         }
                                     });
                                 }
+                                const lastAddedCartItemId = '<%= session.getAttribute("lastAddedCartItemId") != null ? session.getAttribute("lastAddedCartItemId") : "null"%>';
+                                if (lastAddedCartItemId !== "null") {
+                                    const checkbox = document.querySelector(`tr[data-cart-item-id="${lastAddedCartItemId}"] .selectItem`);
+                                    if (checkbox) {
+                                        checkbox.checked = true;
+                                        updateCartTotal(); // Cập nhật tổng khi check
+                                        saveSelectedItems(); // Lưu trạng thái chọn
+                                    }
+                                    // Xóa session attribute sau khi sử dụng
+                                    fetch('${pageContext.request.contextPath}/ClearLastAddedCartItem', {
+                                        method: 'POST'
+                                    }).then(() => console.log('Cleared lastAddedCartItemId from session'));
+                                }
+
             </script>
         </div>
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />

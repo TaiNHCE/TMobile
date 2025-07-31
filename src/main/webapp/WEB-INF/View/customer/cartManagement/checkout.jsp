@@ -202,6 +202,12 @@
                     gap: 10px;
                 }
             }
+            .error-message {
+                color: #dc3545;
+                font-size: 0.9rem;
+                margin-top: 5px;
+                display: none;
+            }
         </style>
     </head>
     <body>
@@ -322,10 +328,12 @@
                 <div class="orderer-section">
                     <h4>Orderer</h4>
                     <div class="mb-3">
-                        <input type="text" name="fullName" class="form-control" placeholder="Full name" required>
+                        <input type="text" name="fullName" id="fullName" class="form-control" placeholder="Full name" required>
+                        <div id="fullNameError" class="error-message"></div>
                     </div>
                     <div class="mb-3">
-                        <input type="text" name="phone" class="form-control" placeholder="Phone number" required>
+                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone number" required>
+                        <div id="phoneError" class="error-message"></div>
                     </div>
                 </div>
 
@@ -376,12 +384,67 @@
                     <input type="hidden" name="totalAmount" value="<%= totalAmount%>">
                     <input type="hidden" name="totalPromotion" value="<%= totalPromotion%>">
                     <input type="hidden" name="selectedCartItemIds" value="<%= selectedCartItemIds != null ? selectedCartItemIds : request.getParameter("selectedCartItemIds") != null ? request.getParameter("selectedCartItemIds") : ""%>">
-                    <button type="submit" class="btn-order mt-3">Place Order</button>
+                    <button type="submit" id="submitBtn" class="btn-order mt-3" disabled>Place Order</button>
                 </div>
             </form>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
+
+        <script>
+            // Validation for Full Name
+            const fullNameInput = document.getElementById("fullName");
+            const fullNameError = document.getElementById("fullNameError");
+            const submitBtn = document.getElementById("submitBtn");
+
+            fullNameInput.addEventListener("blur", function () {
+                let name = fullNameInput.value.trim();
+                fullNameError.style.display = "none";
+                submitBtn.disabled = false;
+
+                // Replace multiple spaces with single space
+                name = name.replace(/\s+/g, " ");
+                fullNameInput.value = name;
+
+                // Regex: Each word starts with uppercase, no numbers or special characters
+                const namePattern = /^([A-ZÀ-Ỹ][a-zà-ỹ]+)(\s[A-ZÀ-Ỹ][a-zà-ỹ]+)*$/u;
+
+                if (!namePattern.test(name) || name === "") {
+                    fullNameError.textContent = "Full name must start with uppercase letters, contain no numbers or special characters, and have no extra spaces.";
+                    fullNameError.style.display = "block";
+                    submitBtn.disabled = true;
+                }
+            });
+
+            fullNameInput.addEventListener("input", function () {
+                fullNameError.style.display = "none";
+                submitBtn.disabled = false;
+            });
+
+            // Validation for Phone Number
+            const phoneInput = document.getElementById("phone");
+            const phoneError = document.getElementById("phoneError");
+
+            phoneInput.addEventListener("blur", function () {
+                const phone = phoneInput.value.trim();
+                phoneError.style.display = "none";
+                submitBtn.disabled = false;
+
+                // Regex: Must start with 0 and have exactly 10 digits
+                const phonePattern = /^0\d{9}$/;
+
+                if (!phonePattern.test(phone) || phone === "") {
+                    phoneError.textContent = "Phone number must start with 0 and have exactly 10 digits.";
+                    phoneError.style.display = "block";
+                    submitBtn.disabled = true;
+                }
+            });
+
+            phoneInput.addEventListener("input", function () {
+                phoneError.style.display = "none";
+                submitBtn.disabled = false;
+            });
+        </script>
     </body>
 </html>
