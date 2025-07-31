@@ -144,7 +144,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean createStaffWithAccount(Account account, Staff staff) {
-        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive, EmailVerified, ProfileImageURL) VALUES (?, ?, 2, 1, 1, ?)";
+        String insertAccountSQL = "INSERT INTO Accounts (Email, PasswordHash, RoleID, IsActive, EmailVerified) VALUES (?, ?, 2, 1, 1)";
         String insertStaffSQL = "INSERT INTO Staff (StaffID, AccountID, FullName, PhoneNumber, BirthDate, Gender, Position, HiredDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -154,7 +154,7 @@ public class StaffDAO extends DBContext {
             PreparedStatement accountStmt = conn.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
             accountStmt.setString(1, account.getEmail());
             accountStmt.setString(2, account.getPasswordHash());
-            accountStmt.setString(3, account.getProfileImageURL());
+            
 
             int affectedRows = accountStmt.executeUpdate();
 
@@ -212,7 +212,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean updateStaffWithAccount(Account account, Staff staff) {
-        String updateAccountSQL = "UPDATE Accounts SET Email = ?, ProfileImageURL = ? WHERE AccountID = ?";
+        String updateAccountSQL = "UPDATE Accounts SET Email = ? WHERE AccountID = ?";
         String updateStaffSQL = "UPDATE Staff SET FullName = ?, PhoneNumber = ?, BirthDate = ?, Gender = ?, Position = ?, HiredDate = ? WHERE StaffID = ?";
 
         try {
@@ -221,8 +221,7 @@ public class StaffDAO extends DBContext {
             // Cập nhật bảng Accounts
             PreparedStatement accountStmt = conn.prepareStatement(updateAccountSQL);
             accountStmt.setString(1, account.getEmail());
-            accountStmt.setString(2, account.getProfileImageURL());
-            accountStmt.setInt(3, account.getAccountID());
+            accountStmt.setInt(2, account.getAccountID());
 
             int affectedAcc = accountStmt.executeUpdate();
             if (affectedAcc == 0) {
@@ -301,7 +300,7 @@ public class StaffDAO extends DBContext {
                 a.setEmail(rs.getString("Email"));
                 a.setPasswordHash(rs.getString("PasswordHash"));
                 a.setRoleID(rs.getInt("RoleID"));
-                a.setProfileImageURL(rs.getString("ProfileImageURL"));
+                
                 return a;
             }
         } catch (SQLException e) {

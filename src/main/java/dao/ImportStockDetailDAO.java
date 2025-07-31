@@ -201,7 +201,7 @@ public class ImportStockDetailDAO extends DBContext {
                     psImport.setInt(2, productId);
                     psImport.setInt(3, quantity);
                     psImport.addBatch();
-                }
+                } 
 
                 int[] updateCounts = psImport.executeBatch();
                 // Kiểm tra xem tất cả các bản ghi có được cập nhật thành công không

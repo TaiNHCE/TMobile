@@ -109,7 +109,7 @@ color: white;
     <div class="container mt-4">
         <div class="card mx-auto shadow">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Update Staff</h4>
+                <h4 class="mb-0">Edit Staff</h4>
             </div>
             <div class="card-body">
                 <% if (request.getAttribute("errorMessage") != null) { %>
@@ -135,8 +135,7 @@ color: white;
                             </div>
 
                             <div class="col-md-12">
-                                <label for="profileImageURL" class="form-label">Profile Image URL:</label>
-                                <input type="url" id="profileImageURL" name="profileImageURL" class="form-control" value="<%= account.getProfileImageURL() %>">
+                              
                             </div>
                         </div>
                     </div>

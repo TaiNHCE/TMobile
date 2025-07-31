@@ -40,8 +40,8 @@
                 background: linear-gradient(to top right, #fcfeff, #eff5ff) padding-box, linear-gradient(to top right, #dbe8fe, #609afa) border-box;
                 border-radius: 12px;
                 width: fit-content;
-                text-align: center; 
-           }
+                text-align: center;
+            }
 
             .btn-addcart {
                 color: #3289EC;
@@ -216,7 +216,7 @@
             </div>
             <%
                 } // đóng if (product != null)
-%>
+            %>
         </div>
 
 
@@ -239,21 +239,22 @@
 
             <!-- Phần tương tác khách hàng -->
             <!-- Nút Add to Cart và Buy Now -->
-            <div class="action-wrapper" style = "gap: 1%;">
-                <div class = "btn-addcartBorder" style = "width: 48%;">
+            <div class="action-wrapper" style="gap: 1%;">
+                <div class="btn-addcartBorder" style="width: 48%;">
                     <form class="action-form" action="AddCartServlet?productId=<%=product.getProductId()%>&categoryId=<%=product.getCategoryId()%>" method="post">
-                        <input type="hidden" name="productId" value="${product.getProductId()}">
+                        <input type="hidden" name="productId" value="<%=product.getProductId()%>">
+                        <input type="hidden" name="action" value="addcart">
                         <button type="submit" class="btn btn-addcart">Add to cart</button>
                     </form>
                 </div>
 
-                <div class = "btn-buyBorder" style = "width: 48%;">
-                    <form class="action-form" action="${pageContext.request.contextPath}/CheckoutServlet" method="get">
-                        <input type="hidden" name="productId" value="${product.getProductId()}">
+                <div class="btn-buyBorder" style="width: 48%;">
+                    <form class="action-form" action="${pageContext.request.contextPath}/AddCartServlet?productId=<%=product.getProductId()%>&categoryId=<%=product.getCategoryId()%>" method="post">
+                        <input type="hidden" name="productId" value="<%=product.getProductId()%>">
+                        <input type="hidden" name="action" value="buynow">
                         <button type="submit" class="btn btn-buy">Buy now</button>
                     </form>
                 </div>
-
             </div>
         </div>
     </body>

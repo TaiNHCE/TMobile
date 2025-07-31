@@ -21,7 +21,16 @@ public class UpdateCartServlet extends HttpServlet {
             String cartItemIdRaw = request.getParameter("cartItemId");
             String quantityRaw = request.getParameter("quantity");
 
-           
+            // Debug input
+            System.out.println("Received action: " + action);
+            System.out.println("Received accountId: " + accountIdRaw);
+            System.out.println("Received cartItemId: " + cartItemIdRaw);
+            System.out.println("Received quantity: " + quantityRaw);
+
+            if (action == null || cartItemIdRaw == null || quantityRaw == null) {
+                response.getWriter().write("error:missing_parameters");
+                return;
+            }
 
             int cartItemId = Integer.parseInt(cartItemIdRaw);
             int quantity = Integer.parseInt(quantityRaw);
@@ -35,11 +44,11 @@ public class UpdateCartServlet extends HttpServlet {
             CartDAO cartDAO = new CartDAO();
             boolean updated = cartDAO.updateCartItemQuantity(cartItemId, quantity);
 
-            // Log update result
-            System.out.println("Update result for cartItemId " + cartItemId + ": " + updated);
+            // Debug update result
+            System.out.println("Update result for cartItemId " + cartItemId + ": " + updated + ", new quantity: " + quantity);
 
             if (updated) {
-                response.getWriter().print("success"); // Dùng print thay vì write
+                response.getWriter().print("success");
             } else {
                 response.getWriter().print("error:update_failed");
             }
