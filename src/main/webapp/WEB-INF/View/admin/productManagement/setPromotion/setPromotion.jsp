@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Category" %>
@@ -32,7 +31,7 @@
             border: none;
             max-width: 800px;
             margin: 0 auto;
-            min-height: 70vh; /* Đảm bảo card có chiều cao tối thiểu */
+            min-height: 70vh;
         }
 
         .card-header {
@@ -46,7 +45,7 @@
 
         .form-section {
             margin-bottom: 2rem;
-            min-height: 60vh; /* Tăng chiều cao tối thiểu của form section */
+            min-height: 60vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -84,28 +83,28 @@
         }
 
         .btn-primary {
-            background-color: #28a745; /* Nền xanh lá cố định */
+            background-color: #28a745;
             border: none;
-            color: white; /* Chữ trắng */
+            color: white;
         }
 
         .btn-primary:focus,
         .btn-primary:active,
         .btn-primary:hover {
-            background-color: #28a745 !important; /* Giữ nguyên màu xanh lá */
+            background-color: #28a745 !important;
             border: none !important;
             color: white !important;
-            box-shadow: none !important; /* Loại bỏ bóng mặc định của Bootstrap */
+            box-shadow: none !important;
         }
 
         .btn-secondary {
-            background-color: #ced4da; /* Nền xám đậm */
+            background-color: #ced4da;
             border-color: #ced4da;
-            color: white; /* Chữ trắng */
+            color: white;
         }
 
         .btn-secondary:hover {
-            background-color: #adb5bd; /* Xám đậm hơn khi hover */
+            background-color: #adb5bd;
             color: white;
         }
 
@@ -117,10 +116,9 @@
             border-radius: 5px;
         }
 
-        /* Thêm khoảng trống giả lập để kéo dài form */
         .spacer {
             flex-grow: 1;
-            height: 20vh; /* Khoảng trống giả lập */
+            height: 20vh;
         }
     </style>
 </head>
@@ -144,7 +142,7 @@
                 <% } %>
 
                 <!-- Form -->
-                <form id="promotionForm" action="AddPromotionServlet" method="POST" class="row g-3">
+                <form id="promotionForm" action="AddPromotionServlet" method="POST" class="row g-3 needs-validation" novalidate>
                     <div class="col-12 form-section">
                         <h5 class="section-title"><i class="fas fa-tags me-2"></i>Promotion Details</h5>
                         <div class="row">
@@ -191,7 +189,6 @@
                                 <div class="invalid-feedback" id="endDateFeedback">End date must be after start date.</div>
                             </div>
 
-                            <!-- Thêm khoảng trống giả lập để kéo dài form -->
                             <div class="spacer"></div>
                         </div>
                     </div>
@@ -214,9 +211,14 @@
             const forms = document.querySelectorAll('.needs-validation');
             Array.prototype.slice.call(forms).forEach(function (form) {
                 form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
+                    if (!form.checkValidity() || !validateDates()) {
                         event.preventDefault();
                         event.stopPropagation();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            text: 'Please correct the errors in the form!',
+                        });
                     }
                     form.classList.add('was-validated');
                 }, false);
@@ -256,9 +258,8 @@
             const startDateFeedback = document.getElementById('startDateFeedback');
             const endDateFeedback = document.getElementById('endDateFeedback');
             const today = new Date();
-            today.setHours(0, 0, 0, 0); // Reset time to start of day (09:17 PM +07, 30/06/2025)
+            today.setHours(0, 0, 0, 0); // Reset to start of day
 
-            // Validate startDate
             const startDate = new Date(startDateInput.value);
             if (startDate < today) {
                 startDateInput.classList.add('is-invalid');
@@ -268,7 +269,6 @@
                 startDateInput.classList.remove('is-invalid');
             }
 
-            // Validate endDate
             const endDate = new Date(endDateInput.value);
             if (endDate <= startDate) {
                 endDateInput.classList.add('is-invalid');
@@ -296,16 +296,16 @@
                 event.stopPropagation();
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Please check the start and end dates!',
+                    title: 'Date Error',
+                    text: 'Please ensure start date is today or later and end date is after start date!',
                 });
             } else if (!this.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Please fill in all fields correctly!',
+                    title: 'Validation Error',
+                    text: 'Please fill in all required fields correctly!',
                 });
             }
             this.classList.add('was-validated');

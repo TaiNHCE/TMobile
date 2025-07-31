@@ -134,8 +134,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label for="profileImageURL" class="form-label">Profile Image URL:</label>
-                                <input type="url" id="profileImageURL" name="profileImageURL" class="form-control">
+                                
                             </div>
                         </div>
                     </div>
