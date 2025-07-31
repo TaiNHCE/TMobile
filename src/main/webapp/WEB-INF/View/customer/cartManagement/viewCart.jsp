@@ -643,6 +643,21 @@
                                         }
                                     });
                                 }
+
+                                const lastAddedCartItemId = '<%= session.getAttribute("lastAddedCartItemId") != null ? session.getAttribute("lastAddedCartItemId") : "null"%>';
+                                if (lastAddedCartItemId !== "null") {
+                                    const checkbox = document.querySelector(`tr[data-cart-item-id="${lastAddedCartItemId}"] .selectItem`);
+                                    if (checkbox) {
+                                        checkbox.checked = true;
+                                        updateCartTotal(); // Cập nhật tổng khi check
+                                        saveSelectedItems(); // Lưu trạng thái chọn
+                                    }
+                                    // Xóa session attribute sau khi sử dụng
+                                    fetch('${pageContext.request.contextPath}/ClearLastAddedCartItem', {
+                                        method: 'POST'
+                                    }).then(() => console.log('Cleared lastAddedCartItemId from session'));
+                                }
+
             </script>
         </div>
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />

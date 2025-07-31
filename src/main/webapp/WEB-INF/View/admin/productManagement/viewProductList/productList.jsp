@@ -10,6 +10,7 @@
 <html>
 
     <head>
+         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <meta charset="UTF-8">
         <title>Product List</title>
         <style>
@@ -126,7 +127,7 @@
                 });
             <% }%>
             };
-            window.onload = function () {
+            window.onload = function () 
             <% if ("1".equals(successpro)) { %>
                 Swal.fire({
                     icon: 'success',
