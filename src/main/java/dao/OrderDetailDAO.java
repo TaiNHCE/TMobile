@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.math.BigDecimal;
 import utils.DBContext;
 import model.OrderDetail;
 import java.sql.PreparedStatement;
@@ -11,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.CartItem;
+import model.Product;
 
 /**
  *
@@ -156,4 +159,37 @@ public class OrderDetailDAO extends DBContext {
         return list;
     }
 
+    public boolean addOrderDetails(int orderId, List<CartItem> cartItems) {
+        String sql = "INSERT INTO OrderDetails (OrderID, ProductID, Quantity, Price) VALUES (?, ?, ?, ?)";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            conn.setAutoCommit(false);
+            try {
+                for (CartItem item : cartItems) {
+                    Product product = item.getProduct();
+                    BigDecimal unitPrice = product.getPrice();
+                    BigDecimal discount = BigDecimal.valueOf(product.getDiscount());
+                    BigDecimal discountFactor = BigDecimal.ONE.subtract(discount.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP));
+                    BigDecimal discountedPrice = unitPrice.multiply(discountFactor);
+
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, item.getProductID());
+                    ps.setInt(3, item.getQuantity());
+                    ps.setBigDecimal(4, discountedPrice);
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+                return false;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -2,8 +2,11 @@ package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Address;
 import utils.DBContext;
 
@@ -175,5 +178,68 @@ public class AddressDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Hàm lấy địa chỉ mặc định theo CustomerID
+    public Address getDefaultAddressByCustomerId(int customerId) {
+        Address address = null;
+        String sql = "SELECT AddressID, CustomerID, ProvinceName, DistrictName, WardName, AddressDetails, IsDefault "
+                + "FROM Addresses "
+                + "WHERE CustomerID = ? AND IsDefault = 1";
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    address = new Address();
+                    address.setAddressId(rs.getInt("AddressID"));
+                    address.setCustomerId(rs.getInt("CustomerID"));
+                    address.setProvinceName(rs.getString("ProvinceName"));
+                    address.setDistrictName(rs.getString("DistrictName"));
+                    address.setWardName(rs.getString("WardName"));
+                    address.setAddressDetails(rs.getString("AddressDetails"));
+                    address.setDefault(rs.getBoolean("IsDefault"));
+                } else {
+                    Logger.getLogger(AddressDAO.class.getName()).log(Level.WARNING,
+                            "No default address found for CustomerID: {0}", customerId);
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE,
+                    "Error fetching default address for CustomerID: {0}, Error: {1}",
+                    new Object[]{customerId, e.getMessage()});
+            e.printStackTrace();
+        }
+        return address;
+    }
+
+    public List<Address> getAddressesByCustomerId(int customerId) {
+        List<Address> addresses = new ArrayList<>();
+        String sql = "SELECT AddressID, CustomerID, ProvinceName, DistrictName, WardName, AddressDetails, IsDefault "
+                + "FROM Addresses "
+                + "WHERE CustomerID = ?";
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Address address = new Address();
+                    address.setAddressId(rs.getInt("AddressID"));
+                    address.setCustomerId(rs.getInt("CustomerID"));
+                    address.setProvinceName(rs.getString("ProvinceName"));
+                    address.setDistrictName(rs.getString("DistrictName"));
+                    address.setWardName(rs.getString("WardName"));
+                    address.setAddressDetails(rs.getString("AddressDetails"));
+                    address.setDefault(rs.getBoolean("IsDefault"));
+                    addresses.add(address);
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE,
+                    "Error fetching addresses for CustomerID: {0}, Error: {1}",
+                    new Object[]{customerId, e.getMessage()});
+            e.printStackTrace();
+        }
+        return addresses;
     }
 }

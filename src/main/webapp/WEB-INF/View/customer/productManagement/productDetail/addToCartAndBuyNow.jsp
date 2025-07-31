@@ -241,14 +241,14 @@
             <!-- Nút Add to Cart và Buy Now -->
             <div class="action-wrapper" style = "gap: 1%;">
                 <div class = "btn-addcartBorder" style = "width: 48%;">
-                    <form class="action-form" action="${pageContext.request.contextPath}/cart/add" method="post">
+                    <form class="action-form" action="AddCartServlet?productId=<%=product.getProductId()%>&categoryId=<%=product.getCategoryId()%>" method="post">
                         <input type="hidden" name="productId" value="${product.getProductId()}">
                         <button type="submit" class="btn btn-addcart">Add to cart</button>
                     </form>
                 </div>
 
                 <div class = "btn-buyBorder" style = "width: 48%;">
-                    <form class="action-form" action="${pageContext.request.contextPath}/checkout" method="post">
+                    <form class="action-form" action="${pageContext.request.contextPath}/CheckoutServlet" method="get">
                         <input type="hidden" name="productId" value="${product.getProductId()}">
                         <button type="submit" class="btn btn-buy">Buy now</button>
                     </form>

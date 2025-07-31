@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import model.CartItem;
 import model.ImportStockDetail;
 import model.Product;
 import utils.DBContext;
@@ -183,5 +185,44 @@ public class ImportStockDetailDAO extends DBContext {
             System.out.println("updateQuantityLeft: " + e.getMessage());
         }
         return 0;
+    }
+
+    public boolean updateStockForOrder(List<CartItem> cartItems) {
+        String updateImportStock = "UPDATE ImportStockDetails SET QuantityLeft = QuantityLeft - ? WHERE ProductID = ? AND QuantityLeft >= ?";
+
+        try ( PreparedStatement psImport = conn.prepareStatement(updateImportStock)) {
+            conn.setAutoCommit(false);
+            try {
+                for (CartItem item : cartItems) {
+                    int quantity = item.getQuantity();
+                    int productId = item.getProductID();
+
+                    psImport.setInt(1, quantity);
+                    psImport.setInt(2, productId);
+                    psImport.setInt(3, quantity);
+                    psImport.addBatch();
+                }
+
+                int[] updateCounts = psImport.executeBatch();
+                // Kiểm tra xem tất cả các bản ghi có được cập nhật thành công không
+                for (int count : updateCounts) {
+                    if (count == 0) {
+                        conn.rollback();
+                        return false; // Có ít nhất một sản phẩm không đủ số lượng
+                    }
+                }
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+                return false;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

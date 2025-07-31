@@ -165,4 +165,62 @@ public class VoucherDAO extends DBContext {
         return list;
     }
 
+     public Voucher getVoucherByCode(String code) {
+        String sql = "SELECT * FROM Vouchers WHERE Code = ? AND IsActive = 1 AND ExpiryDate >= GETDATE()";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, code);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Voucher v = new Voucher();
+                    v.setVoucherID(rs.getInt("VoucherID"));
+                    v.setCode(rs.getString("Code"));
+                    v.setDiscountPercent(rs.getInt("DiscountPercent"));
+                    v.setExpiryDate(rs.getDate("ExpiryDate"));
+                    v.setMinOrderAmount(rs.getDouble("MinOrderAmount"));
+                    v.setMaxDiscountAmount(rs.getDouble("MaxDiscountAmount"));
+                    v.setUsageLimit(rs.getInt("UsageLimit"));
+                    v.setUsedCount(rs.getInt("UsedCount"));
+                    v.setActive(rs.getBoolean("IsActive"));
+                    v.setCreatedAt(rs.getDate("CreatedAt"));
+                    v.setDescription(rs.getString("Description"));
+                    v.setIsGlobal(rs.getBoolean("IsGlobal"));
+                    return v;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void increaseUsedCount(int voucherID) {
+        String sql = "UPDATE Vouchers SET UsedCount = UsedCount + 1 WHERE VoucherID = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, voucherID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+
+    public Voucher getVoucherByCodeForCustomer(String code, int customerId) {
+        String sql = "SELECT v.* FROM Vouchers v "
+                + "LEFT JOIN CustomerVoucher cv ON v.VoucherID = cv.VoucherID "
+                + "WHERE v.Code = ? AND v.IsActive = 1 AND v.ExpiryDate >= GETDATE() "
+                + "AND (v.IsGlobal = 1 OR (cv.CustomerID = ? AND cv.Quantity > 0 AND (cv.ExpirationDate IS NULL OR cv.ExpirationDate >= GETDATE())))";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, code);
+            ps.setInt(2, customerId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToVoucher(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

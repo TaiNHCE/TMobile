@@ -20,6 +20,7 @@
         <title><%= product.getProductName()%> - Product Detail</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/customerProductDetail.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             body {
                 background-color: #F2F4F7;
@@ -112,4 +113,33 @@
     </body>
 
     <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
+    <% String successcreate = request.getParameter("successcreate"); %>
+    <% String errorcreate = request.getParameter("errorcreate");%> 
+
+
+
+    <script>
+        window.onload = function () {
+            var success = '<%= successcreate%>';
+            var error = '<%= errorcreate%>';
+
+            if (success === '1') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Product has been added to cart.',
+                    timer: 2000
+                });
+            } else if (error === '1') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed!',
+                    text: 'Add to cart failed.',
+                    timer: 2000
+                });
+            }
+        };
+    </script>
+
+
 </html>
