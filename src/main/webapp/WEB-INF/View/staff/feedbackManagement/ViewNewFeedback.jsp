@@ -176,26 +176,27 @@
                 min-height: 100vh;
                 box-sizing: border-box;
             }
-            
+
         </style>
 
     </head>
     <body>
-        
+
         <div class="container">
             <jsp:include page="../sideBar.jsp" />
-             <jsp:include page="../header.jsp" />
+            <jsp:include page="../header.jsp" />
             <div class="wrapper">
                 <main class="main-content">
-                   
+
                     <div class="banner">
                         <h1>Customer Reviews</h1>              
                     </div>
                     <%--<c:forEach var="rate" items="${dataRating}">--%>
                     <div class="review-card">
-                        <h3>"${Product.productName}" - <fmt:formatNumber value="${Product.price}" type="number" groupingUsed="true" />đ</h3>
+                        <h3>[Product ID: ${Product.productId}] "${Product.productName}" - 
+                            <fmt:formatNumber value="${Product.price}" type="number" groupingUsed="true" />đ</h3>
 
-
+                        <p class="text-muted">Reviewed by: <strong>${cus.fullName}</strong></p>
                         <div class="star-rating">
                             <c:forEach var="i" begin="1" end="5">
                                 <c:choose>

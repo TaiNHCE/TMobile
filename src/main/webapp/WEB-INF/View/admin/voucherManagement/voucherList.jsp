@@ -66,7 +66,7 @@
                                 if (list != null && !list.isEmpty()) {
                                     for (Voucher v : list) {
                                         String statusClass = v.isActive() ? "status-active" : "status-inactive";
-                                        String statusText = v.isActive() ? "Active" : "Inactive";
+                                        String statusText = v.isActive() ? "Active" : "Deactive";
                             %>
                             <tr>
                                 <td><%= v.getVoucherID()%></td>

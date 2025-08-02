@@ -155,16 +155,7 @@ public class ProductRatingDAO extends DBContext {
         return isOk;
     }
 
-    public void updateisReadComment(int rateID) {
-        String query = "Update ProductRatings SET IsRead = 1  WHERE RateID =?";
-        try {
-            PreparedStatement pre = conn.prepareStatement(query);
-            pre.setInt(1, rateID);
-            pre.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+   
 
     public int addProductRating(int customerId, int productId, int orderId, int star, String comment) {
         int count = 0;

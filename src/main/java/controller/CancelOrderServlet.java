@@ -5,6 +5,8 @@
 package controller;
 
 import dao.OrderDAO;
+import dao.OrderDetailDAO;
+import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,8 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import model.Order;
+import model.OrderDetail;
 
 /**
  *
@@ -79,6 +83,13 @@ public class CancelOrderServlet extends HttpServlet {
 
         if (order.getStatus() == 1 || order.getStatus() == 2) {
             dao.updateStatus(orderID, 5);
+            OrderDetailDAO itemDAO = new OrderDetailDAO();
+            ProductDAO productDAO = new ProductDAO();
+            List<OrderDetail> items = itemDAO.getOrderDetailsByOrderID(orderID);
+
+        for (OrderDetail item : items) {
+            productDAO.increaseStock(item.getProductID(), item.getQuantity());
+        }
             response.sendRedirect("ViewOrderOfCustomer?success=cancel");
         } else {
             response.sendRedirect("ViewOrderOfCustomer?error=not-cancelable");

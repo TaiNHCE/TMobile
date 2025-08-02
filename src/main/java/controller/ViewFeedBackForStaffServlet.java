@@ -76,7 +76,7 @@ public class ViewFeedBackForStaffServlet extends HttpServlet {
         List<RatingReplies> listReplies = rrDAO.getAllRatingRepliesByRateID(productRating.getRateID());
         
         ProductDAO pdDAO = new ProductDAO();
-        Product  pro = pdDAO.getProductByID(productID);
+        Product pro = pdDAO.getProductByID(productID);
       
         CustomerDAO cDAO = new CustomerDAO();
         Customer cus = cDAO.getCustomerbyID(productRating.getCustomerID());

@@ -347,9 +347,7 @@ public class ProductDAO extends DBContext {
                     String productName = rs.getString("ProductName");
                     String description = rs.getString("Description");
                     BigDecimal price = rs.getBigDecimal("Price");
-                    int discount = rs.getInt("Discount");
-                    int stock = rs.getInt("Stock");
-                    String status = rs.getString("Status");
+                    int discount = rs.getInt("Discount");   
                     int supplierId = rs.getInt("SupplierID");
                     if (rs.wasNull()) {
                         supplierId = 0;
@@ -1236,5 +1234,15 @@ public class ProductDAO extends DBContext {
 
         return list;
     }
+    public void increaseStock(int productID, int quantity) {
+    String sql = "UPDATE OrderDetails SET Quantity = Quantity - ? WHERE ProductID = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, quantity);
+        ps.setInt(2, productID);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 
 }
