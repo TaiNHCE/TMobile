@@ -96,11 +96,16 @@
                                                 <td><fmt:formatNumber value="${item.price}" type="number" groupingUsed="true"/></td>
                                                 <td><fmt:formatNumber value="${item.price * item.quantity}" type="number" groupingUsed="true"/></td>
                                                 <td>
-                                                    <button type="button"
-                                                            class="btn btn-outline-primary btn-sm"
-                                                            onclick="openFeedbackModal('${item.productID}', '${fn:escapeXml(item.productName)}', '${data.orderID}')">
-                                                        <i class="bi bi-pencil-square"></i> Write Feedback
-                                                    </button>
+                                                <td>
+                                                    <c:if test="${data.status == 4}">
+                                                        <button type="button"
+                                                                class="btn btn-outline-primary btn-sm"
+                                                                onclick="openFeedbackModal('${item.productID}', '${fn:escapeXml(item.productName)}', '${data.orderID}')">
+                                                            <i class="bi bi-pencil-square"></i> Write Feedback
+                                                        </button>
+                                                    </c:if>
+                                                </td>
+
                                                 </td>
 
                                             </tr>
@@ -182,52 +187,52 @@
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        
+
 
         <!-- SweetAlert on success/error -->
         <c:if test="${not empty param.success || not empty param.error}">
-    <script>
-        window.onload = function () {
-            <c:if test="${param.success == 'feedback'}">
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Feedback Submitted',
-                    text: 'Your feedback has been submitted successfully!',
-                    timer: 3000,
-                    confirmButtonText: 'OK'
-                });
-            </c:if>
-            <c:if test="${param.error == 'feedback'}">
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Feedback Failed',
-                    text: 'There was a problem submitting your feedback. Please try again.',
-                    timer: 3000,
-                    confirmButtonText: 'Close'
-                });
-            </c:if>
+            <script>
+                            window.onload = function () {
+                <c:if test="${param.success == 'feedback'}">
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Feedback Submitted',
+                                    text: 'Your feedback has been submitted successfully!',
+                                    timer: 3000,
+                                    confirmButtonText: 'OK'
+                                });
+                </c:if>
+                <c:if test="${param.error == 'feedback'}">
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Feedback Failed',
+                                    text: 'There was a problem submitting your feedback. Please try again.',
+                                    timer: 3000,
+                                    confirmButtonText: 'Close'
+                                });
+                </c:if>
 
-            if (window.history.replaceState) {
-                const url = new URL(window.location);
-                url.searchParams.delete('success');
-                url.searchParams.delete('error');
-                window.history.replaceState({}, document.title, url.pathname + url.search);
-            }
-            
-        };
-    </script>
-    
-</c:if>
+                                if (window.history.replaceState) {
+                                    const url = new URL(window.location);
+                                    url.searchParams.delete('success');
+                                    url.searchParams.delete('error');
+                                    window.history.replaceState({}, document.title, url.pathname + url.search);
+                                }
 
-<c:if test="${param.error == 'alreadyRated'}">
-    <script>
-        Swal.fire({
-            icon: 'info',
-            title: 'Feedback Exists',
-            text: 'You have already rated this product for this order.'
-        });
-    </script>
-</c:if>
+                            };
+            </script>
+
+        </c:if>
+
+        <c:if test="${param.error == 'alreadyRated'}">
+            <script>
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Feedback Exists',
+                    text: 'You have already rated this product for this order.'
+                });
+            </script>
+        </c:if>
 
 
         <!-- SweetAlert cancel confirmation -->

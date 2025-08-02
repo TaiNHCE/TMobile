@@ -182,6 +182,16 @@ public class RatingRepliesDAO extends DBContext {
         return false;
 
     }
+     public void updateisReadComment(int rateID) {
+        String query = "Update ProductRatings SET IsRead = 1  WHERE RateID =?";
+        try {
+            PreparedStatement pre = conn.prepareStatement(query);
+            pre.setInt(1, rateID);
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         RatingRepliesDAO r = new RatingRepliesDAO();

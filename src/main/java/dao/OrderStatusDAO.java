@@ -18,20 +18,6 @@ import utils.DBContext;
  */
 public class OrderStatusDAO extends DBContext {
 
-    public List<OrderStatus> getAll() {
-        List<OrderStatus> list = new ArrayList<>();
-        String sql = "SELECT * FROM OrderStatus";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new OrderStatus(rs.getInt("StatusID"), rs.getString("StatusName")));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
 
     public List<OrderStatus> getAllStatuses() {
         List<OrderStatus> list = new ArrayList<>();

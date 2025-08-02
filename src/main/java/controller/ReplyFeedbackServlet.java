@@ -88,11 +88,9 @@ public class ReplyFeedbackServlet extends HttpServlet {
 
                 int stID = staff.getStaffID(); // Lấy trực tiếp từ object Staff
 
-                RatingRepliesDAO rrDAO = new RatingRepliesDAO();
-                ProductRatingDAO prDAO = new ProductRatingDAO();
-
+                RatingRepliesDAO rrDAO = new RatingRepliesDAO();              
                 int count = rrDAO.addRatingReply(stID, rateID, answer);
-                prDAO.updateisReadComment(rateID);
+                rrDAO.updateisReadComment(rateID);
 
                 if (count > 0) {
                     response.sendRedirect("ViewFeedBackForStaff?rateID=" + rateID + "&success=success");
