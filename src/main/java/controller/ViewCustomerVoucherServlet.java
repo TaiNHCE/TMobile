@@ -1,8 +1,10 @@
 package controller;
 
+import dao.CustomerDAO;
 import dao.CustomerVoucherDAO;
-import model.CustomerVoucher;
+import model.Account;
 import model.Customer;
+import model.CustomerVoucher;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -11,47 +13,44 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author HP
- */
 @WebServlet(name = "ViewCustomerVoucherServlet", urlPatterns = {"/ViewCustomerVoucher"})
 public class ViewCustomerVoucherServlet extends HttpServlet {
 
-    private CustomerVoucherDAO customerVoucherDAO = new CustomerVoucherDAO();
+    private final CustomerVoucherDAO customerVoucherDAO = new CustomerVoucherDAO();
+    private final CustomerDAO customerDAO = new CustomerDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy customer từ session (login xong phải set lên session rồi nhé!)
-        Customer customer = (Customer) request.getSession().getAttribute("customer");
-        if (customer == null) {
-            // Nếu chưa đăng nhập thì chuyển về login
-            response.sendRedirect("Login"); // sửa lại đường dẫn đúng nếu cần
+
+        Account user = (Account) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("Login"); 
             return;
         }
-        int customerId = customer.getId();
 
-        // Lấy danh sách voucher của khách này (cả personal & global)
+        Customer customer = customerDAO.getCustomerByAccountId(user.getAccountID());
+        if (customer == null) {
+            response.sendRedirect("Home"); 
+            return;
+        }
+
+        int customerId = customer.getId();
         List<CustomerVoucher> voucherList = customerVoucherDAO.getAllVouchersForCustomer(customerId);
 
-        // Gán lên request để JSP dùng
         request.setAttribute("voucherList", voucherList);
-        request.setAttribute("customer", customer); // Nếu JSP cần hiển thị info
-
-        // Chuyển tiếp sang trang JSP hiển thị
+        request.setAttribute("customer", customer);
         request.getRequestDispatcher("/WEB-INF/View/customer/voucherCustomer/voucherListCustomer.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Nếu cần xử lý POST thì tùy bạn, còn nếu chỉ GET thì gọi lại GET cho tiện
         doGet(request, response);
     }
 
     @Override
     public String getServletInfo() {
-        return "View all personal and global vouchers for a customer (get from session)";
+        return "View vouchers for a logged-in customer (global & personal)";
     }
 }

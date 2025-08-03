@@ -42,7 +42,6 @@ public class AddAddressServlet extends HttpServlet {
         String ward = request.getParameter("ward");
         String addressDetails = request.getParameter("addressDetails");
 
-        // Validate server
         if (province == null || district == null || ward == null || addressDetails == null
                 || province.trim().isEmpty() || district.trim().isEmpty()
                 || ward.trim().isEmpty() || addressDetails.trim().isEmpty()) {
@@ -59,19 +58,16 @@ public class AddAddressServlet extends HttpServlet {
 
         boolean isDefault;
         if (!hasDefault) {
-            // Địa chỉ đầu tiên, auto set default
             isDefault = true;
         } else {
-            // Địa chỉ thứ 2 trở đi, dựa vào user check box
             isDefault = (request.getParameter("isDefault") != null);
         }
         if (isDefault) {
-            // Nếu set default, bỏ default các địa chỉ khác
             addressDAO.unsetDefaultAddresses(cus.getId());
         }
 
         Address newAddress = new Address(
-                0, // auto increment
+                0,
                 cus.getId(),
                 province,
                 district,

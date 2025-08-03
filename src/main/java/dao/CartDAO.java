@@ -168,16 +168,19 @@ public class CartDAO extends DBContext {
     }
 
     public boolean updateCartItemQuantity(int cartItemId, int quantity) {
-        String sql = "UPDATE CartItems SET Quantity = ? WHERE CartItemID = ?";
-        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "UPDATE CartItems SET Quantity = ? WHERE cartItemId = ?";
+        try (  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, quantity);
             ps.setInt(2, cartItemId);
+
+            System.out.println("[CartDAO] updateCartItemQuantity SQL: " + sql);
+            System.out.println("[CartDAO] Params: quantity=" + quantity + ", cartItemId=" + cartItemId);
             int rowsAffected = ps.executeUpdate();
-            System.out.println("SQL executed: " + sql + ", rowsAffected: " + rowsAffected + ", cartItemId: " + cartItemId + ", quantity: " + quantity);
+            System.out.println("[CartDAO] Rows updated: " + rowsAffected);
             return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException in updateCartItemQuantity: " + e.getMessage());
+        } catch (Exception ex) {
+            System.err.println("[CartDAO] Error updateCartItemQuantity: " + ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
     }

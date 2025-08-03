@@ -11,6 +11,40 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList5.css">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
+            .btn-inventory {
+                background: #22c55e;
+                color: #fff;
+                font-weight: 700;
+                border-radius: 8px;
+                padding: 9px 18px;
+                border: 1.5px solid #1e9c46;
+                min-width: 110px;
+                margin-right: 8px;
+            }
+            .btn-inventory:hover {
+                background: #1e9c46;
+            }
+
+            .btn-revenue {
+                background: #0dd6f7;
+                color: #000;
+                font-weight: 700;
+                border-radius: 8px;
+                padding: 9px 18px;
+                min-width: 110px;
+                border: 1.5px solid #0bbdd8;
+                margin-right: 0;
+            }
+            .btn-revenue:hover {
+                background: #0bbdd8;
+            }
+
+            .btn-inventory,
+.btn-revenue,
+.search-form {
+    visibility: hidden;
+}
+
             canvas {
                 width: 100% !important;
                 height: 300px !important;
@@ -41,6 +75,16 @@
             <div class="wrapper">
                 <main class="main-content">
                     <h1>Revenue Statistic</h1>
+                    <div class="text-end" style="margin-bottom:0;">
+                        <a href="InventoryStatistic" class="btn btn-inventory me-2">INVENTORY</a>
+                        <a href="RevenueStatistic" class="btn btn-revenue">REVENUE</a>
+                    </div>
+                   
+                    <form class="search-form" action="RevenueStatistic" method="get" autocomplete="off" style="margin-bottom:21.5px; margin-top:11px;">
+                        <input type="text" class="form-control" name="keyword" placeholder="Search product..." />
+                        <button type="submit" class="search-btn">Search</button>
+                    </form>
+
 
                     <% String message = (String) request.getAttribute("message"); %>
                     <% if (message != null) {%>
@@ -98,13 +142,13 @@
                             monthData.setLength(monthData.length() - 1);
                     %>
 
-                    <table  aria-label="Suppliers table">
+                    <table aria-label="Suppliers table">
                         <thead class="table-primary">
                             <tr>
-                                <th  style="text-align:center; vertical-align:middle;">Time Period</th>
-                                <th  style="text-align:center; vertical-align:middle;">Total Orders</th>
-                                <th  style="text-align:center; vertical-align:middle;">Total Products Sold</th>
-                                <th  style="text-align:center; vertical-align:middle;">Total Revenue (₫)</th>
+                                <th style="text-align:center; vertical-align:middle;">Time Period</th>
+                                <th style="text-align:center; vertical-align:middle;">Total Orders</th>
+                                <th style="text-align:center; vertical-align:middle;">Total Products Sold</th>
+                                <th style="text-align:center; vertical-align:middle;">Total Revenue (₫)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,13 +165,13 @@
                                         }
                             %>
                             <tr>
-                                <td  style="text-align:center; vertical-align:middle;"><%= label%></td>
-                                <td  style="text-align:center; vertical-align:middle;"><%= r.getTotalOrder()%></td>
-                                <td  style="text-align:center; vertical-align:middle;"><%= r.getTotalProductsSold()%></td>
-                                <td  style="text-align:center; vertical-align:middle;"><%= String.format("%,d ₫", r.getTotalRevenue())%></td>
+                                <td style="text-align:center; vertical-align:middle;"><%= label%></td>
+                                <td style="text-align:center; vertical-align:middle;"><%= r.getTotalOrder()%></td>
+                                <td style="text-align:center; vertical-align:middle;"><%= r.getTotalProductsSold()%></td>
+                                <td style="text-align:center; vertical-align:middle;"><%= String.format("%,d ₫", r.getTotalRevenue())%></td>
                             </tr>
                             <% }
-                        } else { %>
+                            } else { %>
                             <tr><td colspan="4">No revenue data available.</td></tr>
                             <% }%>
                         </tbody>
@@ -144,7 +188,6 @@
                         </div>
                     </div>
 
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                     <script>
                         const dayLabels = [<%= dayLabels.toString()%>];
                         const dayData = [<%= dayData.toString()%>];
@@ -154,8 +197,8 @@
                         const chartOpts = {
                             maintainAspectRatio: false,
                             plugins: {
-                                legend: {display: false}, // KHÔNG CÓ CHỮ
-                                title: {display: false}   // KHÔNG CÓ CHỮ
+                                legend: {display: false},
+                                title: {display: false}
                             },
                             layout: {padding: 10},
                             scales: {
@@ -173,9 +216,9 @@
                             data: {
                                 labels: dayLabels,
                                 datasets: [{
-                                    data: dayData,
-                                    backgroundColor: '#61a5e8'
-                                }]
+                                        data: dayData,
+                                        backgroundColor: '#61a5e8'
+                                    }]
                             },
                             options: {
                                 ...chartOpts,
@@ -188,9 +231,9 @@
                             data: {
                                 labels: monthLabels,
                                 datasets: [{
-                                    data: monthData,
-                                    backgroundColor: '#61a5e8'
-                                }]
+                                        data: monthData,
+                                        backgroundColor: '#61a5e8'
+                                    }]
                             },
                             options: {
                                 ...chartOpts,

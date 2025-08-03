@@ -17,19 +17,18 @@ public class SupplierDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Suppliers s = new Suppliers(
-                        rs.getInt("supplierID"),
-                        rs.getString("taxId"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("address"),
-                        rs.getTimestamp("createdDate").toLocalDateTime(),
-                        rs.getTimestamp("lastModify").toLocalDateTime(),
-                        rs.getInt("deleted"),
-                        rs.getInt("activate"),
-                        rs.getString("contactPerson"),
-                        rs.getString("supplyGroup"),
-                        rs.getString("description")
+                    rs.getInt("supplierID"),
+                    rs.getString("taxId"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("phoneNumber"),
+                    rs.getString("address"),
+                    rs.getTimestamp("createdDate").toLocalDateTime(),
+                    rs.getTimestamp("lastModify").toLocalDateTime(),
+                    rs.getInt("activate"),
+                    rs.getString("contactPerson"),
+                    rs.getString("supplyGroup"),
+                    rs.getString("description")
                 );
                 suppliers.add(s);
             }
@@ -41,8 +40,8 @@ public class SupplierDAO extends DBContext {
 
     public int createSupplier(Suppliers s) {
         int n = 0;
-        String sql = "INSERT INTO Suppliers (taxId, name, email, phoneNumber, address, createdDate, lastModify, deleted, activate, contactPerson, supplyGroup, description) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Suppliers (taxId, name, email, phoneNumber, address, createdDate, lastModify, activate, contactPerson, supplyGroup, description) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, s.getTaxId());
@@ -52,11 +51,10 @@ public class SupplierDAO extends DBContext {
             ps.setString(5, s.getAddress());
             ps.setTimestamp(6, java.sql.Timestamp.valueOf(s.getCreatedDate()));
             ps.setTimestamp(7, java.sql.Timestamp.valueOf(s.getLastModify()));
-            ps.setInt(8, s.getDeleted());
-            ps.setInt(9, s.getActivate());
-            ps.setString(10, s.getContactPerson());
-            ps.setString(11, s.getSupplyGroup());
-            ps.setString(12, s.getDescription());
+            ps.setInt(8, s.getActivate());
+            ps.setString(9, s.getContactPerson());
+            ps.setString(10, s.getSupplyGroup());
+            ps.setString(11, s.getDescription());
             n = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +79,7 @@ public class SupplierDAO extends DBContext {
     }
 
     public boolean deleteSupplierByID(int supplierId) {
-        String sql = "DELETE FROM Suppliers WHERE supplierID = ?";
+        String sql = "UPDATE Suppliers SET activate = 0, lastModify = GETDATE() WHERE supplierID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, supplierId);
@@ -100,19 +98,18 @@ public class SupplierDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Suppliers(
-                        rs.getInt("supplierID"),
-                        rs.getString("taxId"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("address"),
-                        rs.getTimestamp("createdDate").toLocalDateTime(),
-                        rs.getTimestamp("lastModify").toLocalDateTime(),
-                        rs.getInt("deleted"),
-                        rs.getInt("activate"),
-                        rs.getString("contactPerson"),
-                        rs.getString("supplyGroup"),
-                        rs.getString("description")
+                    rs.getInt("supplierID"),
+                    rs.getString("taxId"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("phoneNumber"),
+                    rs.getString("address"),
+                    rs.getTimestamp("createdDate").toLocalDateTime(),
+                    rs.getTimestamp("lastModify").toLocalDateTime(),
+                    rs.getInt("activate"),
+                    rs.getString("contactPerson"),
+                    rs.getString("supplyGroup"),
+                    rs.getString("description")
                 );
             }
         } catch (Exception e) {
@@ -123,8 +120,8 @@ public class SupplierDAO extends DBContext {
 
     public boolean updateSupplier(Suppliers s) {
         String sql = "UPDATE Suppliers SET taxId = ?, name = ?, email = ?, phoneNumber = ?, address = ?, "
-                + "lastModify = GETDATE(), deleted = ?, activate = ?, contactPerson = ?, supplyGroup = ?, description = ? "
-                + "WHERE supplierID = ?";
+                   + "lastModify = GETDATE(), activate = ?, contactPerson = ?, supplyGroup = ?, description = ? "
+                   + "WHERE supplierID = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, s.getTaxId());
@@ -132,13 +129,11 @@ public class SupplierDAO extends DBContext {
             ps.setString(3, s.getEmail());
             ps.setString(4, s.getPhoneNumber());
             ps.setString(5, s.getAddress());
-            ps.setInt(6, s.getDeleted());
-            ps.setInt(7, s.getActivate());
-            ps.setString(8, s.getContactPerson());
-            ps.setString(9, s.getSupplyGroup());
-            ps.setString(10, s.getDescription());
-            ps.setInt(11, s.getSupplierID());
-
+            ps.setInt(6, s.getActivate());
+            ps.setString(7, s.getContactPerson());
+            ps.setString(8, s.getSupplyGroup());
+            ps.setString(9, s.getDescription());
+            ps.setInt(10, s.getSupplierID());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,19 +150,18 @@ public class SupplierDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Suppliers s = new Suppliers(
-                        rs.getInt("supplierID"),
-                        rs.getString("taxId"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("address"),
-                        rs.getTimestamp("createdDate").toLocalDateTime(),
-                        rs.getTimestamp("lastModify").toLocalDateTime(),
-                        rs.getInt("deleted"),
-                        rs.getInt("activate"),
-                        rs.getString("contactPerson"),
-                        rs.getString("supplyGroup"),
-                        rs.getString("description")
+                    rs.getInt("supplierID"),
+                    rs.getString("taxId"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("phoneNumber"),
+                    rs.getString("address"),
+                    rs.getTimestamp("createdDate").toLocalDateTime(),
+                    rs.getTimestamp("lastModify").toLocalDateTime(),
+                    rs.getInt("activate"),
+                    rs.getString("contactPerson"),
+                    rs.getString("supplyGroup"),
+                    rs.getString("description")
                 );
                 suppliers.add(s);
             }
@@ -177,25 +171,58 @@ public class SupplierDAO extends DBContext {
         return suppliers;
     }
 
-    // check trung ten nha cung cap(k the trung ten nha cung cap) 
+    // Check trùng tên nhà cung cấp
     public boolean isSupplierNameExist(String name) {
-    String sql = "SELECT 1 FROM Suppliers WHERE name = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, name);
-        ResultSet rs = ps.executeQuery();
-        return rs.next(); 
-    } catch (Exception e) {
-        e.printStackTrace();
+        String sql = "SELECT 1 FROM Suppliers WHERE name = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
-public int getTotalSuppliers() {
-    String sql = "SELECT COUNT(*) FROM Suppliers";
-    try (PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-        if (rs.next()) return rs.getInt(1);
-    } catch (Exception e) { e.printStackTrace(); }
-    return 0;
-}
 
+    public int getTotalSuppliers() {
+        String sql = "SELECT COUNT(*) FROM Suppliers";
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Lấy tất cả nhà cung cấp đang hoạt động 
+    public List<Suppliers> getAllActivatedSuppliers() {
+        List<Suppliers> suppliers = new ArrayList<>();
+        String sql = "SELECT * FROM Suppliers WHERE activate = 1";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Suppliers s = new Suppliers(
+                    rs.getInt("supplierID"),
+                    rs.getString("taxId"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("phoneNumber"),
+                    rs.getString("address"),
+                    rs.getTimestamp("createdDate").toLocalDateTime(),
+                    rs.getTimestamp("lastModify").toLocalDateTime(),
+                    rs.getInt("activate"),
+                    rs.getString("contactPerson"),
+                    rs.getString("supplyGroup"),
+                    rs.getString("description")
+                );
+                suppliers.add(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return suppliers;
+    }
 }

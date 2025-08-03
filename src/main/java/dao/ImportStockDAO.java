@@ -7,27 +7,25 @@ import utils.DBContext;
 
 public class ImportStockDAO extends DBContext {
 
-    // Method to fetch all import stocks
     public ArrayList<ImportStock> getAllImportStocks() {
-        ArrayList<ImportStock> list = new ArrayList<>();
-        String sql = "SELECT I.*, S.*, F.FullName FROM ImportStocks I "
-                + "JOIN Suppliers S ON I.SupplierID = S.SupplierID "
-                + "JOIN Staff F ON I.StaffID = F.StaffID";
-        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Suppliers s = extractSupplier(rs);
-                ImportStock io = extractImportStock(rs);
-                io.setSupplier(s);
-                io.setFullName(rs.getString("FullName"));
-                list.add(io);
-            }
-        } catch (SQLException e) {
-            System.out.println("getAllImportStocks: " + e.getMessage());
+    ArrayList<ImportStock> list = new ArrayList<>();
+    String sql = "SELECT I.*, S.*, F.FullName FROM ImportStocks I " +
+                 "JOIN Suppliers S ON I.SupplierID = S.SupplierID " +
+                 "JOIN Staff F ON I.StaffID = F.StaffID";
+    try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            Suppliers s = extractSupplier(rs);
+            ImportStock io = extractImportStock(rs);
+            io.setSupplier(s);
+            io.setFullName(rs.getString("FullName"));
+            list.add(io);
         }
-        return list;
+    } catch (SQLException e) {
+        System.out.println("getAllImportStocks: " + e.getMessage());
     }
+    return list;
+}
 
-    // Method to fetch import stock by ID
     public ImportStock getImportStockByID(int id) {
         ImportStock io = null;
         String sql = "SELECT I.*, F.FullName, S.* "
@@ -59,7 +57,6 @@ public class ImportStockDAO extends DBContext {
         return io;
     }
 
-    // Fetch import stocks by supplier name
     public ArrayList<ImportStock> getImportStockBySupplierName(String name) {
         ArrayList<ImportStock> list = new ArrayList<>();
         String query = "SELECT * FROM ImportStocks I JOIN Suppliers S ON I.SupplierID = S.SupplierID WHERE S.Name LIKE ?";
@@ -110,7 +107,6 @@ public class ImportStockDAO extends DBContext {
         return io;
     }
 
-    // Method to create import stock entry
     public int createImportStock(ImportStock io) {
         String query = "INSERT INTO ImportStocks (StaffID, SupplierID, ImportDate, TotalAmount, IsCompleted) VALUES (?, ?, GETDATE(), ?, 1)";
         try ( PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -130,7 +126,6 @@ public class ImportStockDAO extends DBContext {
                 }
             }
 
-            // Fallback nếu không lấy được bằng getGeneratedKeys
             Statement st = conn.createStatement();
             ResultSet rs2 = st.executeQuery("SELECT CAST(SCOPE_IDENTITY() AS INT) AS id");
             if (rs2.next()) {
@@ -146,7 +141,6 @@ public class ImportStockDAO extends DBContext {
         return -1;
     }
 
-    // Method to update supplier for an import stock
     public int updateImportStockSupplier(int importId, int supplierId) {
         String query = "UPDATE ImportStocks SET SupplierID = ? WHERE ImportID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(query)) {
@@ -159,7 +153,6 @@ public class ImportStockDAO extends DBContext {
         return -1;
     }
 
-    // Method to update stock quantity after import
     public int importStock(List<Map<String, String>> stocks) {
         StringBuilder query = new StringBuilder("UPDATE Products SET Stock = Stock + CASE");
         StringBuilder ids = new StringBuilder("(");
@@ -183,7 +176,6 @@ public class ImportStockDAO extends DBContext {
         return -1;
     }
 
-    // Method to complete import stock entry
     private int completedImportStock(int importId, long total) {
         String query = "UPDATE ImportStocks SET IsCompleted = 1, ImportDate = GETDATE(), TotalAmount = ? WHERE ImportID = ?";
         try ( PreparedStatement ps = conn.prepareStatement(query)) {
@@ -208,7 +200,6 @@ public class ImportStockDAO extends DBContext {
         return -1;
     }
 
-    // Method to filter import stock history by date range
     public ArrayList<ImportStock> filterHistoryByDate(String from, String to) {
         ArrayList<ImportStock> list = new ArrayList<>();
         String query = "SELECT * FROM ImportStocks I JOIN Suppliers S ON I.SupplierID = S.SupplierID WHERE ImportDate BETWEEN ? AND ?";
@@ -281,22 +272,21 @@ public class ImportStockDAO extends DBContext {
 
     // ============ Helpers =============
     private Suppliers extractSupplier(ResultSet rs) throws SQLException {
-        return new Suppliers(
-                rs.getInt("SupplierID"),
-                rs.getString("TaxID"),
-                rs.getString("Name"),
-                rs.getString("Email"),
-                rs.getString("PhoneNumber"),
-                rs.getString("Address"),
-                rs.getTimestamp("CreatedDate").toLocalDateTime(),
-                rs.getTimestamp("LastModify").toLocalDateTime(),
-                rs.getInt("Deleted"),
-                rs.getInt("Activate"),
-                rs.getString("ContactPerson"),
-                rs.getString("SupplyGroup"),
-                rs.getString("Description")
-        );
-    }
+    return new Suppliers(
+        rs.getInt("SupplierID"),
+        rs.getString("TaxID"),
+        rs.getString("Name"),
+        rs.getString("Email"),
+        rs.getString("PhoneNumber"),
+        rs.getString("Address"),
+        rs.getTimestamp("CreatedDate").toLocalDateTime(),
+        rs.getTimestamp("LastModify").toLocalDateTime(),
+        rs.getInt("Activate"),
+        rs.getString("ContactPerson"),
+        rs.getString("SupplyGroup"),
+        rs.getString("Description")
+    );
+}
 
     private ImportStock extractImportStock(ResultSet rs) throws SQLException {
         return new ImportStock(
@@ -309,8 +299,6 @@ public class ImportStockDAO extends DBContext {
         );
     }
 
-    // Thêm các method này vào ImportStockDAO.java
-// Method to get all active suppliers
     public ArrayList<Suppliers> getAllActiveSuppliers() {
         ArrayList<Suppliers> list = new ArrayList<>();
         String sql = "SELECT * FROM Suppliers WHERE Deleted = 0 AND Activate = 1 ORDER BY Name";
@@ -327,7 +315,6 @@ public class ImportStockDAO extends DBContext {
         return list;
     }
 
-// Method to get all active products
     public ArrayList<Product> getAllActiveProducts() {
         ArrayList<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM Products WHERE Deleted = 0 AND Status = 1 ORDER BY ProductName";
@@ -339,7 +326,6 @@ public class ImportStockDAO extends DBContext {
                 product.setProductId(rs.getInt("ProductID"));
                 product.setProductName(rs.getString("ProductName"));
                 product.setPrice(rs.getBigDecimal("Price"));
-
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -348,15 +334,12 @@ public class ImportStockDAO extends DBContext {
         return list;
     }
 
-// Method to create import stock with details
     public int createImportStockWithDetails(ImportStock importStock, List<ImportStockDetail> details) {
         String insertImportStock = "INSERT INTO ImportStocks (StaffID, SupplierID, ImportDate, TotalAmount, IsCompleted) VALUES (?, ?, GETDATE(), ?, 0)";
         String insertDetails = "INSERT INTO ImportStockDetails (ImportID, ProductID, Quantity, UnitPrice, QuantityLeft) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            conn.setAutoCommit(false); // Start transaction
-
-            // Insert import stock
+            conn.setAutoCommit(false); 
             int importId = -1;
             try ( PreparedStatement ps = conn.prepareStatement(insertImportStock, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, importStock.getStaffId());
@@ -373,7 +356,6 @@ public class ImportStockDAO extends DBContext {
             }
 
             if (importId > 0) {
-                // Insert import stock details
                 try ( PreparedStatement ps = conn.prepareStatement(insertDetails)) {
                     for (ImportStockDetail detail : details) {
                         ps.setInt(1, importId);
@@ -386,7 +368,7 @@ public class ImportStockDAO extends DBContext {
                     ps.executeBatch();
                 }
 
-                conn.commit(); // Commit transaction
+                conn.commit(); 
                 return importId;
             } else {
                 conn.rollback();
@@ -395,7 +377,7 @@ public class ImportStockDAO extends DBContext {
 
         } catch (SQLException e) {
             try {
-                conn.rollback(); // Rollback on error
+                conn.rollback(); 
             } catch (SQLException ex) {
                 System.out.println("Rollback error: " + ex.getMessage());
             }
@@ -403,14 +385,14 @@ public class ImportStockDAO extends DBContext {
             return -1;
         } finally {
             try {
-                conn.setAutoCommit(true); // Reset auto commit
+                conn.setAutoCommit(true); 
             } catch (SQLException e) {
                 System.out.println("Reset auto commit error: " + e.getMessage());
             }
         }
     }
 
-// Method to search suppliers by name
+
     public ArrayList<Suppliers> searchSuppliersByName(String name) {
         ArrayList<Suppliers> list = new ArrayList<>();
         String sql = "SELECT * FROM Suppliers WHERE Name LIKE ? AND Deleted = 0 AND Activate = 1 ORDER BY Name";
@@ -429,7 +411,6 @@ public class ImportStockDAO extends DBContext {
         return list;
     }
 
-// Method to search products by name
     public ArrayList<Product> searchProductsByName(String name) {
         ArrayList<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM Products WHERE ProductName LIKE ? AND Deleted = 0 AND Status = 1 ORDER BY ProductName";
@@ -443,7 +424,6 @@ public class ImportStockDAO extends DBContext {
                 product.setProductId(rs.getInt("ProductID"));
                 product.setProductName(rs.getString("ProductName"));
                 product.setPrice(rs.getBigDecimal("Price"));
-               
                 list.add(product);
             }
         } catch (SQLException e) {

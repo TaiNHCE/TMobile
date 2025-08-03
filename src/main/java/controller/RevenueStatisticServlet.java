@@ -70,7 +70,7 @@ public class RevenueStatisticServlet extends HttpServlet {
             ArrayList<RevenueStatistic> dayStats = dao.getRevenueByDay();
             if (!dayStats.isEmpty()) {
                 Date latestDate = new Date(dayStats.get(dayStats.size() - 1).getOrderDate().getTime());
-                        System.out.println("Latest order date: " + latestDate);  // <-- thêm dòng này để in log
+                        System.out.println("Latest order date: " + latestDate);
 
                 ArrayList<RevenueStatistic> dayCategoryData = dao.getRevenueByCategoryOnDay(latestDate);
                 request.setAttribute("chartDayData", dayCategoryData);

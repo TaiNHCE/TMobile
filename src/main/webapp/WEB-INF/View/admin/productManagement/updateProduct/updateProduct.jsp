@@ -2,22 +2,18 @@
     String success = request.getParameter("success");
     String error = request.getParameter("error");
 %>
+<!-- Bootstrap CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Fontawesome CDN -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 <html>
 
     <head>
         <style>
-            .sidebar-wrapper {
-                width: 220px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                background-color: #232946;
-                z-index: 10;
-            }
+          
 
             .main-content {
-                margin-left: 220px; /* Phù h?p v?i chi?u r?ng sidebar */
+                margin-left: 40px; /* Phù h?p v?i chi?u r?ng sidebar */
                 padding: 30px;
                 min-height: 100vh;
                 background-color: #f8f9fa;
@@ -32,7 +28,6 @@
     <body>
 
         <div class="main-content">
-            <jsp:include page="/sideBar.jsp"/>
             <div>
                 <jsp:include page="/WEB-INF/View/admin/productManagement/updateProduct/productTitle.jsp" />
             </div>

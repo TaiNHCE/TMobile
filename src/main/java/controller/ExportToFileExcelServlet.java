@@ -123,7 +123,6 @@ public class ExportToFileExcelServlet extends HttpServlet {
             cell.setCellValue(imp != null ? imp.getFullName() : "");
         }
 
-        // Auto-size
         for (int i = 0; i < 11; i++) {
             sheet.autoSizeColumn(i);
         }

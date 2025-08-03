@@ -14,7 +14,6 @@
 
     </head>
     <body style="width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #ffffff;">
-        <jsp:include page="/sideBar.jsp"/>
         <form action="AdminCreateProduct" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
 
             <div style="margin-top: 10%; width: 66%; margin-bottom: -0.2%; background-color: #0D6EFD; border: 0.5px solid gray; padding: 0.8%; border-top-left-radius: 12px; border-top-right-radius: 12px;">

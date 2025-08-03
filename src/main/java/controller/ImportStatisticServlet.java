@@ -88,67 +88,65 @@ public class ImportStatisticServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    try {
-        String keyword = request.getParameter("search");
-        InventoryStatisticDAO invDao = new InventoryStatisticDAO();
-        ImportStockDAO dao = new ImportStockDAO();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String keyword = request.getParameter("search");
+            InventoryStatisticDAO invDao = new InventoryStatisticDAO();
+            ImportStockDAO dao = new ImportStockDAO();
 
-        ArrayList<InventoryStatistic> inventoryList;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            inventoryList = invDao.searchInventory(keyword);
-        } else {
-            inventoryList = invDao.getAllInventory();
-        }
-
-        // Lấy danh sách thống kê
-        Map<String, Integer> dailyImport = dao.getImportStocksCountByDate();
-        Map<String, Integer> monthlyImport = dao.getImportStocksCountByMonth();
-        Map<String, Integer> supplierImport = dao.getStocksBySupplier();
-        Map<String, Integer> topProductImport = dao.getTopImportedProducts();
-
-        // Lấy top 5, build 2 map: short name (label), full name (tooltip)
-        Map<String, Integer> top5ProductImportShort = new LinkedHashMap<>();
-        Map<String, String> top5ProductImportFull = new LinkedHashMap<>();
-        int count = 0;
-        for (Map.Entry<String, Integer> entry : topProductImport.entrySet()) {
-            if (count >= 5) break;
-            String fullName = entry.getKey();
-            String shortName = fullName;
-            if (shortName.length() > 20) shortName = shortName.substring(0, 20) + "...";
-            // Tránh trùng label
-            int idx = 2;
-            String check = shortName;
-            while (top5ProductImportShort.containsKey(check)) {
-                check = shortName + " #" + idx++;
+            ArrayList<InventoryStatistic> inventoryList;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                inventoryList = invDao.searchInventory(keyword);
+            } else {
+                inventoryList = invDao.getAllProductStock();
             }
-            shortName = check;
 
-            top5ProductImportShort.put(shortName, entry.getValue());
-            top5ProductImportFull.put(shortName, fullName);
-            count++;
+            Map<String, Integer> dailyImport = dao.getImportStocksCountByDate();
+            Map<String, Integer> monthlyImport = dao.getImportStocksCountByMonth();
+            Map<String, Integer> supplierImport = dao.getStocksBySupplier();
+            Map<String, Integer> topProductImport = dao.getTopImportedProducts();
+
+            Map<String, Integer> top5ProductImportShort = new LinkedHashMap<>();
+            Map<String, String> top5ProductImportFull = new LinkedHashMap<>();
+            int count = 0;
+            for (Map.Entry<String, Integer> entry : topProductImport.entrySet()) {
+                if (count >= 5) {
+                    break;
+                }
+                String fullName = entry.getKey();
+                String shortName = fullName;
+                if (shortName.length() > 20) {
+                    shortName = shortName.substring(0, 20) + "...";
+                }
+                int idx = 2;
+                String check = shortName;
+                while (top5ProductImportShort.containsKey(check)) {
+                    check = shortName + " #" + idx++;
+                }
+                shortName = check;
+
+                top5ProductImportShort.put(shortName, entry.getValue());
+                top5ProductImportFull.put(shortName, fullName);
+                count++;
+            }
+
+            Map<String, Integer> top5SupplierImport = getTop5ShortName(supplierImport);
+            request.setAttribute("inventoryList", inventoryList);
+            request.setAttribute("dailyImport", dailyImport);
+            request.setAttribute("monthlyImport", monthlyImport);
+            request.setAttribute("supplierImport", top5SupplierImport);
+            request.setAttribute("topProductImportShort", top5ProductImportShort);
+            request.setAttribute("topProductImportFull", top5ProductImportFull);
+
+            request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Error fetching inventory statistics: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
         }
-
-        // Tương tự cho supplier nếu muốn, hoặc giữ nguyên như cũ
-        Map<String, Integer> top5SupplierImport = getTop5ShortName(supplierImport);
-
-        request.setAttribute("inventoryList", inventoryList);
-        request.setAttribute("dailyImport", dailyImport);
-        request.setAttribute("monthlyImport", monthlyImport);
-        request.setAttribute("supplierImport", top5SupplierImport);
-        request.setAttribute("topProductImportShort", top5ProductImportShort);
-        request.setAttribute("topProductImportFull", top5ProductImportFull);
-
-        request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("error", "Error fetching inventory statistics: " + e.getMessage());
-        request.getRequestDispatcher("/WEB-INF/View/staff/stockManagement/importStatistic.jsp").forward(request, response);
     }
-}
-
 
     /**
      * Handles the HTTP <code>POST</code> method.

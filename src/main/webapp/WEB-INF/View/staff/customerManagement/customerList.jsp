@@ -92,5 +92,21 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <%
+    String success = request.getParameter("success");
+    if ("assigned".equals(success)) {
+%>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Assigned!',
+        text: 'Voucher assigned successfully to customer.',
+        confirmButtonText: 'OK'
+    });
+</script>
+<%
+    }
+%>
+
     </body>
 </html>

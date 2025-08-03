@@ -13,7 +13,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Brand;
 
 import model.CartItem;
@@ -238,25 +240,24 @@ public class ProductDAO extends DBContext {
     }
 
     public List<Product> getProductList() {
-        List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
-                + "p.SupplierID, p.CategoryID, p.BrandID, p.IsFeatured, p.IsBestSeller, p.IsNew, p.WarrantyPeriod, p.IsActive, "
-                + "pi.ImageURL "
-                + "FROM Products p "
-                + "LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID";
+    List<Product> list = new ArrayList<>();
+    String sql = "SELECT p.ProductID, p.ProductName, p.Description, p.Price, p.Discount, "
+               + "p.SupplierID, p.CategoryID, p.BrandID, p.IsFeatured, p.IsBestSeller, "
+               + "p.IsNew, p.WarrantyPeriod, p.IsActive, pi.ImageURL "
+               + "FROM Products p "
+               + "LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID";
 
-        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
+    try (PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
                 int productID = rs.getInt("ProductID");
                 String productName = rs.getString("ProductName");
                 String description = rs.getString("Description");
                 BigDecimal price = rs.getBigDecimal("Price");
                 int discount = rs.getInt("Discount");
-                int stock = rs.getInt("Stock");
-                String status = rs.getString("Status");
                 int supplierId = rs.getInt("SupplierID");
                 if (rs.wasNull()) {
-                    supplierId = 0; // Xử lý null do ON DELETE SET NULL
+                    supplierId = 0; 
                 }
                 int categoryId = rs.getInt("CategoryID");
                 if (rs.wasNull()) {
@@ -1258,5 +1259,44 @@ public class ProductDAO extends DBContext {
         e.printStackTrace();
     }
 }
+   //----Tai---//
+    public int countLowStockDynamic(int threshold) {
+    String sql = "SELECT COUNT(*) AS LowStockCount FROM ( " +
+                 "SELECT p.ProductID, " +
+                 "ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS StockLeft " +
+                 "FROM Products p " +
+                 "LEFT JOIN ImportStockDetails isd ON p.ProductID = isd.ProductID " +
+                 "GROUP BY p.ProductID " +
+                 ") AS StockView WHERE StockLeft <= ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, threshold); // Ví dụ, threshold = 5
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+
+    public Map<Integer, Integer> getAllProductStocks() {
+        Map<Integer, Integer> stockMap = new HashMap<>();
+        String sql = "SELECT p.ProductID, "
+                + "ISNULL(SUM(isd.Quantity), 0) - ISNULL((SELECT SUM(od.Quantity) FROM OrderDetails od WHERE od.ProductID = p.ProductID), 0) AS Stock "
+                + "FROM Products p "
+                + "LEFT JOIN ImportStockDetails isd ON p.ProductID = isd.ProductID "
+                + "GROUP BY p.ProductID";
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                int stock = rs.getInt("Stock");
+                stockMap.put(productId, stock);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stockMap;
+    }
 
 }

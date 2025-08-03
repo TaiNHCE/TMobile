@@ -12,7 +12,6 @@ public class Suppliers {
     private String address;
     private LocalDateTime createdDate;
     private LocalDateTime lastModify;
-    private int deleted;
     private int activate;
     private String contactPerson;   
     private String supplyGroup;     
@@ -23,7 +22,7 @@ public class Suppliers {
 
     // Constructor có tất cả thuộc tính
     public Suppliers(int supplierID, String taxId, String name, String email, String phoneNumber, String address,
-                     LocalDateTime createdDate, LocalDateTime lastModify, int deleted, int activate,
+                     LocalDateTime createdDate, LocalDateTime lastModify, int activate,
                      String contactPerson, String supplyGroup, String description) {
         this.supplierID = supplierID;
         this.taxId = taxId;
@@ -33,7 +32,6 @@ public class Suppliers {
         this.address = address;
         this.createdDate = createdDate;
         this.lastModify = lastModify;
-        this.deleted = deleted;
         this.activate = activate;
         this.contactPerson = contactPerson;
         this.supplyGroup = supplyGroup;
@@ -110,13 +108,6 @@ public class Suppliers {
         this.lastModify = lastModify;
     }
 
-    public int getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(int deleted) {
-        this.deleted = deleted;
-    }
 
     public int getActivate() {
         return activate;

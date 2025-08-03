@@ -11,17 +11,14 @@
     <title>Add Shipping Address</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Import dùng chung file CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/profile.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
 
 <div class="main-account container-fluid">
-    <!-- Sidebar đồng bộ -->
     <jsp:include page="/WEB-INF/View/customer/sideBar.jsp" />
 
-    <!-- Card thêm địa chỉ -->
     <div class="profile-card" style="margin-bottom:20px">
         <div class="profile-header">
             <h4>
@@ -84,10 +81,8 @@
 
 <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
 
-<!-- Địa giới hành chính -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
-    // Validation JS phía client
     document.getElementById('formAddress').addEventListener('submit', function (event) {
         const addressInput = document.getElementById('addressDetails');
         const errorMessage = document.getElementById('error-message');
@@ -100,7 +95,6 @@
         }
     });
 
-    // Load Province/District/Ward
     let allData = [];
     let provinceSel = document.getElementById("province");
     let districtSel = document.getElementById("district");

@@ -65,7 +65,7 @@ public class ManageStatisticServlet extends HttpServlet {
         if (keyword != null && !keyword.trim().isEmpty()) {
             statistics = dao.searchInventory(keyword.trim());
         } else {
-            statistics = dao.getAllInventory();
+            statistics = dao.getAllProductStock();
         }
 
         String message = (statistics == null || statistics.isEmpty()) ? "No statistics data available." : null;

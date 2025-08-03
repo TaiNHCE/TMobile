@@ -21,13 +21,10 @@
                         <!-- Không có nút, nhưng vẫn chiếm chỗ -->
                     </div>
                     <form class="search-form mb-4" method="get" style="min-height: 52px;">
-                        <!-- Không có filter -->
                     </form>
-                    <!-- Alert error -->
                     <c:if test="${not empty error}">
                         <div class="alert alert-danger">${error}</div>
                     </c:if>
-                    <!-- Bảng thông tin chung -->
                     <div class="table-container mb-4" style="max-width: 1100px; margin: 0 auto;">
                         <table aria-label="Suppliers table">
                             <thead>
@@ -56,7 +53,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Chi tiết sản phẩm -->
                     <div class="table-container mb-4" style="max-width: 1100px; margin: 0 auto;">
                         <h3 style="margin-bottom: 18px;">Details</h3>
                         <table aria-label="Suppliers table">
@@ -82,7 +78,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Nút Back -->
                     <div class="text-end" style="max-width: 1100px; margin: 0 auto;">
                         <a href="ImportStockHistory" class="btn btn-secondary">Back</a>
                     </div>
