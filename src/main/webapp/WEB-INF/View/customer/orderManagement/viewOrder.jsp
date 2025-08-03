@@ -2,6 +2,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,6 +12,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/Css/profile.css" rel="stylesheet">
+
         <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -121,7 +124,11 @@
                             <c:forEach var="order" items="${orderList}">
                                 <div class="mb-4 p-4" style="background: #fff; border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <div class="fw-semibold fs-5"><i class="bi bi-receipt-cutoff me-2"></i> Order #${order.orderID}</div>
+                                        <div class="fw-semibold fs-5 text-center">
+                                            <i class="bi bi-receipt-cutoff me-2"></i>
+                                            Order Date: <span class="fw-bold">${fn:substringBefore(order.orderDate, ' ')}</span>
+                                        </div>
+
                                         <span class="badge status-${order.status}">
                                             <c:choose>
                                                 <c:when test="${order.status == 1}">Waiting</c:when>
@@ -167,7 +174,7 @@
                                                 </button>
                                             </form>
                                         </c:if>
-                                        
+
                                     </div>
                                 </div>
                             </c:forEach>
@@ -187,7 +194,6 @@
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
         <!-- SweetAlert for cancel confirmation -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -211,10 +217,10 @@
                     });
                 });
             });
-            
-            
+
+
         </script>
-        
+
 
         <!-- SweetAlert for server response -->
         <c:if test="${not empty success || not empty error}">

@@ -5,6 +5,7 @@
 package controller;
 
 import dao.BrandDAO;
+import dao.CategoryDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import model.Brand;
+import model.Category;
 import model.Product;
 
 /**
@@ -95,7 +97,6 @@ public class SortProductServlet extends HttpServlet {
 
         }
 
-
         String priceRangeAndCategory = request.getParameter("priceRangeCategory");
         String priceRange = null;
         if (priceRangeAndCategory != null && priceRangeAndCategory.contains("-")) {
@@ -115,6 +116,7 @@ public class SortProductServlet extends HttpServlet {
 
             switch (priceRange) {
                 case "under7":
+                    minPrice = new BigDecimal("100000");
                     maxPrice = new BigDecimal("7000000");
                     break;
                 case "7to9":
@@ -135,6 +137,7 @@ public class SortProductServlet extends HttpServlet {
                     break;
                 case "above20":
                     minPrice = new BigDecimal("20000000");
+                    maxPrice = new BigDecimal("200000000");
                     break;
             }
         }
@@ -144,7 +147,14 @@ public class SortProductServlet extends HttpServlet {
             productList = proDao.getProductByBrand(brandId);
         } else if (brandId == -1 && priceRange != null) {
             productList = proDao.getProductByCategoryAndPrice(categoryId, minPrice, maxPrice);
+        } else {
+            productList = proDao.getProductByCategory(categoryId);
         }
+        
+        CategoryDAO categoryDAO = new CategoryDAO();
+        List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
+        request.setAttribute("categoryList", categoryList);
+        
         request.setAttribute("productList", productList);
         request.setAttribute("brandList", brandList);
         request.setAttribute("categoryId", categoryId);

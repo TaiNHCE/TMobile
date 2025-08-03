@@ -83,7 +83,7 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="AdminViewProductDetail?productId=<%= product.getProductId()%>" class="btn btn-warning">Detail</a>
-                                    <a href="AdminUpdateInfo?productId=<%= product.getProductId()%>" class="btn btn-primary">Edit</a>
+                                    <a href="AdminUpdateProduct?productId=<%= product.getProductId()%>" class="btn btn-primary">Edit</a>
                                     <button class="btn btn-danger" onclick="confirmDelete(<%= product.getProductId()%>)">Delete</button>
                                 </div>
                             </td>

@@ -43,7 +43,7 @@
                            id="categoryName"
                            name="categoryName"
                            value="<%= category.getCategoryName()%>"
-                           class="input-category" />
+                           class="input-category" required/>
                 </div>
 
                 <div class="form-row">
@@ -52,7 +52,7 @@
                            id="description"
                            name="description"
                            value="<%= category.getDescription()%>"
-                           class="input-category" />
+                           class="input-category" required/>
                 </div>
             </div>
             <% } %>
@@ -82,9 +82,8 @@
                     <input type="text"
                            name="groupName"
                            value="<%= cateGroup.getNameCategoryDetailsGroup()%>"
-                           class="group-name-input" />
+                           class="group-name-input" required/>
                 </div>
-
 
                 <!-- Chi tiết, ẩn ban đầu -->
                 <div class="group-details" id="detailGroup<%= groupIndex%>">
@@ -98,9 +97,8 @@
                         <input type="text"
                                name="detailName"
                                value="<%= cateList.getCategoryDatailName()%>"
-                               class="detail-input" />
+                               class="detail-input" required/>
                     </div>
-
 
                     <%
                                 }
@@ -125,9 +123,8 @@
             <%            if (groupIndex > -1) {
             %>
             <a style = "margin-left: 81%;" href="CategoryView" class="btn btn-secondary" id="back"><i class="bi bi-arrow-return-left"></i> Back</a>
-
             <button type="submit" class="btn btn-primary" id="submit">
-                <i class="fas fa-edit"></i> Edit
+                <i class="fas fa-edit"></i> Save
             </button>
 
             <%
@@ -138,8 +135,6 @@
                 }
             %>
         </form>
-
-
 
         <!--            <== Category detail==>-->
 

@@ -69,12 +69,12 @@
             <!-- Modal -->
             <div id="filterModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.4); z-index:1000;">
                 <div style="background-color:#fff; padding: 20px; border-radius: 10px; width: 40%; margin: 5% auto;">
-                    <h3>Chọn hãng và giá</h3>
-                    <form action="SortProduct" method="get">
+                    <h3>Choose brand and price</h3>
+                    <form action="SortProduct" method="get" onsubmit="return validateFilter()">
 
                         <!-- Brand Section -->
                         <div>
-                            <p><strong>Hãng:</strong></p>
+                            <p><strong>Brand:</strong></p>
                             <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
                                 <%
                                     if (brandList != null) {
@@ -130,8 +130,8 @@
 
                         <!-- Buttons -->
                         <div style="margin-top: 20px;">
-                            <button type="submit" class="filter">Áp dụng</button>
-                            <button type="button" class="filter" onclick="closeModal()" style="margin-left: 10px;">Đóng</button>
+                            <button type="submit" class="filter">Apply</button>
+                            <button type="button" class="filter" onclick="closeModal()" style="margin-left: 10px;">Close</button>
                         </div>
                     </form>
                 </div>
@@ -156,7 +156,7 @@
 
                 function selectRadio(label) {
                     // Bỏ class checked của tất cả label cùng name
-                    const all = document.querySelectorAll('input[name="priceRange"]');
+                    const all = document.querySelectorAll('input[name="priceRangeCategory"]');
                     all.forEach(input => {
                         if (input.closest('label')) {
                             input.closest('label').classList.remove('checked');
@@ -169,8 +169,20 @@
                     input.checked = true;
                     label.classList.add('checked');
                 }
-            </script>
 
+                function validateFilter() {
+                    const hasBrand = document.querySelector('input[name="brandcategory"]:checked') !== null;
+                    const hasPrice = document.querySelector('input[name="priceRangeCategory"]:checked') !== null;
+
+                    if (!hasBrand && !hasPrice) {
+                        alert("Please select at least a brand or a price range.");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+            </script>
         </div>
     </body>
 </html>

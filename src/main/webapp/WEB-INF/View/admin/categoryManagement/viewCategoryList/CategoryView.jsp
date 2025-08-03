@@ -29,17 +29,7 @@
                     Category Management
                 </h1>
                 <button class="create-btn" onclick="location.href = 'CreateCategory'">Create</button>
-
-                <form class="search-form" method="get" action="AdminProduct">
-                    <input
-                        type="text"
-                        name="keyword"
-                        placeholder="Find by name ..."
-                        value="<%= request.getParameter("keyword") != null ? request.getParameter("keyword") : ""%>"
-                        />
-                    <button type="submit" class="search-btn">Search</button>
-                </form>
-
+                
                 <%
                     if (categoryList != null) {
                 %>

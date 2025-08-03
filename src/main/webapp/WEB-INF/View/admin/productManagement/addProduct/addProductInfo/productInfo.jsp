@@ -41,7 +41,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Suppliers</label>
-                <select class="form-control" id="suppliers" name="suppliers">
+                <select class="form-control" id="suppliers" name="suppliers" required>
                     <option value="">-- Select suppliers --</option>
                     <% for (Suppliers sup : supList) {%>
                     <option value="<%= sup.getSupplierID()%>"><%= sup.getName()%></option>
@@ -51,7 +51,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Category</label>
-                <select class="form-control" id="category" name="category" onchange="updateBrands()">
+                <select class="form-control" id="category" name="category" onchange="updateBrands()" required>
                     <option value="">-- Select category --</option>
                     <% for (Category c : categoryList) {%>
                     <option value="<%= c.getCategoryId()%>"><%= c.getCategoryName()%></option>
@@ -61,7 +61,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Brand</label>
-                <select class="form-control" id="brand" name="brand">
+                <select class="form-control" id="brand" name="brand" required>
                     <option value="">-- Select brand --</option>
                 </select>
             </div>

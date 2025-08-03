@@ -133,25 +133,27 @@
                     <!-- Danh sách sản phẩm -->
                     <div id="product-scroll-best" style = "">
                         <% if (productListBestSeller != null) {
+
                                 for (Product pro : productListBestSeller) {
-                                    if (pro.getDiscount() != 0) {
-                                        oldPrice = pro.getPrice();
-                                        BigDecimal price = pro.getPrice();
-                                        int discount = pro.getDiscount();
+                                    if (pro.isIsActive() == true) {
+                                        if (pro.getDiscount() != 0) {
+                                            oldPrice = pro.getPrice();
+                                            BigDecimal price = pro.getPrice();
+                                            int discount = pro.getDiscount();
 
-                                        BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
-                                        newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
+                                            BigDecimal discountRate = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100));
+                                            newPrice = price.multiply(BigDecimal.ONE.subtract(discountRate));
 
-                                        BigDecimal giaCu = oldPrice;
-                                        BigDecimal giaMoi = newPrice;
-                                        BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
+                                            BigDecimal giaCu = oldPrice;
+                                            BigDecimal giaMoi = newPrice;
+                                            BigDecimal giaDaGiam = giaCu.subtract(giaMoi);
 
-                                        Locale localeVN = new Locale("vi", "VN");
-                                        NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
+                                            Locale localeVN = new Locale("vi", "VN");
+                                            NumberFormat currencyVN = NumberFormat.getInstance(localeVN);
 
-                                        String giaCuFormatted = currencyVN.format(oldPrice);
-                                        String giaMoiFormatted = currencyVN.format(giaMoi);
-                                        String giamFormatted = currencyVN.format(giaDaGiam);
+                                            String giaCuFormatted = currencyVN.format(oldPrice);
+                                            String giaMoiFormatted = currencyVN.format(giaMoi);
+                                            String giamFormatted = currencyVN.format(giaDaGiam);
                         %>
                         <div class="sanPhamMoi">
                             <a href="<%= request.getContextPath()%>/ProductDetail?productId=<%= pro.getProductId()%>&categoryId=<%= pro.getCategoryId()%>" style="text-decoration: none; color: inherit; display: block;">
@@ -190,8 +192,9 @@
                             </a>
                         </div>
                         <%
-                                } // end if discount
-                            } // end for
+                                    } // end if discount
+                                } // end for
+                            }
                         } else { %>
                         <p>null</p>
                         <% }%>

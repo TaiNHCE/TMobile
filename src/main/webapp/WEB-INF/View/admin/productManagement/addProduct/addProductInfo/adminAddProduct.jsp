@@ -11,9 +11,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    </head>
-    <body style="height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #ffffff;">
 
+    </head>
+    <body style="width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #ffffff;">
+        <jsp:include page="/sideBar.jsp"/>
         <form action="AdminCreateProduct" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
 
             <div style="margin-top: 10%; width: 66%; margin-bottom: -0.2%; background-color: #0D6EFD; border: 0.5px solid gray; padding: 0.8%; border-top-left-radius: 12px; border-top-right-radius: 12px;">
@@ -22,7 +23,6 @@
 
             <div style="width: 66%; display: flex; gap: 1.5%; border: 0.5px solid gray; justify-content: center; align-items: center; background-color: #ffffff; border-bottom: none ">
 
-
                 <div style="width: 48%;">
                     <jsp:include page="/WEB-INF/View/admin/productManagement/addProduct/addProductInfo/imgProduct.jsp" />
                 </div>
@@ -30,7 +30,6 @@
                 <div style="width: 48%; background-color: #ffffff; padding: 10px; border-radius: 12px;">
                     <jsp:include page="/WEB-INF/View/admin/productManagement/addProduct/addProductInfo/productInfo.jsp" />
                 </div>
-
 
             </div>
             <div style="text-align: right; width: 66%; border: 0.5px solid gray; padding: 1.5%; border-top: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
