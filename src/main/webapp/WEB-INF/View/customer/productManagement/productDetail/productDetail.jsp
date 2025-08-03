@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%
     Product product = (Product) request.getAttribute("product");
 %>
@@ -28,15 +28,6 @@
             .fa-star.checked {
                 color: #f5a623;
             }
-
-            .fa-star {
-                color: #ccc; /* màu xám cho sao chưa chọn */
-            }
-            .checked {
-                color: orange; /* màu cam cho sao đã chọn */
-            }
-
-
         </style>
     </head>
 
@@ -74,32 +65,22 @@
                             Customer Feedback
                         </h2>
                     </div>
-                    <c:if test="${not empty productRatings}">
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <strong style="font-size: 18px;">Average Rating:</strong>
-                            <span style="color: #f5a623; font-size: 18px;">
-                                <c:forEach begin="1" end="5" var="i">
-                                    <i class="fa fa-star ${i <= averageRating ? 'checked' : ''}"></i>
-                                </c:forEach>
-                                (<fmt:formatNumber value="${averageRating}" maxFractionDigits="1" /> / 5)
-                            </span>
-                        </div>
-                    </c:if>
                     <c:if test="${empty productRatings}">
                         <p style="text-align: center; color: gray;">No feedback available for this product.</p>
                     </c:if>
+
                     <c:forEach var="rating" items="${productRatings}">
                         <div style="border: 1px solid #e1e1e1; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #fafafa;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <strong>${rating.fullName}</strong> 
+
                                 <small style="color: gray;">${rating.createdDate}</small>
                             </div>
 
                             <div style="color: #f5a623; margin: 5px 0;">
-                                <c:set var="stars" value="${rating.star}" />
                                 <c:forEach begin="1" end="5" var="i">
-                                    <i class="fa fa-star ${i <= stars ? 'checked' : ''}"></i>
-                                </c:forEach>                           
+                                    <i class="fa fa-star <c:if test='${i <= rating.star}'>checked</c:if>'"></i>
+                                </c:forEach>
                             </div>
 
                             <p style="margin-top: 8px; font-size: 15px;">${rating.comment}</p>
@@ -133,14 +114,14 @@
 
     <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
     <% String successcreate = request.getParameter("successcreate"); %>
-    <% String errorcreate = request.getParameter("errorcreate");%> 
+    <% String checkquantity = request.getParameter("checkquantity");%> 
 
 
 
     <script>
         window.onload = function () {
             var success = '<%= successcreate%>';
-            var error = '<%= errorcreate%>';
+            var error = '<%= checkquantity%>';
 
             if (success === '1') {
                 Swal.fire({
@@ -153,7 +134,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Failed!',
-                    text: 'Add to cart failed.',
+                    text: 'The quantity of product in stock is not enough to order.',
                     timer: 2000
                 });
             }
