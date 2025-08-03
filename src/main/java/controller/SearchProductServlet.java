@@ -5,6 +5,7 @@
 package controller;
 
 import dao.BrandDAO;
+import dao.CategoryDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Brand;
+import model.Category;
 import model.Product;
 
 /**
@@ -75,10 +77,20 @@ public class SearchProductServlet extends HttpServlet {
                 request.setAttribute("brandList", brandList);
                 request.setAttribute("categoryId", product.getCategoryId());
                 request.setAttribute("brandId", product.getBrandId());
+                CategoryDAO categoryDAO = new CategoryDAO();
+                List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
+                request.setAttribute("categoryList", categoryList);
                 request.getRequestDispatcher("/WEB-INF/View/customer/productManagement/searchProduct/searchProduct.jsp").forward(request, response);
+            } else {
+                CategoryDAO categoryDAO = new CategoryDAO();
+                List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
+                request.setAttribute("categoryList", categoryList);
+                request.getRequestDispatcher("/WEB-INF/View/customer/productManagement/searchProduct/searchProduct.jsp").forward(request, response);
+
             }
 
         }
+
     }
 
     /**

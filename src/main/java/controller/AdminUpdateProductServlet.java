@@ -24,11 +24,15 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import model.Brand;
 import model.Category;
+import model.CategoryDetail;
+import model.CategoryDetailGroup;
 import model.Product;
+import model.ProductDetail;
 import model.Suppliers;
 
 /**
@@ -36,8 +40,8 @@ import model.Suppliers;
  * @author HP - Gia Khiêm
  */
 @MultipartConfig
-@WebServlet(name = "StaffUpdateInfoServlet", urlPatterns = {"/AdminUpdateInfo"})
-public class AdminUpdateInfoServlet extends HttpServlet {
+@WebServlet(name = "AdminUpdateProductServlet", urlPatterns = {"/AdminUpdateProduct"})
+public class AdminUpdateProductServlet extends HttpServlet {
 
     private Cloudinary cloudinary;
 
@@ -104,15 +108,23 @@ public class AdminUpdateInfoServlet extends HttpServlet {
             List<Brand> brandList = brandDao.getAllBrand();
             Product product = proDao.getProductById(productId);
 
+            List<ProductDetail> productDetailList = proDao.getProductDetailById(productId);
+            List<CategoryDetailGroup> categoryGroupList = cateDao.getCategoryDetailGroupById(product.getCategoryId());
+            List<CategoryDetail> categporyDetailList = cateDao.getCategoryDetailById(product.getCategoryId());
+
             request.setAttribute("categoryList", categoryList);
             request.setAttribute("brandList", brandList);
             request.setAttribute("product", product);
+            request.setAttribute("productDetailList", productDetailList);
+            request.setAttribute("categoryGroupList", categoryGroupList);
+            request.setAttribute("categoryDetailList", categporyDetailList);
+            request.setAttribute("productId", productId);
 
             SupplierDAO supDAO = new SupplierDAO();
             List<Suppliers> supList = supDAO.getAllSuppliers();
 
             request.setAttribute("supList", supList);
-            request.getRequestDispatcher("/WEB-INF/View/admin/productManagement/updateProduct/updateInfo/updateInfo.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/View/admin/productManagement/updateProduct/updateProduct.jsp").forward(request, response);
         }
 
     }
@@ -140,17 +152,6 @@ public class AdminUpdateInfoServlet extends HttpServlet {
                 .trim();
         BigDecimal price = new BigDecimal(priceFormatted);
 
-        String stockStr = request.getParameter("stock");
-        int stock = 0; // mặc định nếu rỗng
-
-        if (stockStr != null && !stockStr.trim().isEmpty()) {
-            try {
-                stock = Integer.parseInt(stockStr.trim());
-            } catch (NumberFormatException e) {
-                e.printStackTrace(); // hoặc log lỗi, thông báo người dùng
-            }
-        }
-
         int Category = Integer.parseInt(request.getParameter("category"));
         int Brand = Integer.parseInt(request.getParameter("brand"));
         int supplier = Integer.parseInt(request.getParameter("suppliers"));
@@ -164,39 +165,63 @@ public class AdminUpdateInfoServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
+        ProductDetail productDetail = proDAO.getOneProductDetailById(id);
         Product product = proDAO.getProductByID(id);
-        Part part = request.getPart("file");
+        Map<String, String> imageUrlMap = new LinkedHashMap<>();
+        imageUrlMap.put("fileMain", product.getImageUrl());
+        imageUrlMap.put("file1", productDetail.getImageUrl1());
+        imageUrlMap.put("file2", productDetail.getImageUrl2());
+        imageUrlMap.put("file3", productDetail.getImageUrl3());
+        imageUrlMap.put("file4", productDetail.getImageUrl4());
 
-        String imageUrl = product.getImageUrl();
-        if (part.getName().equals("file") && part.getSize() > 0) {
+        for (String key : imageUrlMap.keySet()) {
+            Part part = request.getPart(key);
+            if (part != null && part.getSize() > 0) {
+                InputStream is = part.getInputStream();
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                byte[] data = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = is.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, bytesRead);
+                }
+                byte[] fileBytes = buffer.toByteArray();
 
-            InputStream is = part.getInputStream();
+                Map uploadResult = cloudinary.uploader().upload(fileBytes,
+                        ObjectUtils.asMap("resource_type", "auto"));
 
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            byte[] data = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = is.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, bytesRead);
-            }
-            byte[] fileBytes = buffer.toByteArray();
-
-            Map uploadResult = cloudinary.uploader().upload(fileBytes,
-                    ObjectUtils.asMap("resource_type", "auto"));
-
-            if (imageUrl != null) {
-                imageUrl = (String) uploadResult.get("secure_url");
+                String url = (String) uploadResult.get("secure_url");
+                if (url != null) {
+                    imageUrlMap.put(key, url); // ⚡ Update lại value
+                }
             }
         }
+        //        <====================================== Xử lý ảnh ===========================================>
+        boolean res = proDAO.updateProductInfo(id, productName, price, supplier, Category, Brand, isFeatured, isBestSeller, isNew, isActive, imageUrlMap.get("fileMain"));
 
-//        <====================================== Xử lý anh ===========================================>
-        boolean res = proDAO.updateProductInfo(id, productName, price, stock, supplier, Category, Brand, isFeatured, isBestSeller, isNew, isActive, imageUrl);
+        //        <====================================== Xử lý thông tin ===========================================>
+        List<ProductDetail> productDetailList = proDAO.getProductDetailById(id);
+
+        for (ProductDetail proDetail : productDetailList) {
+            String paramName = "attribute_" + proDetail.getCategoryDetailID();
+
+            String value = request.getParameter(paramName);
+
+            if (value != null && !value.trim().isEmpty()) {
+                proDetail.setAttributeValue(value.trim());
+
+                // Cập nhật lại DB
+                res = proDAO.updateProductDetail(id, proDetail.getCategoryDetailID(), value, imageUrlMap.get("file1"), imageUrlMap.get("file2"), imageUrlMap.get("file3"), imageUrlMap.get("file4"), imageUrlMap.get("fileMain")); // bạn cần có hàm này trong DAO
+            }
+
+        }
 
         if (res) {
-            response.sendRedirect("AdminUpdateInfo?productId=" + id + "&success=1");
+            response.sendRedirect("AdminUpdateProduct?productId=" + id + "&success=1");
         } else {
-            response.sendRedirect("AdminUpdateInfo?productId=" + id + "&error=1");
+            response.sendRedirect("AdminUpdateProduct?productId=" + id + "&error=1");
         }
 
+        //        <====================================== Xử lý thông tin ===========================================>
     }
 
     /**

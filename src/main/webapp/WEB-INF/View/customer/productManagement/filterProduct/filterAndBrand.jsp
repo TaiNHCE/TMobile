@@ -68,18 +68,18 @@
             <!-- Modal -->
             <div id="filterModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.4); z-index:1000;">
                 <div style="background-color:#fff; padding: 20px; border-radius: 10px; width: 40%; margin: 5% auto;">
-                    <h3>Chọn hãng và giá</h3>
+                    <h3>Brand and Price</h3>
 
-                    <form action="SortProduct" method="get">
+                    <form action="SortProduct" method="get" onsubmit="return validateFilter()">
 
 
                         <!-- Brand Section -->
                         <div>
-                            <p><strong>Hãng:</strong></p>
+                            <p><strong>Brand:</strong></p>
                             <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
                                 <%
                                     if (brandList != null) {
-                                    categoryId = brandList.get(0).getCategoryID();
+                                        categoryId = brandList.get(0).getCategoryID();
                                         for (Brand br : brandList) {
                                 %>
                                 <label style="width: 100px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 10px; padding: 5px; cursor: pointer; position: relative;">
@@ -132,8 +132,8 @@
 
                         <!-- Buttons -->
                         <div style="margin-top: 20px;">
-                            <button type="submit" class="filter">Áp dụng</button>
-                            <button type="button" class="filter" onclick="closeModal()" style="margin-left: 10px;">Đóng</button>
+                            <button type="submit" class="filter">Apply</button>
+                            <button type="button" class="filter" onclick="closeModal()" style="margin-left: 10px;">Close</button>
                         </div>
                     </form>
 
@@ -173,6 +173,17 @@
                     label.classList.add('checked');
                 }
 
+                function validateFilter() {
+                    const hasBrand = document.querySelector('input[name="brandcategory"]:checked') !== null;
+                    const hasPrice = document.querySelector('input[name="priceRangeCategory"]:checked') !== null;
+
+                    if (!hasBrand && !hasPrice) {
+                        alert("Please select at least a brand or a price range.");
+                        return false;
+                    }
+
+                    return true;
+                }
 
             </script>
 

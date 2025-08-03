@@ -159,7 +159,11 @@ public class AdminAddProductServlet extends HttpServlet {
                 String url = (String) uploadResult.get("secure_url");
                 if (url != null) {
                     imageUrlMap.put(key, url); // ⚡ Update lại value
+                } else {
+                    imageUrlMap.put(key, "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png");
                 }
+            } else {
+                imageUrlMap.put(key, "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png");
             }
         }
 

@@ -180,7 +180,7 @@
             <% } // end if discount
                 } // end for
             } else { %>
-            <p>null</p>
+            <p>No matching products found</p>
             <% }%>
         </div>
 

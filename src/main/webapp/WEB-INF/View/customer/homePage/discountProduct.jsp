@@ -120,7 +120,7 @@
             <div id="" style = "gap: 0.25%; display: flex; width: 100%; flex-wrap: wrap;">
                 <% if (productListDiscount != null) {
                         for (Product pro : productListDiscount) {
-                            if (pro.getDiscount() != 0) {
+                            if (pro.getDiscount() != 0 && pro.isIsActive() == true) {
                                 oldPrice = pro.getPrice();
                                 BigDecimal price = pro.getPrice();
                                 int discount = pro.getDiscount();

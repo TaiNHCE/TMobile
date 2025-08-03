@@ -20,8 +20,7 @@ import model.Account;
     "/AdminDashboard",
     "/StaffDeleteProduct",
     "/AdminProduct",
-    "/AdminUpdateInfo",
-    "/AdminUpdateProductDetail",
+    "/AdminUpdateProduct",
     "/AdminViewProductDetail",
     "/CategoryDetail",
     "/CategoryView",
@@ -38,6 +37,7 @@ import model.Account;
     "/UpdateStaffServlet",
     "/UpdateSupplier",
     "/ViewSupplier"
+        
 })
 public class AdminFilter implements Filter {
 

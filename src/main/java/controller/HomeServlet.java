@@ -67,7 +67,6 @@ public class HomeServlet extends HttpServlet {
         CategoryDAO categoryDAO = new CategoryDAO();
         BrandDAO brandDAO = new BrandDAO();
         ProductDAO productDAO = new ProductDAO();
-
         List<Category> categoryList = categoryDAO.getAllCategory(); // hoặc getAllCategory()
         List<Brand> brandList = brandDAO.getAllBrand();
         

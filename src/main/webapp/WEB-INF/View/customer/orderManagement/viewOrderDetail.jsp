@@ -50,7 +50,10 @@
                     <c:when test="${not empty orderList}">
 
                         <div class="profile-header">
-                            <h4><i class="bi bi-bag-check-fill me-2"></i> Order #${data.orderID} Detail</h4>
+                            <div class="fw-semibold fs-5 text-center">
+                                <i class="bi bi-receipt-cutoff me-2"></i>
+                                Order Date: <span class="fw-bold">${fn:substringBefore(data.orderDate, ' ')}</span>
+                            </div>
                         </div>
 
                         <div class="mb-4 p-4" style="background: #fff; border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);">
@@ -192,34 +195,34 @@
         <!-- SweetAlert on success/error -->
         <c:if test="${not empty param.success || not empty param.error}">
             <script>
-                            window.onload = function () {
+    window.onload = function () {
                 <c:if test="${param.success == 'feedback'}">
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Feedback Submitted',
-                                    text: 'Your feedback has been submitted successfully!',
-                                    timer: 3000,
-                                    confirmButtonText: 'OK'
-                                });
+        Swal.fire({
+            icon: 'success',
+            title: 'Feedback Submitted',
+            text: 'Your feedback has been submitted successfully!',
+            timer: 3000,
+            confirmButtonText: 'OK'
+        });
                 </c:if>
                 <c:if test="${param.error == 'feedback'}">
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Feedback Failed',
-                                    text: 'There was a problem submitting your feedback. Please try again.',
-                                    timer: 3000,
-                                    confirmButtonText: 'Close'
-                                });
+        Swal.fire({
+            icon: 'error',
+            title: 'Feedback Failed',
+            text: 'There was a problem submitting your feedback. Please try again.',
+            timer: 3000,
+            confirmButtonText: 'Close'
+        });
                 </c:if>
 
-                                if (window.history.replaceState) {
-                                    const url = new URL(window.location);
-                                    url.searchParams.delete('success');
-                                    url.searchParams.delete('error');
-                                    window.history.replaceState({}, document.title, url.pathname + url.search);
-                                }
+        if (window.history.replaceState) {
+            const url = new URL(window.location);
+            url.searchParams.delete('success');
+            url.searchParams.delete('error');
+            window.history.replaceState({}, document.title, url.pathname + url.search);
+        }
 
-                            };
+    };
             </script>
 
         </c:if>

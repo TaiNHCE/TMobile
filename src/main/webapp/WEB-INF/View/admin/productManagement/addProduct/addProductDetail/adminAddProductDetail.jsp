@@ -17,14 +17,13 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <div>
+        <div style = "width: 100%">
             <form action="AdminAddProductDetail?categoryId=<%= categoryId%>&productId=<%= product.getProductId()%>" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
-                <div style="margin-top: 10%; width: 68.4%; margin-bottom: -0.2%; background-color: #0D6EFD; border: 0.5px solid gray; padding: 0.8%; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                <div style="margin-top: 5%; width: 68.4%; margin-bottom: -0.2%; background-color: #0D6EFD; border: 0.5px solid gray; padding: 0.8%; border-top-left-radius: 12px; border-top-right-radius: 12px;">
                     <h4 style="color: white; margin: 0; text-align: left;">Add Product</h4>
                 </div>
 
                 <div style="width: 70%; display: flex; gap: 1.5%; border: 0.5px solid gray; justify-content: center; align-items: center; background-color: #ffffff; border-bottom: none ">
-
 
                     <div style="width: 40%;">
                         <jsp:include page="/WEB-INF/View/admin/productManagement/addProduct/addProductDetail/imgProductDetail.jsp" />
@@ -34,11 +33,10 @@
                         <jsp:include page="/WEB-INF/View/admin/productManagement/addProduct/addProductDetail/productDetail.jsp" />
                     </div>
 
-
                 </div>
                 <div style="text-align: right; width: 67%; border: 0.5px solid gray; padding: 1.5%; border-top: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
                     <button class = "btn-success"type="submit">Create</button>
-                    <a style = "text-decoration: none;"href="AdminProduct" class="btn-back">Cancel</a>
+                    <a style = "text-decoration: none;"href="DeleteProductWhenCancel?productId=<%=product.getProductId()%>" class="btn-back">Cancel</a>
                 </div>
 
             </form>

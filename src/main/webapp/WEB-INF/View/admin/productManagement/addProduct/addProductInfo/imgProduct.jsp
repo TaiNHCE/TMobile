@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <%
     Product product = (Product) request.getAttribute("product");
-    %>
+%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,40 +19,38 @@
 
     </head>
     <body>
-    <!-- Khung ảnh cố định không bị nhảy -->
-    <div style="
-        width: 100%;
-        height: 300px;
-        border-radius: 15px;
-        overflow: hidden;
-        background-color: #f8f9fa;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 10px;
-    ">
-        <label for="fileInputMain" style="cursor: pointer; margin: 0; display: block;">
-            <img id="previewMainImage"
-                src="https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
-                style="
-                    max-height: 100%;
-                    max-width: 100%;
-                    object-fit: contain;
-                    border-radius: 10px;
-                    display: block;
-                "
-                alt="Click to change image"
-                title="Click to change image">
-        </label>
+        <!-- Khung ảnh cố định không bị nhảy -->
+        <div style="
+             width: 100%;
+             height: 300px;
+             border-radius: 15px;
+             overflow: hidden;
+             background-color: #f8f9fa;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             padding: 10px;
+             ">
+            <label for="fileInputMain" style="width: 100%; cursor: pointer; margin: 0; display: block;">
+                <img id="previewMainImage"
+                     src="https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
+                     style="
+                     width: 100%;
+                     max-height: 100%;
+                     max-width: 100%;
+                     object-fit: contain;
+                     border-radius: 10px;
+                     display: block;
+                     "
+                     alt="Click to change image"
+                     title="Click to change image">
+            </label>
 
-        <input type="file" name="fileMain" id="fileInputMain" accept="image/*"
-               style="display: none;" onchange="previewSelectedImage(this, 'previewMainImage')">
-    </div>
-</body>
-
-
-
-
+            <input type="file" name="fileMain" id="fileInputMain" accept="image/*"
+                   style="display: none;" onchange="previewSelectedImage(this, 'previewMainImage')">
+        </div>
+    </body>
+    
     <script>
 
         function previewSelectedImage(input, imgId) {
