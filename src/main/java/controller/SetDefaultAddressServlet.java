@@ -39,8 +39,7 @@ public class SetDefaultAddressServlet extends HttpServlet {
         AddressDAO dao = new AddressDAO();
         Address addr = dao.getAddressById(addressId);
         if (addr != null && addr.getCustomerId() == cus.getId()) {
-            // Bỏ mặc định cũ
-            dao.unsetDefaultAddresses(cus.getId());
+            dao.unsetDefaultAddresses(cus.getId());// bo dia chi cu
             // Set địa chỉ này là mặc định
             addr.setDefault(true);
             dao.updateAddress(addr);
@@ -51,7 +50,7 @@ public class SetDefaultAddressServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // POST cũng dùng logic như GET (nếu muốn)
+        doGet(request, response);
     }
 
     @Override

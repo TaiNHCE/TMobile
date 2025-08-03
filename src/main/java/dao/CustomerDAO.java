@@ -140,6 +140,19 @@ public class CustomerDAO extends DBContext {
         }
         return cus;
     }
+    //-----TAI-----//
+
+    public int countTotalCustomers() {
+        String sql = "SELECT COUNT(*) FROM Customers";
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO(); // giả sử bạn đã có class này

@@ -586,7 +586,7 @@
                                         console.log('Quantity decreased to:', currentQuantity);
                                         submitQuantityForm(cartItemId);
                                     } else {
-                                        a
+                                        
                                         console.log('Minimum quantity reached:', currentQuantity);
                                     }
                                 }

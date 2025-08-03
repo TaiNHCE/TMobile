@@ -65,12 +65,12 @@ public class InventoryStatisticServlet extends HttpServlet {
         InventoryStatisticDAO dao = new InventoryStatisticDAO();
         String keyword = request.getParameter("keyword");
 
-        ArrayList<InventoryStatistic> statistics = dao.getAllInventory();
+        ArrayList<InventoryStatistic> statistics = dao.getAllInventoryBatch();
         if (keyword != null && !keyword.trim().isEmpty()) {
             statistics = dao.searchInventory(keyword.trim());
             request.setAttribute("searchKeyword", keyword.trim());
         } else {
-            statistics = dao.getAllInventory();
+            statistics = dao.getAllInventoryBatch();
         }
         String message = (statistics == null || statistics.isEmpty()) ? "No inventory statistics available." : null;
         request.setAttribute("inventoryStatistics", statistics);

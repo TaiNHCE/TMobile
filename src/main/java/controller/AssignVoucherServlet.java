@@ -67,22 +67,15 @@ public class AssignVoucherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy customerId từ URL (?customerId=...)
         String customerIdRaw = request.getParameter("customerId");
         if (customerIdRaw == null) {
             response.sendRedirect("CustomerList?error=MissingCustomerId");
             return;
         }
         int customerId = Integer.parseInt(customerIdRaw);
-
-        // Lấy danh sách voucher cá nhân, còn hạn, đang hoạt động
         List<Voucher> personalVouchers = voucherDAO.getPersonalVouchersAvailable();
-
-        // Nếu muốn show tên khách hàng:
-        // String customerName = ...; // Lấy theo customerId nếu cần
         request.setAttribute("customerId", customerId);
-        // request.setAttribute("customerName", customerName); // nếu có
-        request.setAttribute("personalVouchers", personalVouchers); // CHUẨN
+        request.setAttribute("personalVouchers", personalVouchers);
         request.getRequestDispatcher("/WEB-INF/View/staff/customerManagement/asignVoucher.jsp").forward(request, response);
     }
 
@@ -104,9 +97,33 @@ public class AssignVoucherServlet extends HttpServlet {
             String expirationDateRaw = request.getParameter("expirationDate");
             Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(expirationDateRaw);
 
-            // Check if already asigned
+            Voucher voucher = voucherDAO.getVoucherById(voucherId);
+            if (voucher == null) {
+                request.setAttribute("error", "Voucher does not exist.");
+                doGet(request, response);
+                return;
+            }
+            Date voucherExpiry = voucher.getExpiryDate();
+            Date now = new Date();
+            if (voucherExpiry.before(now)) {
+                request.setAttribute("error", "Voucher has already expired. Cannot assign to customer.");
+                doGet(request, response);
+                return;
+            }
+            if (quantity > voucher.getUsageLimit()) {
+                request.setAttribute("error", "The quantity exceeds the usage limit of this voucher (" + voucher.getUsageLimit() + ").");
+                doGet(request, response);
+                return;
+            }
+
+            if (expirationDate.after(voucherExpiry)) {
+                request.setAttribute("error", "Customer voucher expiration cannot exceed the master voucher's expiration date ("
+                        + new SimpleDateFormat("yyyy-MM-dd").format(voucherExpiry) + ").");
+                doGet(request, response);
+                return;
+            }
             if (customerVoucherDAO.isAsigned(customerId, voucherId)) {
-                request.setAttribute("error", "This voucher is already asigned to the customer.");
+                request.setAttribute("error", "This voucher has already been assigned to this customer.");
                 doGet(request, response);
                 return;
             }
@@ -114,7 +131,7 @@ public class AssignVoucherServlet extends HttpServlet {
             CustomerVoucher cv = new CustomerVoucher(customerId, voucherId, expirationDate, quantity);
             boolean ok = customerVoucherDAO.assignVoucher(cv);
             if (ok) {
-                response.sendRedirect("CustomerList?success=asigned");
+                response.sendRedirect("CustomerList?success=assigned");
             } else {
                 request.setAttribute("error", "Failed to assign voucher.");
                 doGet(request, response);

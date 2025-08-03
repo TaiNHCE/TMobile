@@ -9,7 +9,6 @@
         <title>Import Stock History</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-        <!-- Sidebar CSS (nếu cần) -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/Css/supplierList6.css">
     </head>
     <body>
@@ -83,11 +82,10 @@
             </div>
         </div>
     </body>
-    <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .swal2-confirm-green {
-            background-color: #28a745 !important; /* Bootstrap green */
+            background-color: #28a745 !important;
             color: #fff !important;
             border: none !important;
             box-shadow: none !important;
@@ -97,27 +95,49 @@
         }
     </style>
     <script>
-                            document.getElementById('exportExcelBtn').onclick = function (e) {
-                                e.preventDefault();
-                                Swal.fire({
-                                    icon: 'question',
-                                    title: 'Export Excel',
-                                    text: 'Do you want to export the import stock history to Excel?',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Yes, export',
-                                    cancelButtonText: 'Cancel',
-                                    customClass: {
-                                        confirmButton: 'swal2-confirm-green'
-                                    }
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        this.form.action = 'ExportToFileExcelServlet';
-                                        this.form.method = 'post';
-                                        this.form.submit();
-                                    }
-                                });
-                                return false;
-                            }
+                           document.getElementById('exportExcelBtn').onclick = function (e) {
+    e.preventDefault();
+    Swal.fire({
+        icon: 'question',
+        title: 'Export Excel',
+        text: 'Do you want to export the import stock history to Excel?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, export',
+        cancelButtonText: 'Cancel',
+        customClass: {
+            confirmButton: 'swal2-confirm-green'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const exportForm = document.createElement('form');
+            exportForm.method = 'post';
+            exportForm.action = 'ExportToFileExcelServlet';
+            
+            const originalForm = this.form;
+            const inputs = originalForm.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.name && input.value) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = input.name;
+                    hiddenInput.value = input.value;
+                    exportForm.appendChild(hiddenInput);
+                }
+            });
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'export';
+            exportForm.appendChild(actionInput);
+            
+            document.body.appendChild(exportForm);
+            exportForm.submit();
+            document.body.removeChild(exportForm);
+        }
+    });
+    return false;
+}
     </script>
 
 </html>

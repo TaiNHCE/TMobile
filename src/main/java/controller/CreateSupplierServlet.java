@@ -93,7 +93,7 @@ public class CreateSupplierServlet extends HttpServlet {
         String errorMsg = null;
         SupplierDAO dao = new SupplierDAO();
 
-        // CHỈ kiểm tra trùng dữ liệu (KHÔNG kiểm tra format!)
+        // Kiểm tra trùng dữ liệu
         if (dao.isSupplierExist(taxId, email)) {
             errorMsg = "Tax ID or Email already exists!";
         } else if (dao.isSupplierNameExist(name)) {
@@ -120,7 +120,7 @@ public class CreateSupplierServlet extends HttpServlet {
         LocalDateTime now = LocalDateTime.now();
         Suppliers supplier = new Suppliers(
                 0, taxId, name, email, phoneNumber, address,
-                now, now, deleted, active,
+                now, now, active,
                 contactPerson, supplyGroup, description
         );
 

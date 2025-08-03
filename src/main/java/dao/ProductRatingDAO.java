@@ -265,5 +265,19 @@ public class ProductRatingDAO extends DBContext {
         }
         return false;
     }
+    //----- Tai----//
+    public int countUnreadFeedback() {
+        String sql = "SELECT COUNT(*) FROM ProductRatings WHERE IsRead = 0";
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
 
 }

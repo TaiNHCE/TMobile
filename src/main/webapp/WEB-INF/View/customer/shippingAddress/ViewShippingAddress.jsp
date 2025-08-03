@@ -119,7 +119,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 window.onload = function () {
-    // Xử lý nút xóa
     document.querySelectorAll('.delete-btn').forEach(function(btn) {
         btn.onclick = function(e) {
             e.preventDefault();

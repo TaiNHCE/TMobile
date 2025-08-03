@@ -56,7 +56,7 @@
 .header-container {
     position: fixed;
     top: 0;
-    left: 250px; /* n?u sidebar có width 250px */
+    left: 250px;
     width: calc(100% - 250px);
     background: white;
     border-bottom: 1px solid #e9ecef;
