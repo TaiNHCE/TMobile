@@ -65,8 +65,11 @@
                                 List<Voucher> list = (List<Voucher>) request.getAttribute("voucherList");
                                 if (list != null && !list.isEmpty()) {
                                     for (Voucher v : list) {
-                                        String statusClass = v.isActive() ? "status-active" : "status-inactive";
-                                        String statusText = v.isActive() ? "Active" : "Deactive";
+                                        boolean isOverused = v.getUsedCount() >= v.getUsageLimit();
+                                        boolean isCurrentlyActive = v.isActive() && !isOverused;
+                                        String statusClass = isCurrentlyActive ? "status-active" : "status-inactive";
+                                        String statusText = isCurrentlyActive ? "Active" : "Deactive";
+
                             %>
                             <tr>
                                 <td><%= v.getVoucherID()%></td>
@@ -177,6 +180,14 @@
                         });
                     };
                 });
+
+                // 🔁 Clean up the URL
+                if (window.history.replaceState) {
+                    const url = new URL(window.location);
+                    url.searchParams.delete('success');
+                    url.searchParams.delete('error');
+                    window.history.replaceState({}, document.title, url.pathname);
+                }
 
 
             };

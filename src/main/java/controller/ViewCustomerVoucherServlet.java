@@ -27,7 +27,7 @@ public class ViewCustomerVoucherServlet extends HttpServlet {
         Customer customer = (Customer) request.getSession().getAttribute("customer");
         if (customer == null) {
             // Nếu chưa đăng nhập thì chuyển về login
-            response.sendRedirect("LoginPage"); // sửa lại đường dẫn đúng nếu cần
+            response.sendRedirect("Login"); // sửa lại đường dẫn đúng nếu cần
             return;
         }
         int customerId = customer.getId();

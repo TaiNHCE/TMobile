@@ -23,8 +23,7 @@ import model.Account;
 public class LoginAdminServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -83,6 +82,8 @@ public class LoginAdminServlet extends HttpServlet {
         if (acc != null && acc.getAccountID() != -1) {
             if (acc.getRoleID() == 1) {
                 session.setAttribute("admin", acc);
+                session.setAttribute("role", acc.getRoleID());
+
                 response.sendRedirect("AdminDashboard");
             } else {
                 request.setAttribute("err", "<p style='color:red'>You do not have permission to access this page.</p>");

@@ -63,7 +63,7 @@ public class DeleteSupplierServlet extends HttpServlet {
 
         if (supplierID == null || supplierID.trim().isEmpty()
                 || taxId == null || taxId.trim().isEmpty()) {
-            response.sendRedirect("ViewSupplier?success=delete");
+            response.sendRedirect("ViewSupplier");
             return;
         }
 

@@ -134,6 +134,9 @@ public class VoucherServlet extends HttpServlet {
             if (expiry.before(new Date())) {
                 throw new IllegalArgumentException("Expiry date must be today or later.");
             }
+            if (usedCount >= usageLimit) {
+                isActive = false;
+            }
 
             Voucher v = new Voucher(id, code, discount, expiry, minAmount, maxDiscount,
                     usageLimit, usedCount, isActive, createdAt, description, isGlobal);

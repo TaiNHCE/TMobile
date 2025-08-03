@@ -193,15 +193,8 @@ main.main-content {
             </div>
         </div>
         
-        <div class="header-actions">
-            <a href="Notifications" class="notification-btn" title="Notifications">
-                <i class="fas fa-bell"></i>
-                <c:if test="${not empty notificationCount && notificationCount > 0}">
-                    <span class="notification-badge">${notificationCount}</span>
-                </c:if>
-            </a>
-            
-            <form action="${pageContext.request.contextPath}/Logout" method="post" style="margin: 0;">
+        <div class="header-actions">           
+            <form action="${pageContext.request.contextPath}/Logout" method="get" style="margin: 0;">
                 <button type="submit" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
