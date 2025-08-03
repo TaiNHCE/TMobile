@@ -14,6 +14,18 @@
         selectedCartItemIds = request.getParameter("selectedCartItemIds");
     }
     Address defaultAddress = (Address) request.getAttribute("defaultAddress");
+    Long totalAmount = (Long) session.getAttribute("totalAmount");
+    Long discountAmount = (Long) session.getAttribute("discountAmount");
+    Long finalTotalAmount = (Long) session.getAttribute("finalTotalAmount");
+    if (totalAmount == null) {
+        totalAmount = 0L;
+    }
+    if (discountAmount == null) {
+        discountAmount = 0L;
+    }
+    if (finalTotalAmount == null) {
+        finalTotalAmount = totalAmount;
+    }
 %>
 <html lang="en">
     <head>
@@ -214,7 +226,6 @@
         <jsp:include page="/WEB-INF/View/customer/homePage/header.jsp" />
         <div class="container">
             <h2 class="mb-4">Checkout</h2>
-
             <!-- Display notification -->
             <%
                 String message = (String) session.getAttribute("message");
@@ -232,38 +243,12 @@
                 <button type="submit" class="btn btn-outline-primary">Apply Voucher</button>
             </form>
             <form action="${pageContext.request.contextPath}/CheckoutServlet" method="post">
-                <input type="hidden" name="selectedCartItemIds" value="<%= request.getParameter("selectedCartItemIds") != null ? request.getParameter("selectedCartItemIds") : ""%>">
-
+                <input type="hidden" name="selectedCartItemIds" value="<%= selectedCartItemIds != null ? selectedCartItemIds : request.getParameter("selectedCartItemIds") != null ? request.getParameter("selectedCartItemIds") : ""%>">
                 <!-- Product Section -->
                 <div class="product-section">
                     <h4>Product</h4>
                     <%
                         List<CartItem> cartItems = (List<CartItem>) request.getAttribute("selectedItems");
-                        long totalAmount = 0;
-
-                        if (cartItems != null && !cartItems.isEmpty()) {
-                            for (CartItem item : cartItems) {
-                                Product product = item.getProduct();
-                                if (product != null) {
-                                    BigDecimal unitPrice = product.getPrice();
-                                    BigDecimal discount = BigDecimal.valueOf(product.getDiscount());
-                                    BigDecimal discountFactor = BigDecimal.ONE.subtract(discount.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP));
-                                    BigDecimal discountedPrice = unitPrice.multiply(discountFactor);
-                                    BigDecimal itemTotal = discountedPrice.multiply(BigDecimal.valueOf(item.getQuantity()));
-                                    totalAmount += itemTotal.longValue();
-                                }
-                            }
-                        }
-
-                        Voucher appliedVoucher = (Voucher) session.getAttribute("appliedVoucher");
-                        long totalPromotion = 0;
-
-                        if (appliedVoucher != null) {
-                            if (appliedVoucher.getDiscountPercent() > 0) {
-                                totalPromotion = totalAmount * appliedVoucher.getDiscountPercent() / 100;
-                            }
-                        }
-
                         if (cartItems != null && !cartItems.isEmpty()) {
                     %>
                     <table class="table cart-table">
@@ -323,7 +308,6 @@
                     %>
                     <input type="hidden" name="totalAmount" value="<%= totalAmount%>">
                 </div>
-
                 <!-- Orderer Section -->
                 <div class="orderer-section">
                     <h4>Orderer</h4>
@@ -336,7 +320,6 @@
                         <div id="phoneError" class="error-message"></div>
                     </div>
                 </div>
-
                 <!-- Address Section -->
                 <div class="address-section">
                     <h4>Address</h4>
@@ -365,7 +348,6 @@
                         <a href="${pageContext.request.contextPath}/AddressListServlet?fromCheckout=true&selectedCartItemIds=<%= selectedCartItemIds != null ? selectedCartItemIds : request.getParameter("selectedCartItemIds") != null ? request.getParameter("selectedCartItemIds") : ""%>" class="btn-address">Select Address</a>
                     </div>
                 </div>
-
                 <!-- Information Order Section -->
                 <div class="info-section">
                     <h4>Order Summary</h4>
@@ -374,73 +356,70 @@
                         <span class="price"><%= String.format("%,d", totalAmount)%> VND</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Total promotion:</span>
-                        <span class="price"><%= String.format("%,d", totalPromotion)%> VND</span>
+                        <span>Total discount:</span>
+                        <span class="price"><%= String.format("%,d", discountAmount)%> VND</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total after discount:</span>
+                        <span class="price"><%= String.format("%,d", totalAmount - discountAmount)%> VND</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>VAT (8%):</span>
+                        <span class="price"><%= String.format("%,d", (finalTotalAmount - (totalAmount - discountAmount)))%> VND</span>
                     </div>
                     <div class="d-flex justify-content-between mt-3">
                         <strong>Payment required:</strong>
-                        <strong class="price"><%= String.format("%,d", totalAmount - totalPromotion)%> VND</strong>
+                        <strong class="price"><%= String.format("%,d", finalTotalAmount)%> VND</strong>
                     </div>
+                    <p><small>*Total includes 8% VAT</small></p>
                     <input type="hidden" name="totalAmount" value="<%= totalAmount%>">
-                    <input type="hidden" name="totalPromotion" value="<%= totalPromotion%>">
+                    <input type="hidden" name="totalPromotion" value="<%= discountAmount%>">
                     <input type="hidden" name="selectedCartItemIds" value="<%= selectedCartItemIds != null ? selectedCartItemIds : request.getParameter("selectedCartItemIds") != null ? request.getParameter("selectedCartItemIds") : ""%>">
                     <button type="submit" id="submitBtn" class="btn-order mt-3" disabled>Place Order</button>
                 </div>
             </form>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <jsp:include page="/WEB-INF/View/customer/homePage/footer.jsp" />
-
         <script>
             // Validation for Full Name
             const fullNameInput = document.getElementById("fullName");
             const fullNameError = document.getElementById("fullNameError");
             const submitBtn = document.getElementById("submitBtn");
-
             fullNameInput.addEventListener("blur", function () {
                 let name = fullNameInput.value.trim();
                 fullNameError.style.display = "none";
                 submitBtn.disabled = false;
-
                 // Replace multiple spaces with single space
                 name = name.replace(/\s+/g, " ");
                 fullNameInput.value = name;
-
                 // Regex: Each word starts with uppercase, no numbers or special characters
                 const namePattern = /^([A-ZÀ-Ỹ][a-zà-ỹ]+)(\s[A-ZÀ-Ỹ][a-zà-ỹ]+)*$/u;
-
                 if (!namePattern.test(name) || name === "") {
                     fullNameError.textContent = "Full name must start with uppercase letters, contain no numbers or special characters, and have no extra spaces.";
                     fullNameError.style.display = "block";
                     submitBtn.disabled = true;
                 }
             });
-
             fullNameInput.addEventListener("input", function () {
                 fullNameError.style.display = "none";
                 submitBtn.disabled = false;
             });
-
             // Validation for Phone Number
             const phoneInput = document.getElementById("phone");
             const phoneError = document.getElementById("phoneError");
-
             phoneInput.addEventListener("blur", function () {
                 const phone = phoneInput.value.trim();
                 phoneError.style.display = "none";
                 submitBtn.disabled = false;
-
                 // Regex: Must start with 0 and have exactly 10 digits
                 const phonePattern = /^0\d{9}$/;
-
                 if (!phonePattern.test(phone) || phone === "") {
                     phoneError.textContent = "Phone number must start with 0 and have exactly 10 digits.";
                     phoneError.style.display = "block";
                     submitBtn.disabled = true;
                 }
             });
-
             phoneInput.addEventListener("input", function () {
                 phoneError.style.display = "none";
                 submitBtn.disabled = false;

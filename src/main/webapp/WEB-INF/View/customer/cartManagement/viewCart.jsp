@@ -371,7 +371,7 @@
                                     <input type="hidden" name="accountId" value="<%= session.getAttribute("user") != null ? ((Account) session.getAttribute("user")).getAccountID() : 0%>">
                                     <div class="quantity-container">
                                         <button type="button" class="quantity-btn" onclick="decreaseQuantity(<%= item.getCartItemID()%>)">-</button>
-                                        <input type="number" name="quantity" value="<%= item.getQuantity()%>" class="form-control quantity-value" id="quantity-<%= item.getCartItemID()%>" min="1" onchange="submitQuantityForm(<%= item.getCartItemID()%>)">
+                                        <input type="number" name="quantity" value="<%= item.getQuantity()%>" class="form-control quantity-value" id="quantity-<%= item.getCartItemID()%>" min="1" onchange="submitQuantityForm(<%= item.getCartItemID()%>)"readonly>
                                         <button type="button" class="quantity-btn" onclick="increaseQuantity(<%= item.getCartItemID()%>)">+</button>
                                     </div>
                                 </form>
@@ -586,7 +586,7 @@
                                         console.log('Quantity decreased to:', currentQuantity);
                                         submitQuantityForm(cartItemId);
                                     } else {
-                                        
+                                        a
                                         console.log('Minimum quantity reached:', currentQuantity);
                                     }
                                 }

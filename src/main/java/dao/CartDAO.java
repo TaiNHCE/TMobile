@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import model.CartItem;
 import model.Product;
-import model.ProductVariant;
 import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -169,7 +168,7 @@ public class CartDAO extends DBContext {
 
     public boolean updateCartItemQuantity(int cartItemId, int quantity) {
         String sql = "UPDATE CartItems SET Quantity = ? WHERE cartItemId = ?";
-        try (  PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, quantity);
             ps.setInt(2, cartItemId);
 
@@ -401,4 +400,17 @@ public class CartDAO extends DBContext {
         }
     }
 
+    public boolean getProductQuantityLeft(int productId, int requiredQuantity) throws SQLException {
+        String sql = "SELECT SUM(QuantityLeft) AS TotalQuantityLeft FROM ImportStockDetails WHERE ProductID = ?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int totalQuantityLeft = rs.getInt("TotalQuantityLeft");
+                    return totalQuantityLeft >= requiredQuantity;
+                }
+            }
+        }
+        return false; // Return false if product not found or no quantity left
+    }
 }
