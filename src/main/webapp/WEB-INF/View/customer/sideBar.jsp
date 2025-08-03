@@ -1,8 +1,12 @@
 <%@page import="model.Account"%>
 <%@page import="model.Customer"%>
 <%
-    Customer user = (Customer) session.getAttribute("customer");
-    Account acc = (Account) session.getAttribute("user");
+        Account acc = (Account) session.getAttribute("user");
+        Customer user = (Customer) session.getAttribute("cus");
+        if (acc == null || user == null) {
+            response.sendRedirect("Login");
+            return;
+        }
 
     String currentPage = request.getRequestURI();
 %>

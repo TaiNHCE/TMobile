@@ -22,8 +22,7 @@ import jakarta.servlet.http.HttpSession;
 public class ResetPasswordServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -59,6 +58,15 @@ public class ResetPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Boolean otpVerified = (Boolean) session.getAttribute("otpVerified");
+
+        // Nếu chưa verify OTP thì đưa về trang ForgotPassword
+        if (otpVerified == null || !otpVerified) {
+            response.sendRedirect("ForgotPassword");
+            return;
+        }
+
         request.getRequestDispatcher("WEB-INF/View/account/reset-password.jsp").forward(request, response);
     }
 
@@ -85,14 +93,13 @@ public class ResetPasswordServlet extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
         String passwordPattern = "^.{9,}$";
         if (!newPassword.matches(passwordPattern)) {
-             request.setAttribute("error", "Password must be at least 9 characters long.");
+            request.setAttribute("error", "Password must be at least 9 characters long.");
         }
         if (!newPassword.equals(confirmPassword)) {
             request.setAttribute("error", "Passwords do not match.");
             request.getRequestDispatcher("WEB-INF/View/account/reset-password.jsp").forward(request, response);
             return;
         }
-        
 
         AccountDAO dao = new AccountDAO();
         String hashedPassword = dao.hashMD5(newPassword);

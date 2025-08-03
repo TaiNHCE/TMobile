@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
 import model.Customer;
 
 /**
@@ -62,7 +63,14 @@ public class ViewProfileServlet extends HttpServlet {
             throws ServletException, IOException {
         ProfileDAO dao = new ProfileDAO();
         HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        Customer customer = (Customer) session.getAttribute("cus");
 
+        if (user == null || customer == null) {
+
+            response.sendRedirect("Login");
+            return;
+        }
         int id = (Integer) session.getAttribute("accountId");
         int accountID = dao.getAccountIDByCustomerID(id);
         session.setAttribute("accountId", id);

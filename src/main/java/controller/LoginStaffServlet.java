@@ -89,6 +89,7 @@ public class LoginStaffServlet extends HttpServlet {
 
                 session.setAttribute("user", acc);   // Nếu cần dùng thông tin Account
                 session.setAttribute("staff", staff); // Đây là đối tượng Staff thực sự!
+                session.setAttribute("role", acc.getRoleID());
 
                 response.sendRedirect("StaffDashboard");
             } else {

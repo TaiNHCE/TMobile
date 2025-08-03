@@ -25,8 +25,7 @@ import utils.OTPManager;
 public class VerifyOTPServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -152,7 +151,7 @@ public class VerifyOTPServlet extends HttpServlet {
             session.setAttribute("resetEmail", email);
             session.removeAttribute("otpManager");
             session.removeAttribute("otpPurpose");
-
+            session.setAttribute("otpVerified", true);
             response.sendRedirect("ResetPassword");
         }
     }

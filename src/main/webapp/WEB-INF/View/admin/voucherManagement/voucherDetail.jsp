@@ -38,8 +38,8 @@
                             <th>Type:</th>
                             <td>
                                 <%= v.isIsGlobal()
-                                ? "<span class='badge bg-success'>Global</span>"
-                                : "<span class='badge bg-info text-dark'>Personal</span>"%>
+                                        ? "<span class='badge bg-success'>Global</span>"
+                                        : "<span class='badge bg-info text-dark'>Personal</span>"%>
                             </td>
                         </tr>
                         <tr><th>Discount (%):</th><td><%= v.getDiscountPercent()%></td></tr>
@@ -48,14 +48,23 @@
                         <tr><th>Max Discount:</th><td><%= currencyVN.format(v.getMaxDiscountAmount()) + " ₫"%></td></tr>
                         <tr><th>Usage Limit:</th><td><%= v.getUsageLimit()%></td></tr>
                         <tr><th>Used:</th><td><%= v.getUsedCount()%></td></tr>
+                                <%
+                                    boolean isOverused = v.getUsedCount() >= v.getUsageLimit();
+                                    boolean isCurrentlyActive = v.isActive() && !isOverused;
+                                    String statusClass = isCurrentlyActive ? "status-active" : "status-inactive";
+                                    String statusText = isCurrentlyActive ? "Active" : "Deactive";
+                                %>
                         <tr>
                             <th>Status</th>
                             <td>
-                                <span class="badge <%= v.isActive() ? "status-active" : "status-inactive"%>">
-                                    <%= v.isActive() ? "Active" : "Deactive"%>
+                                <span class="badge <%= statusClass%>"><%= statusText%>
+                                    <% if (isOverused) { %>
+                                    <i class="fa-solid fa-triangle-exclamation text-warning" title="Usage limit reached"></i>
+                                    <% }%>
                                 </span>
                             </td>
                         </tr>
+
 
                         <tr><th>Description:</th><td><%= v.getDescription() != null ? v.getDescription() : "N/A"%></td></tr>
                     </table>

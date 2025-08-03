@@ -25,8 +25,7 @@ import model.Customer;
 public class LoginServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -99,6 +98,8 @@ public class LoginServlet extends HttpServlet {
             Customer cus = customerDao.getCustomerByAccountId(acc.getAccountID());
             session.setAttribute("cus", cus);
             session.setAttribute("accountId", acc.getAccountID());
+            session.setAttribute("role", acc.getRoleID());
+
             session.setAttribute("user", acc);
             response.sendRedirect("Home");
         }

@@ -12,9 +12,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import model.Account;
+import model.Customer;
 
 import model.Order;
 import model.OrderDetail;
@@ -36,18 +39,14 @@ public class CancelOrderServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CancelOrderServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CancelOrderServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        Customer customer = (Customer) session.getAttribute("cus");
+
+        if (user == null || customer == null) {
+
+            response.sendRedirect("Login");
+            return;
         }
     }
 
@@ -77,6 +76,15 @@ public class CancelOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        Customer customer = (Customer) session.getAttribute("cus");
+
+        if (user == null || customer == null) {
+
+            response.sendRedirect("Login");
+            return;
+        }
         int orderID = Integer.parseInt(request.getParameter("orderID"));
         OrderDAO dao = new OrderDAO();
         Order order = dao.getOrderByID(orderID + "");
@@ -87,9 +95,9 @@ public class CancelOrderServlet extends HttpServlet {
             ProductDAO productDAO = new ProductDAO();
             List<OrderDetail> items = itemDAO.getOrderDetailsByOrderID(orderID);
 
-        for (OrderDetail item : items) {
-            productDAO.increaseStock(item.getProductID(), item.getQuantity());
-        }
+            for (OrderDetail item : items) {
+                productDAO.increaseStock(item.getProductID(), item.getQuantity());
+            }
             response.sendRedirect("ViewOrderOfCustomer?success=cancel");
         } else {
             response.sendRedirect("ViewOrderOfCustomer?error=not-cancelable");

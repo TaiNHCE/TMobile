@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
+import model.Customer;
 
 /**
  *
@@ -32,18 +34,14 @@ public class ChangePasswordServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ChangePasswordServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ChangePasswordServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        Customer customer = (Customer) session.getAttribute("cus");
+
+        if (user == null || customer == null) {
+
+            response.sendRedirect("Login");
+            return;
         }
     }
 
@@ -59,6 +57,13 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        Customer customer = (Customer) session.getAttribute("cus");
+        if (user == null || customer == null) {
+            response.sendRedirect("Login");
+            return;
+        }
         request.getRequestDispatcher("WEB-INF/View/customer/profile/change-password.jsp").forward(request, response);
     }
 

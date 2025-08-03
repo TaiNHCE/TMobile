@@ -57,7 +57,7 @@
                             <h3>Admin User</h3>
                             <p>Administrator</p>
                         </div>
-                        <button class="logout-btn btn btn-danger" onclick="alert('Logged out successfully!'); window.location.href = 'LoginAdmin';">
+                        <button class="logout-btn btn btn-danger" onclick="alert('Logged out successfully!'); window.location.href = 'Logout';">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </div>

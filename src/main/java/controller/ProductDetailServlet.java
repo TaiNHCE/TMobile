@@ -94,10 +94,17 @@ public class ProductDetailServlet extends HttpServlet {
             CustomerDAO customerDAO = new CustomerDAO();
             RatingRepliesDAO repliesDAO = new RatingRepliesDAO();
             List<ProductRating> productRatings = ratingDAO.getProductRatingsByProductId(productId);
+            double totalStars = 0;
+            int visibleRatingCount = 0;
+
             for (ProductRating rating : productRatings) {
+                if (!rating.isIsDeleted()) {  // <-- chỉ tính đánh giá chưa bị ẩn
+                    totalStars += rating.getStar();
+                    visibleRatingCount++;
+                }
+
                 Customer customer = customerDAO.getCustomerbyID(rating.getCustomerID());
-                rating.setCustomer(customer); // ❌ Không cần nếu chỉ dùng FullName
-                rating.setFullName(customer.getFullName()); // ❌ Không cần nếu đã có từ DB
+                rating.setFullName(customer.getFullName());
 
                 List<RatingReplies> replies = repliesDAO.getAllRatingRepliesByRateID(rating.getRateID());
                 if (replies == null) {
@@ -105,13 +112,25 @@ public class ProductDetailServlet extends HttpServlet {
                 }
                 rating.setReplies(replies);
             }
-            
+
+            double averageRating = 0;
+            if (visibleRatingCount > 0) {
+                averageRating = totalStars / visibleRatingCount;
+            }
+            request.setAttribute("averageRating", averageRating);
+
             // Truyền dữ liệu sang JSP
             request.setAttribute("product", product);
             request.setAttribute("cateGroupList", cateGroupList);
             request.setAttribute("cateDetailList", cateDetailList);
             request.setAttribute("productDetailList", productDetailList);
-            request.setAttribute("productRatings", productRatings);
+            List<ProductRating> visibleRatings = new ArrayList<>();
+            for (ProductRating rating : productRatings) {
+                if (!rating.isIsDeleted()) {
+                    visibleRatings.add(rating);
+                }
+            }
+            request.setAttribute("productRatings", visibleRatings);
 
             request.getRequestDispatcher("/WEB-INF/View/customer/productManagement/productDetail/productDetail.jsp").forward(request, response);
         }

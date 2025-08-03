@@ -55,12 +55,34 @@ public class LogoutServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+       @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate();
-        response.sendRedirect("Home");
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Integer role = (Integer) session.getAttribute("role");
+            session.invalidate();
+
+            if (role != null) {
+                switch (role) {
+                    case 1: // Admin
+                        response.sendRedirect("LoginAdmin"); 
+                        break;
+                    case 2: // Staff
+                        response.sendRedirect("LoginStaff"); 
+                        break;
+                    case 3: // Customer
+                        response.sendRedirect("Home"); 
+                        break;
+                    default:
+                        response.sendRedirect("Home");
+                }
+            } else {
+                response.sendRedirect("Home");
+            }
+        } else {
+            response.sendRedirect("Home");
+        }
     }
 
     /**
